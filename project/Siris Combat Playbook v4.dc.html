@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<script src="./image-slot.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&amp;family=JetBrains+Mono:wght@500;700&amp;family=Marcellus+SC&amp;display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;background:oklch(0.165 0.008 260);}
+*{box-sizing:border-box;}
+a{color:oklch(0.80 0.15 65);} a:hover{color:oklch(0.88 0.12 65);}
+button{font:inherit;}
+@media print{@page{size:landscape;margin:5mm;} html{zoom:0.52;} [data-print-hide]{display:none !important;} html,body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}
+</style>
+</helmet>
+<div style="min-height:100vh; background:oklch(0.165 0.008 260); color:oklch(0.95 0.006 80); font-family:'Atkinson Hyperlegible', system-ui, sans-serif; padding:14px; display:flex; flex-wrap:wrap; align-items:flex-start; gap:14px; font-variant-numeric:tabular-nums;">
+<div style="flex:1 1 720px; min-width:0; display:flex; flex-direction:column; gap:14px;">
+
+  <header style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px;">
+    <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+      <div style="width:64px; height:96px; flex:none; border:3px solid oklch(0.11 0.005 260); box-shadow:0 0 0 1px oklch(0.36 0.01 260); border-radius:5px; overflow:hidden; background:oklch(0.13 0.006 260);"><image-slot id="siris-portrait" shape="rect" placeholder="Siris portrait" style="width:100%; height:100%;" src="assets/siris.png"></image-slot></div>
+      <div style="font-family:'Marcellus SC', serif; font-size:32px; line-height:1; letter-spacing:0.06em; color:oklch(0.88 0.12 65);">Siris</div>
+      <div style="font-size:13px; color:oklch(0.74 0.01 260);">Kalashtar Artillerist Artificer · The Eighth Fold · Combat Playbook</div>
+    </div>
+    <div style="display:flex; flex-wrap:wrap; align-items:center; gap:14px;">
+      <div style="display:flex; align-items:center; gap:6px; font-size:12px; color:oklch(0.74 0.01 260);">
+        <span>Dex mod <span style="border:1px dashed oklch(0.55 0.01 260); border-radius:3px; padding:0 4px; font-size:10px;">EDIT</span></span>
+        <button onClick="{{ dexDown }}" style="width:34px; height:34px; border-radius:4px; border:1px solid oklch(0.40 0.01 260); background:oklch(0.215 0.008 260); color:oklch(0.95 0.006 80); cursor:pointer; font-size:16px;">−</button>
+        <span style="font-family:'JetBrains Mono', monospace; font-size:17px; font-weight:700; color:oklch(0.95 0.006 80); min-width:26px; text-align:center;">{{ stats.dexStr }}</span>
+        <button onClick="{{ dexUp }}" style="width:34px; height:34px; border-radius:4px; border:1px solid oklch(0.40 0.01 260); background:oklch(0.215 0.008 260); color:oklch(0.95 0.006 80); cursor:pointer; font-size:16px;">+</button>
+      </div>
+    </div>
+  </header>
+
+  <section data-screen-label="Tier I Loadout" style="display:flex; flex-direction:column; gap:10px;">
+    
+  <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+    <span style="width:34px; height:34px; flex:none; transform:rotate(45deg); border:3px solid oklch(0.11 0.005 260); box-shadow:0 0 0 1px oklch(0.36 0.01 260); background:oklch(0.74 0.14 255 / 0.35); display:flex; align-items:center; justify-content:center; margin:0 4px;"><span style="transform:rotate(-45deg); font-family:'Marcellus SC', serif; font-size:15px; color:oklch(0.95 0.006 80);">I</span></span>
+    <span style="font-family:'Marcellus SC', serif; font-size:25px; line-height:1;">Loadout</span>
+    <span style="font-size:13px; color:oklch(0.74 0.01 260);">What Siris carries into the fight</span>
+    <span style="flex:1 1 40px; height:5px; background:oklch(0.11 0.005 260); border-top:1px solid oklch(0.36 0.01 260); border-bottom:1px solid oklch(0.36 0.01 260);"></span>
+    <button onClick="{{ toggleLoadout }}" style="cursor:pointer; min-height:34px; padding:4px 12px; border-radius:17px; font-size:12.5px; background:transparent; color:oklch(0.80 0.01 260); border:1px solid oklch(0.40 0.01 260);">{{ loadoutLabel }}</button>
+  </div>
+    <div style="display:grid; grid-template-columns:repeat(7, minmax(0, 1fr)); border:3px solid oklch(0.11 0.005 260); box-shadow:0 0 0 1px oklch(0.36 0.01 260); border-radius:6px; background:oklch(0.11 0.005 260); gap:3px; overflow:hidden;">
+      <div style="background:oklch(0.215 0.008 260); padding:7px 10px; min-width:0;"><div style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:oklch(0.74 0.01 260); white-space:nowrap;">Spell atk</div><div style="font-family:'JetBrains Mono', monospace; font-size:24px; font-weight:700;">{{ stats.atk }}</div></div>
+      <div style="background:oklch(0.215 0.008 260); padding:7px 10px; min-width:0;"><div style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:oklch(0.74 0.01 260); white-space:nowrap;">Save DC</div><div style="font-family:'JetBrains Mono', monospace; font-size:24px; font-weight:700;">{{ stats.dc }}</div></div>
+      <div style="background:oklch(0.215 0.008 260); padding:7px 10px; min-width:0;"><div style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:oklch(0.74 0.01 260); white-space:nowrap;">Chistera atk</div><div style="display:flex; align-items:baseline; gap:6px; flex-wrap:wrap;"><span style="font-family:'JetBrains Mono', monospace; font-size:24px; font-weight:700;">{{ stats.chAtk }}</span><span style="font-size:11px; color:oklch(0.62 0.01 260);">{{ stats.chAtkParts }}</span></div></div>
+      <div style="background:oklch(0.215 0.008 260); padding:7px 10px; min-width:0;"><div style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:oklch(0.74 0.01 260); white-space:nowrap;">Slots</div><div style="font-family:'JetBrains Mono', monospace; font-size:16px; font-weight:700; margin-top:5px;">{{ stats.slots }}</div></div>
+      <div style="background:oklch(0.215 0.008 260); padding:7px 10px; min-width:0;"><div style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:oklch(0.74 0.01 260); white-space:nowrap;">▲ Fire Bolt</div><div style="font-family:'JetBrains Mono', monospace; font-size:15px; font-weight:700; margin-top:5px; white-space:nowrap;">{{ stats.fb }}</div><div style="font-size:11px; color:oklch(0.62 0.01 260);">{{ stats.fbParts }}</div></div>
+      <div style="background:oklch(0.215 0.008 260); padding:7px 10px; min-width:0;"><div style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:oklch(0.74 0.01 260); white-space:nowrap;">Baseline</div><div style="font-family:'JetBrains Mono', monospace; font-size:24px; font-weight:700;">{{ stats.baseline }}</div><div style="font-size:11px; color:oklch(0.62 0.01 260);">Fire Bolt + cannon</div></div>
+      <div style="background:oklch(0.215 0.008 260); padding:7px 10px; min-width:0;"><div style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:oklch(0.74 0.01 260); white-space:nowrap;">Cannon</div><div style="font-family:'JetBrains Mono', monospace; font-size:14px; font-weight:700; margin-top:5px; white-space:nowrap;">AC 18 · HP {{ stats.cannonHpNum }}</div><div style="font-size:11px; color:oklch(0.62 0.01 260);">5 × level</div></div>
+    </div>
+    <sc-if value="{{ showLoadout }}" hint-placeholder-val="{{ true }}">
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:12px; align-items:start;">
+      
+      <div style="border:3px solid oklch(0.11 0.005 260); box-shadow:0 0 0 1px oklch(0.36 0.01 260); border-radius:6px; background:oklch(0.11 0.005 260); display:flex; flex-direction:column; gap:2px; font-size:12.5px; line-height:1.4; color:oklch(0.80 0.01 260);">
+        <div style="background:oklch(0.76 0.14 305 / 0.16); border-radius:3px 3px 0 0; padding:7px 11px; font-family:'Marcellus SC', serif; font-size:18px; color:oklch(0.95 0.006 80); display:flex; gap:8px; align-items:center;"><span style="color:oklch(0.76 0.14 305); font-size:13px;">✦</span>Spells</div>
+        <sc-for list="{{ spellGroups }}" as="g" hint-placeholder-count="4">
+          <div style="background:oklch(0.215 0.008 260); padding:7px 11px; display:flex; flex-direction:column; gap:5px;">
+            <div style="display:flex; justify-content:space-between; gap:8px; font-size:11px; letter-spacing:0.07em; text-transform:uppercase; color:oklch(0.74 0.01 260);"><span>{{ g.title }}</span><span style="color:{{ g.subFg }};">{{ g.sub }}</span></div>
+            <div style="display:flex; flex-wrap:wrap; gap:4px;">
+              <sc-for list="{{ g.items }}" as="it" hint-placeholder-count="3">
+                <span onMouseEnter="{{ it.enter }}" onMouseLeave="{{ it.leave }}" onClick="{{ it.tap }}" style="position:relative; display:flex;">
+                  <span style="cursor:help; font-size:12.5px; font-weight:700; padding:2px 7px; border-radius:3px; background:{{ it.bg }}; color:{{ it.fg }}; text-decoration:{{ it.deco }}; border-width:1px; border-style:{{ it.bs }}; border-color:{{ it.bd }};">{{ it.name }}<span style="color:oklch(0.76 0.14 305);">{{ it.conc }}</span></span>
+                  <sc-if value="{{ it.open }}" hint-placeholder-val="{{ false }}">
+                    <span style="position:absolute; left:0; top:100%; z-index:40; padding-top:6px; width:300px; max-width:80vw;">
+                      <span style="display:flex; flex-direction:column; gap:6px; background:oklch(0.13 0.006 260); border:3px solid oklch(0.08 0.004 260); box-shadow:0 0 0 1px oklch(0.76 0.14 305), 0 12px 28px oklch(0 0 0 / 0.55); border-radius:6px; padding:10px 12px; color:oklch(0.95 0.006 80); text-decoration:none; font-weight:400;">
+                        <span style="font-family:'Marcellus SC', serif; font-size:17px; line-height:1.1;">{{ it.name }}</span>
+                        <span style="display:flex; flex-wrap:wrap; gap:4px;">
+                          <sc-for list="{{ it.meta }}" as="m" hint-placeholder-count="3">
+                            <span style="font-size:11px; font-weight:700; letter-spacing:0.04em; padding:1px 6px; border-radius:3px; background:oklch(0.26 0.01 260); color:oklch(0.88 0.01 260); white-space:nowrap;">{{ m }}</span>
+                          </sc-for>
+                        </span>
+                        <sc-for list="{{ it.lines }}" as="ln" hint-placeholder-count="2">
+                          <span style="display:grid; grid-template-columns:62px minmax(0,1fr); gap:8px; font-size:12.5px; line-height:1.35; border-top:1px solid oklch(0.26 0.01 260); padding-top:5px;">
+                            <span style="font-size:10.5px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:oklch(0.70 0.01 260); padding-top:1px;">{{ ln.k }}</span>
+                            <span><span style="font-family:'JetBrains Mono', monospace; font-weight:700;">{{ ln.dice }}</span> <span style="color:oklch(0.82 0.01 260);">{{ ln.v }}</span></span>
+                          </span>
+                        </sc-for>
+                      </span>
+                    </span>
+                  </sc-if>
+                </span>
+              </sc-for>
+            </div>
+            <sc-if value="{{ g.hasNote }}" hint-placeholder-val="{{ false }}">
+              <div style="font-size:11.5px; color:oklch(0.70 0.01 260);">{{ g.note }}</div>
+            </sc-if>
+          </div>
+        </sc-for>
+        <div style="background:oklch(0.215 0.008 260); padding:6px 11px; font-size:11.5px; color:oklch(0.66 0.01 260);"><span style="color:oklch(0.76 0.14 305);">◎</span> = concentration · one at a time</div>
+      </div>
+      
+      <div style="border:3px solid oklch(0.11 0.005 260); box-shadow:0 0 0 1px oklch(0.36 0.01 260); border-radius:6px; overflow:hidden; background:oklch(0.11 0.005 260); display:flex; flex-direction:column; gap:2px; font-size:12.5px; line-height:1.4; color:oklch(0.80 0.01 260);">
+        <div style="background:oklch(0.74 0.14 255 / 0.16); padding:7px 11px; font-family:'Marcellus SC', serif; font-size:18px; color:oklch(0.95 0.006 80); display:flex; gap:8px; align-items:center;"><span style="color:oklch(0.74 0.14 255); font-size:13px;">◆</span>Eldritch Cannon</div>
+        <div style="background:oklch(0.215 0.008 260); padding:8px 11px; display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:8px;">
+          <div style="display:flex; flex-direction:column; gap:4px;"><div style="aspect-ratio:1; border:3px solid oklch(0.11 0.005 260); box-shadow:0 0 0 1px oklch(0.36 0.01 260); border-radius:5px; overflow:hidden; background:oklch(0.13 0.006 260);"><image-slot id="cannon-flamethrower" shape="rect" placeholder="Flamethrower" src="assets/cannon-flamethrower.png" style="width:100%; height:100%;"></image-slot></div><span style="font-size:11px; text-align:center;"><span style="color:oklch(0.80 0.15 65);">▲</span> Flamethrower</span></div>
+          <div style="display:flex; flex-direction:column; gap:4px;"><div style="aspect-ratio:1; border:3px solid oklch(0.11 0.005 260); box-shadow:0 0 0 1px oklch(0.36 0.01 260); border-radius:5px; overflow:hidden; background:oklch(0.13 0.006 260);"><image-slot id="cannon-ballista" shape="rect" placeholder="Force Ballista" src="assets/cannon-ballista.png" style="width:100%; height:100%;"></image-slot></div><span style="font-size:11px; text-align:center;"><span style="color:oklch(0.74 0.14 255);">◆</span> Force Ballista</span></div>
+          <div style="display:flex; flex-direction:column; gap:4px;"><div style="aspect-ratio:1; border:3px solid oklch(0.11 0.005 260); box-shadow:0 0 0 1px oklch(0.36 0.01 260); border-radius:5px; overflow:hidden; background:oklch(0.13 0.006 260);"><image-slot id="cannon-protector" shape="rect" placeholder="Protector" src="assets/cannon-protector.png" style="width:100%; height:100%;"></image-slot></div><span style="font-size:11px; text-align:center;"><span style="color:oklch(0.80 0.15 150);">✚</span> Protector</span></div>
+        </div>
+        
+        <div style="background:oklch(0.215 0.008 260); padding:7px 11px;"><div style="font-weight:700; font-size:13px; color:oklch(0.95 0.006 80);">Rules</div>Bonus action to fire · within 60 ft of you · walks/climbs 15 ft as part of that bonus action · type locked when summoned; rebuild costs a slot</div>
+        
+        <div style="background:oklch(0.215 0.008 260); padding:7px 11px;"><div style="font-weight:700; font-size:13px; color:oklch(0.95 0.006 80);"><span style="color:oklch(0.74 0.14 255);">◆</span> Force Ballista</div>Spell atk {{ stats.atk }} · 120 ft · <span style="font-family:'JetBrains Mono', monospace; color:oklch(0.95 0.006 80);">2d8</span> force <span style="color:oklch(0.62 0.01 260);">≈ 9</span> · push 5 ft</div>
+        
+        <div style="background:oklch(0.215 0.008 260); padding:7px 11px;"><div style="font-weight:700; font-size:13px; color:oklch(0.95 0.006 80);"><span style="color:oklch(0.80 0.15 65);">▲</span> Flamethrower</div>15-ft cone · Dex save {{ stats.dc }} · <span style="font-family:'JetBrains Mono', monospace; color:oklch(0.95 0.006 80);">2d8</span> fire <span style="color:oklch(0.62 0.01 260);">≈ 9</span>, half on save · ignites unattended flammables · reach ≈ 30 ft (15 move + 15 cone)</div>
+      </div>
+      
+      <div style="border:3px solid oklch(0.11 0.005 260); box-shadow:0 0 0 1px oklch(0.36 0.01 260); border-radius:6px; overflow:hidden; background:oklch(0.11 0.005 260); display:flex; flex-direction:column; gap:2px; font-size:12.5px; line-height:1.4; color:oklch(0.80 0.01 260);">
+        <div style="background:oklch(0.80 0.15 65 / 0.16); padding:7px 11px; font-family:'Marcellus SC', serif; font-size:18px; color:oklch(0.95 0.006 80); display:flex; gap:8px; align-items:center;"><span style="color:oklch(0.80 0.15 65); font-size:13px;">■</span>Equipment</div>
+        <div style="background:oklch(0.215 0.008 260); padding:8px 11px; display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:8px;">
+          <div style="aspect-ratio:4/3; border:3px solid oklch(0.11 0.005 260); box-shadow:0 0 0 1px oklch(0.36 0.01 260); border-radius:5px; overflow:hidden; background:oklch(0.13 0.006 260);"><image-slot id="gear-chistera" shape="rect" placeholder="Chistera" src="assets/gear-chistera.png" style="width:100%; height:100%;"></image-slot></div>
+          <div style="aspect-ratio:4/3; border:3px solid oklch(0.11 0.005 260); box-shadow:0 0 0 1px oklch(0.36 0.01 260); border-radius:5px; overflow:hidden; background:oklch(0.13 0.006 260);"><image-slot id="gear-bead" shape="rect" placeholder="Tinkering bead" src="assets/gear-bead.png" style="width:100%; height:100%;"></image-slot></div>
+        </div>
+        
+        <div style="background:oklch(0.215 0.008 260); padding:7px 11px;"><div style="font-weight:700; font-size:13px; color:oklch(0.95 0.006 80);"><span style="color:oklch(0.84 0.01 260);">■</span> Chistera</div>Glass jai-alai launcher, sling-style · 30/120 ft · atk {{ stats.chAtk }} · <span style="font-family:'JetBrains Mono', monospace; color:oklch(0.95 0.006 80);">{{ stats.chExpr }}</span> <span style="color:oklch(0.62 0.01 260);">≈ {{ stats.chAvg }}</span></div>
+        
+        <div style="background:oklch(0.215 0.008 260); padding:7px 11px;"><div style="font-weight:700; font-size:13px; color:oklch(0.95 0.006 80);">Tinkering bead</div>Magical Tinkering · free · 4 active total · action + tinker’s tools · one mode per bead:<div style="display:grid; grid-template-columns:14px minmax(0,1fr); column-gap:6px; margin-top:3px;"><span style="color:oklch(0.90 0.13 95);">☼</span><span><b style="color:oklch(0.95 0.006 80);">Light:</b> 5 ft bright + 5 ft dim</span><span style="color:oklch(0.84 0.01 260);">≋</span><span><b style="color:oklch(0.95 0.006 80);">Sound:</b> replays up to 6 s of recorded footsteps/voices when tapped, to lure</span></div></div>
+      </div>
+      <sc-for list="{{ kits }}" as="kit" hint-placeholder-count="2">
+      <div style="border:3px solid oklch(0.11 0.005 260); box-shadow:0 0 0 1px oklch(0.36 0.01 260); border-radius:6px; overflow:hidden; background:oklch(0.11 0.005 260); display:flex; flex-direction:column; gap:2px; font-size:12.5px; line-height:1.4; color:oklch(0.80 0.01 260);">
+        <div style="background:{{ kit.tint }}; padding:7px 11px; font-family:'Marcellus SC', serif; font-size:18px; color:oklch(0.95 0.006 80); display:flex; gap:8px; align-items:baseline; flex-wrap:wrap;"><span style="color:{{ kit.c }}; font-size:13px;">{{ kit.g }}</span>{{ kit.title }}<span style="font-family:'Atkinson Hyperlegible', sans-serif; font-size:12px; color:oklch(0.74 0.01 260);">{{ kit.sub }}</span></div>
+        <sc-if value="{{ kit.hasIntro }}" hint-placeholder-val="{{ false }}">
+          <div style="background:oklch(0.19 0.008 260); padding:6px 11px; display:flex; flex-wrap:wrap; gap:6px; align-items:center; color:oklch(0.86 0.01 260);">{{ kit.intro }}<sc-for list="{{ kit.introDms }}" as="b" hint-placeholder-count="1"><span style="font-size:11px; font-weight:700; letter-spacing:0.05em; padding:1px 6px; border-radius:3px; background:{{ b.bg }}; color:{{ b.fg }}; border:1.5px {{ b.bs }} {{ b.bd }}; white-space:nowrap;">{{ b.txt }}</span></sc-for></div>
+        </sc-if>
+        <sc-for list="{{ kit.rows }}" as="row" hint-placeholder-count="5">
+          <div style="background:oklch(0.215 0.008 260); padding:7px 11px; display:flex; gap:10px; align-items:start; opacity:{{ row.opacity }};">
+            <sc-if value="{{ row.hasSlot }}" hint-placeholder-val="{{ true }}"><div style="width:48px; flex:none; height:48px; border:3px solid oklch(0.11 0.005 260); box-shadow:0 0 0 1px oklch(0.36 0.01 260); border-radius:5px; overflow:hidden; background:oklch(0.13 0.006 260);"><image-slot id="{{ row.slot }}" shape="rect" placeholder="{{ row.name }}" src="{{ row.src }}" style="width:100%; height:100%;"></image-slot></div></sc-if>
+            <div style="display:flex; flex-direction:column; gap:2px; min-width:0;">
+            <div style="display:flex; flex-wrap:wrap; align-items:center; gap:6px; font-weight:700; font-size:13px; color:oklch(0.95 0.006 80);"><span style="color:{{ row.c }};">{{ row.g }}</span><span>{{ row.name }}</span><sc-for list="{{ row.dms }}" as="b" hint-placeholder-count="1"><span style="font-size:11px; font-weight:700; letter-spacing:0.05em; padding:1px 6px; border-radius:3px; background:{{ b.bg }}; color:{{ b.fg }}; border:1.5px {{ b.bs }} {{ b.bd }}; white-space:nowrap;">{{ b.txt }}</span></sc-for></div>
+            <sc-if value="{{ row.hasDice }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex; flex-wrap:wrap; align-items:baseline; gap:2px 6px;"><span style="font-family:'JetBrains Mono', monospace; font-size:13.5px; font-weight:700; color:oklch(0.95 0.006 80);">{{ row.dice }}</span><span style="font-family:'JetBrains Mono', monospace; font-size:11.5px; color:oklch(0.66 0.01 260);">{{ row.avg }}</span><span style="font-size:11px; font-weight:700; color:{{ row.dc }};">{{ row.dg }} {{ row.t }}</span></div>
+            </sc-if>
+            <div style="text-wrap:pretty;">{{ row.txt }}</div>
+            <sc-if value="{{ row.hasTip }}" hint-placeholder-val="{{ false }}">
+              <div style="font-size:12px; color:oklch(0.86 0.08 255);">Tip: {{ row.tip }}</div>
+            </sc-if>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      </sc-for>
+    </div>
+    </sc-if>
+  </section>
+
+  
+  
+  <section data-screen-label="Tier II Playbook" ref="{{ playbookRef }}" style="display:flex; flex-direction:column; gap:10px;">
+    
+  <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+    <span style="width:34px; height:34px; flex:none; transform:rotate(45deg); border:3px solid oklch(0.11 0.005 260); box-shadow:0 0 0 1px oklch(0.36 0.01 260); background:oklch(0.80 0.15 150 / 0.30); display:flex; align-items:center; justify-content:center; margin:0 4px;"><span style="transform:rotate(-45deg); font-family:'Marcellus SC', serif; font-size:15px; color:oklch(0.95 0.006 80);">II</span></span>
+    <span style="font-family:'Marcellus SC', serif; font-size:25px; line-height:1;">Playbook</span>
+    <span style="font-size:13px; color:oklch(0.74 0.01 260);">Run the play</span>
+    <span style="flex:1 1 40px; height:5px; background:oklch(0.11 0.005 260); border-top:1px solid oklch(0.36 0.01 260); border-bottom:1px solid oklch(0.36 0.01 260);"></span>
+  </div>
+    <div role="tablist" style="display:flex; flex-wrap:wrap; gap:2px; border-bottom:3px solid oklch(0.11 0.005 260); box-shadow:0 1px 0 oklch(0.36 0.01 260);">
+      <sc-for list="{{ tabs }}" as="tb" hint-placeholder-count="6">
+        <button role="tab" onClick="{{ tb.select }}" style="cursor:pointer; min-height:42px; padding:6px 15px; display:flex; align-items:center; gap:7px; background:{{ tb.bg }}; color:{{ tb.fg }}; border:0; border-bottom:3px solid {{ tb.bd }}; margin-bottom:-3px; border-radius:4px 4px 0 0; font-family:'Marcellus SC', serif; font-size:16.5px;"><span style="color:{{ tb.c }}; font-size:13px;">{{ tb.g }}</span>{{ tb.label }}<span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:oklch(0.66 0.01 260);">{{ tb.n }}</span></button>
+      </sc-for>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:6px;">
+      <button onClick="{{ toggleFlow }}" aria-expanded="{{ flowOpen }}" style="cursor:pointer; align-self:flex-start; display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; padding:2px 0; background:transparent; border:0; color:oklch(0.95 0.006 80); text-align:left;">
+        <span style="font-family:'JetBrains Mono', monospace; font-size:13px; color:oklch(0.80 0.15 65); width:12px;">{{ flowChevron }}</span>
+        <span style="font-family:'Marcellus SC', serif; font-size:17px; color:oklch(0.90 0.10 65);">Decision flow</span>
+        <span style="font-size:11.5px; color:oklch(0.66 0.01 260);">{{ flowHint }}</span>
+      </button>
+      <sc-if value="{{ flowOpen }}" hint-placeholder-val="{{ true }}">
+      <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(250px, 1fr)); gap:6px;">
+        <sc-for list="{{ steps }}" as="s" hint-placeholder-count="8">
+          <button onClick="{{ s.select }}" style="cursor:pointer; text-align:left; display:grid; grid-template-columns:20px minmax(0,1fr); gap:8px; align-items:start; padding:7px 10px; border-radius:5px; background:{{ s.bg }}; border:0; box-shadow:0 0 0 {{ s.ringW }} {{ s.ringC }}; color:oklch(0.95 0.006 80); font-size:12.5px; line-height:1.3;">
+            <span style="font-family:'JetBrains Mono', monospace; font-weight:700; color:oklch(0.80 0.15 65);">{{ s.num }}</span>
+            <span style="display:flex; flex-direction:column; gap:3px; min-width:0;">
+              <span style="font-weight:700;">{{ s.q }}</span>
+              <span style="display:flex; flex-wrap:wrap; gap:2px 8px;">
+                <sc-for list="{{ s.plays }}" as="p" hint-placeholder-count="2">
+                  <span style="font-size:12px; color:{{ p.fg }}; text-decoration:{{ p.deco }};">→ {{ p.name }}</span>
+                </sc-for>
+              </span>
+            </span>
+          </button>
+        </sc-for>
+      </div>
+      </sc-if>
+    </div>
+    <div style="display:flex; flex-wrap:wrap; align-items:center; gap:6px;">
+      <sc-for list="{{ chips }}" as="c" hint-placeholder-count="5">
+        <button onClick="{{ c.toggle }}" style="cursor:pointer; min-height:36px; padding:5px 13px; border-radius:18px; font-size:13.5px; font-weight:700; background:{{ c.bg }}; color:{{ c.fg }}; border:1px solid {{ c.bd }};">{{ c.mark }} {{ c.label }}</button>
+      </sc-for>
+      <sc-if value="{{ anyFilter }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ clearAll }}" style="cursor:pointer; min-height:36px; padding:5px 12px; border-radius:18px; font-size:13px; background:transparent; color:oklch(0.80 0.15 65); border:1px dashed oklch(0.55 0.01 260);">✕ Clear {{ clearLabel }}</button>
+      </sc-if>
+    </div>
+    <div style="display:grid; grid-template-columns:{{ gridCols }}; gap:12px; align-items:start;">
+        <sc-for list="{{ cards }}" as="card" hint-placeholder-count="12">
+          <article onClick="{{ card.open }}" style="cursor:pointer; display:{{ card.display }}; opacity:{{ card.opacity }}; flex-direction:column; background:oklch(0.215 0.008 260); border:3px solid oklch(0.11 0.005 260); box-shadow:0 0 0 {{ card.ringW }} {{ card.ring }}; border-radius:6px; overflow:hidden; transition:opacity .15s;">
+            <div style="background:{{ card.tint }}; border-bottom:3px solid oklch(0.11 0.005 260); padding:8px 10px 7px; display:grid; grid-template-columns:minmax(0,1fr); gap:3px 10px; align-items:start;">
+              <div style="display:flex; flex-direction:column; gap:2px; min-width:0;">
+                <div style="display:flex; align-items:center; gap:7px;">
+                  <span style="color:{{ card.accent }}; font-size:14px;">{{ card.glyph }}</span>
+                  <span style="font-family:'Marcellus SC', serif; font-size:18px; line-height:1.1;">{{ card.name }}</span>
+                </div>
+                <div style="font-size:12.5px; color:oklch(0.82 0.01 260);">{{ card.use }}</div>
+                <div style="display:flex; flex-wrap:wrap; gap:4px; margin-top:3px;">
+                  <sc-for list="{{ card.gear }}" as="gr" hint-placeholder-count="1">
+                    <span style="display:flex; align-items:center; gap:4px; font-size:11px; font-weight:700; padding:1px 6px; border-radius:3px; background:oklch(0.13 0.006 260); color:oklch(0.92 0.01 80); border:1px solid {{ gr.c }}; white-space:nowrap;"><span style="color:{{ gr.c }};">{{ gr.g }}</span>{{ gr.label }}</span>
+                  </sc-for>
+                </div>
+              </div>
+              <div style="grid-column:1 / -1; display:flex; flex-wrap:wrap; justify-content:flex-end; gap:0 14px;">
+                <sc-for list="{{ card.totals }}" as="t" hint-placeholder-count="1">
+                  <div style="display:flex; align-items:baseline; gap:5px; white-space:nowrap;">
+                    <span style="font-size:10.5px; text-transform:uppercase; letter-spacing:0.06em; color:oklch(0.74 0.01 260);">{{ t.l }}</span>
+                    <span style="font-family:'JetBrains Mono', monospace; font-size:19px; font-weight:700;">≈{{ t.v }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="display:flex; flex-wrap:wrap; gap:4px; padding:7px 10px 5px;">
+              <sc-for list="{{ card.badges }}" as="b" hint-placeholder-count="2">
+                <span style="font-size:11px; font-weight:700; letter-spacing:0.05em; padding:1px 6px; border-radius:3px; background:{{ b.bg }}; color:{{ b.fg }}; border:1.5px {{ b.bs }} {{ b.bd }}; white-space:nowrap;">{{ b.txt }}</span>
+              </sc-for>
+            </div>
+            <sc-if value="{{ card.hasGate }}" hint-placeholder-val="{{ false }}">
+              <div style="margin:0 10px 6px; padding:4px 8px; border-radius:3px; border:1.5px dashed oklch(0.80 0.15 65); font-size:12px; font-weight:700; color:oklch(0.88 0.12 65);">{{ card.gate }}</div>
+            </sc-if>
+            <sc-for list="{{ card.lanes }}" as="lane" hint-placeholder-count="2">
+              <div style="display:grid; grid-template-columns:66px minmax(0,1fr); gap:8px; padding:6px 10px; border-top:1px solid oklch(0.29 0.01 260); background:{{ lane.rowBg }}; opacity:{{ lane.op }};">
+                <div style="display:flex; flex-direction:column; gap:2px; align-items:flex-start;">
+                  <span style="font-size:10.5px; font-weight:700; letter-spacing:0.06em; padding:2px 5px; border-radius:3px; background:{{ lane.bg }}; color:{{ lane.fg }}; border:1px solid {{ lane.bd }};">{{ lane.k }}</span>
+                  <span style="font-size:10.5px; color:oklch(0.70 0.01 260); line-height:1.2;">{{ lane.q }}</span>
+                </div>
+                <div style="min-width:0;">
+                  <div style="font-size:13px; line-height:1.32; text-wrap:pretty;"><b>{{ lane.name }}</b> <span style="color:oklch(0.78 0.01 260);">{{ lane.txt }}</span></div>
+                  <sc-for list="{{ lane.dice }}" as="d" hint-placeholder-count="1">
+                    <div style="display:flex; flex-wrap:wrap; align-items:baseline; gap:2px 6px; margin-top:3px;">
+                      <span style="font-family:'JetBrains Mono', monospace; font-size:14px; font-weight:700;">{{ d.e }}</span>
+                      <span style="font-size:11.5px; color:oklch(0.66 0.01 260);">{{ d.p }}</span>
+                      <span style="font-size:11.5px; color:oklch(0.66 0.01 260); font-family:'JetBrains Mono', monospace;">{{ d.avg }}</span>
+                      <span style="font-size:11px; font-weight:700; color:{{ d.c }}; white-space:nowrap; padding:0 6px 0 4px; border-radius:3px; border:1px solid {{ d.c }}; background:oklch(0.13 0.006 260); display:inline-flex; align-items:center; gap:4px;"><span style="font-size:12px;">{{ d.g }}</span>{{ d.t }}</span>
+                    </div>
+                  </sc-for>
+                  <sc-if value="{{ lane.hasCost }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex; flex-wrap:wrap; align-items:center; gap:4px; margin-top:4px;">
+                      <span style="font-size:11px; color:oklch(0.62 0.01 260);">{{ lane.costTxt }}</span>
+                      <span style="font-size:11px; font-weight:700; color:{{ lane.statusFg }}; margin-left:auto;">{{ lane.status }}</span>
+                    </div>
+                  </sc-if>
+                </div>
+              </div>
+            </sc-for>
+            <sc-if value="{{ card.hasNote }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:6px 10px 8px; border-top:1px solid oklch(0.29 0.01 260); font-size:12px; line-height:1.35; color:oklch(0.80 0.01 260); background:oklch(0.19 0.008 260);">{{ card.note }}</div>
+            </sc-if>
+            <sc-if value="{{ card.locked }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:5px 10px; border-top:1px solid oklch(0.29 0.01 260); font-size:11.5px; font-weight:700; color:oklch(0.86 0.08 255); background:oklch(0.19 0.008 260);">Unlocks at Level 5 · numbers shown at L5</div>
+            </sc-if>
+          </article>
+        </sc-for>
+      </div>
+  </section>
+
+  <div style="height:5px; background:oklch(0.11 0.005 260); border-top:1px solid oklch(0.36 0.01 260); border-bottom:1px solid oklch(0.36 0.01 260);"></div>
+
+  <footer style="display:grid; grid-template-columns:repeat(auto-fit, minmax(340px, 1fr)); gap:14px; font-size:12.5px; line-height:1.4;">
+    <div style="display:grid; grid-auto-rows:min-content; gap:5px; align-content:start;">
+      <div style="font-family:'Marcellus SC', serif; font-size:17px; color:oklch(0.90 0.10 65);">Rules reminders</div>
+      <div style="display:grid; grid-template-columns:14px minmax(0,1fr); column-gap:7px; line-height:1.4; min-height:min-content;"><span style="color:oklch(0.76 0.14 305);">◎</span><span><b>One concentration spell at a time:</b> Faerie Fire, Caustic Brew, Web, Heat Metal. Catapult, Shatter, Pyrotechnics, Snare, and Magic Stone don't need it</span></div>
+      <div style="display:grid; grid-template-columns:14px minmax(0,1fr); column-gap:7px; line-height:1.4; min-height:min-content;"><span style="color:oklch(0.80 0.15 65);">▲</span><span>Oil's +5 triggers <b>once per coating</b></span></div>
+      <div style="display:grid; grid-template-columns:14px minmax(0,1fr); column-gap:7px; line-height:1.4; min-height:min-content;"><span style="color:oklch(0.84 0.01 260);">■</span><span><b>Only one bonus action per turn:</b> cannon vs Magic Stone vs Misty Step</span></div>
+      <div style="display:grid; grid-template-columns:14px minmax(0,1fr); column-gap:7px; line-height:1.4; min-height:min-content;"><span style="color:oklch(0.84 0.01 260);">■</span><span><b>Bosses:</b> target Dex saves or attack rolls. <b>Casters:</b> target Con/Str saves</span></div>
+      <div style="display:grid; grid-template-columns:14px minmax(0,1fr); column-gap:7px; line-height:1.4; min-height:min-content;"><span style="color:oklch(0.74 0.12 25);">⬢</span><span><b>Prone:</b> melee within 5 ft has advantage; ranged has disadvantage, including yours. Saves unaffected</span></div>
+      <div style="display:grid; grid-template-columns:14px minmax(0,1fr); column-gap:7px; line-height:1.4; min-height:min-content;"><span style="color:oklch(0.74 0.12 25);">⬢</span><span><b>Restrained:</b> attacks against it have advantage; its Dex saves have disadvantage</span></div>
+      <div style="display:grid; grid-template-columns:14px minmax(0,1fr); column-gap:7px; line-height:1.4; min-height:min-content;"><span style="color:oklch(0.72 0.015 260);">◐</span><span><b>Heavily obscured</b> = effectively blinded, both ways. Siris has no darkvision; darkvision doesn’t see through smoke</span></div>
+      <div style="display:grid; grid-template-columns:14px minmax(0,1fr); column-gap:7px; line-height:1.4; min-height:min-content;"><span style="color:oklch(0.72 0.015 260);">◐</span><span>Pyrotechnics puts out the flame it uses</span></div>
+      <div style="display:grid; grid-template-columns:14px minmax(0,1fr); column-gap:7px; line-height:1.4; min-height:min-content;"><span style="color:oklch(0.84 0.01 260);">▪</span><span>Shards DC 15 and marbles DC 10 are <b>fixed</b>, not your DC. Enemies moving at half speed skip the save</span></div>
+      <div style="display:grid; grid-template-columns:14px minmax(0,1fr); column-gap:7px; line-height:1.4; min-height:min-content;"><span style="color:oklch(0.84 0.01 260);">■</span><span>After imbuing Magic Stone (bonus action spell), the only other spell that turn is Fire Bolt or another action cantrip</span></div>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:4px;">
+      <div style="display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;">
+        <span style="font-family:'Marcellus SC', serif; font-size:17px; color:oklch(0.90 0.10 65);">Pending DM rulings</span>
+        <span style="font-size:11.5px; color:oklch(0.66 0.01 260);">Tap to mark approved; badges go solid</span>
+      </div>
+      <sc-for list="{{ rulings }}" as="r" hint-placeholder-count="10">
+        <button onClick="{{ r.toggle }}" style="text-align:left; cursor:pointer; display:grid; grid-template-columns:52px minmax(0,1fr) auto; gap:8px; align-items:center; background:transparent; color:oklch(0.95 0.006 80); border:0; padding:2px 0; font-size:12.5px;">
+          <span style="font-size:11px; font-weight:700; padding:1px 5px; border-radius:3px; border:1.5px {{ r.bs }} {{ r.bd }}; color:{{ r.fg }}; text-align:center;">{{ r.badge }}</span>
+          <span style="text-decoration:{{ r.deco }}; color:{{ r.txtFg }};">{{ r.txt }}</span>
+          <span style="font-size:11px; color:oklch(0.66 0.01 260); white-space:nowrap;">{{ r.plays }}</span>
+        </button>
+      </sc-for>
+    </div>
+  </footer>
+</div>
+<aside data-print-hide="1" style="flex:1 1 300px; max-width:360px; position:sticky; top:14px; max-height:calc(100vh - 28px); overflow:auto; display:flex; flex-direction:column; gap:10px;">
+  <div style="border:3px solid oklch(0.11 0.005 260); box-shadow:0 0 0 1px oklch(0.36 0.01 260); border-radius:6px; background:oklch(0.11 0.005 260); display:flex; flex-direction:column; gap:2px; font-size:12.5px; overflow:hidden; flex:none;">
+    <div style="background:oklch(0.80 0.15 65 / 0.16); padding:8px 11px; display:flex; align-items:center; justify-content:space-between; gap:8px;">
+      <span style="display:flex; align-items:center; gap:10px;"><span style="font-family:'Marcellus SC', serif; font-size:19px;">Tracker</span></span>
+      <span style="font-family:'JetBrains Mono', monospace; font-size:15px; font-weight:700;">{{ tr.roundLabel }}</span>
+    </div>
+    <div style="background:oklch(0.215 0.008 260); padding:8px 10px; display:flex; flex-direction:row; gap:6px;">
+      <button onClick="{{ tr.advance }}" style="cursor:pointer; flex:1 1 0; min-height:40px; padding:4px 14px; border-radius:6px; border:1px solid oklch(0.86 0.13 65); background:linear-gradient(oklch(0.84 0.14 68), oklch(0.74 0.15 60)); box-shadow:inset 0 1px 0 oklch(1 0 0 / 0.35), 0 0 14px oklch(0.80 0.15 65 / 0.3); color:oklch(0.16 0.008 260); font-size:13.5px; font-weight:700; letter-spacing:0.02em;">{{ tr.advanceLabel }}</button>
+      <sc-if value="{{ tr.inCombat }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ tr.endCombat }}" style="cursor:pointer; flex:1 1 0; min-height:36px; padding:4px 8px; border-radius:6px; border:1px solid oklch(0.42 0.01 260); background:linear-gradient(oklch(0.30 0.01 260), oklch(0.235 0.01 260)); box-shadow:inset 0 1px 0 oklch(1 0 0 / 0.07), 0 1px 2px oklch(0 0 0 / 0.4); color:oklch(0.95 0.006 80); font-size:12.5px; font-weight:700; letter-spacing:0.01em; white-space:nowrap;">End combat</button>
+      </sc-if>
+    </div>
+    <div style="background:oklch(0.215 0.008 260); padding:8px 10px; display:flex; flex-direction:column; gap:6px;">
+      <div style="font-family:'Marcellus SC', serif; font-size:15px; color:oklch(0.95 0.006 80); display:flex; justify-content:space-between; align-items:baseline; gap:8px;"><span>This turn</span></div>
+      <div style="display:flex; gap:6px;">
+        <sc-for list="{{ tr.econ }}" as="e" hint-placeholder-count="3">
+          <button onClick="{{ e.toggle }}" style="cursor:pointer; flex:1 1 0; min-height:38px; border-radius:6px; font-size:12.5px; font-weight:700; letter-spacing:0.02em; background:{{ e.bg }}; color:{{ e.fg }}; border:1px solid {{ e.bd }}; box-shadow:{{ e.sh }}; text-decoration:{{ e.deco }}; display:flex; align-items:center; justify-content:center; gap:6px;">{{ e.label }}</button>
+        </sc-for>
+      </div>
+    </div>
+    <div style="background:oklch(0.215 0.008 260); padding:8px 10px; display:flex; flex-direction:column; gap:6px;">
+      <div style="font-family:'Marcellus SC', serif; font-size:15px; color:oklch(0.95 0.006 80); display:flex; justify-content:space-between; align-items:baseline; gap:8px;"><span>Spell slots</span></div>
+      <sc-for list="{{ tr.slots }}" as="s" hint-placeholder-count="1">
+        <div style="display:grid; grid-template-columns:44px minmax(0,1fr) auto; align-items:center; gap:10px; padding:8px 10px; border-radius:8px; background:oklch(0.16 0.008 260); box-shadow:inset 0 1px 3px oklch(0 0 0 / 0.5);">
+          <span style="display:flex; flex-direction:column; line-height:1.05;"><span style="font-family:'Marcellus SC', serif; font-size:18px;">{{ s.label }}</span><span style="font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:oklch(0.66 0.01 260);">level</span></span>
+          <div style="display:flex; gap:10px; align-items:center; justify-content:flex-end;">
+            <sc-for list="{{ s.pips }}" as="p" hint-placeholder-count="3">
+              <button onClick="{{ p.toggle }}" aria-label="{{ p.aria }}" style="cursor: pointer; width: 26px; height: 26px; padding: 0; border-radius: 50%; border: 2px solid {{ p.bd }}; background: {{ p.bg }}"></button>
+            </sc-for>
+          </div>
+          
+        </div>
+      </sc-for>
+      <span style="font-size:10.5px; letter-spacing:0.08em; text-transform:uppercase; color:oklch(0.66 0.01 260);">Free once per long rest</span>
+      <div style="display:flex; gap:6px;">
+        <sc-for list="{{ tr.frees }}" as="f" hint-placeholder-count="2">
+          <button onClick="{{ f.toggle }}" style="cursor:pointer; flex:1 1 0; min-height:36px; padding:2px 8px; border-radius:6px; font-size:12px; font-weight:700; background:{{ f.bg }}; color:{{ f.fg }}; border:1px solid {{ f.bd }}; box-shadow:{{ f.sh }}; text-decoration:{{ f.deco }};">{{ f.label }}</button>
+        </sc-for>
+      </div>
+    </div>
+    <div style="background:oklch(0.215 0.008 260); padding:8px 10px; display:flex; flex-direction:column; gap:6px;">
+      <div style="font-family:'Marcellus SC', serif; font-size:15px; color:oklch(0.95 0.006 80); display:flex; justify-content:space-between; align-items:baseline; gap:8px;"><span>Concentration</span></div>
+      <sc-if value="{{ tr.conc.has }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+          <span><span style="color:oklch(0.76 0.14 305);">◎</span> <b>{{ tr.conc.name }}</b> <span style="color:oklch(0.70 0.01 260);">{{ tr.conc.left }}</span></span>
+          <button onClick="{{ tr.conc.end }}" style="cursor:pointer; flex:none; min-width:64px; min-height:36px; padding:4px 8px; border-radius:6px; border:1px solid oklch(0.42 0.01 260); background:linear-gradient(oklch(0.30 0.01 260), oklch(0.235 0.01 260)); box-shadow:inset 0 1px 0 oklch(1 0 0 / 0.07), 0 1px 2px oklch(0 0 0 / 0.4); color:oklch(0.95 0.006 80); font-size:12.5px; font-weight:700; letter-spacing:0.01em; white-space:nowrap;">End</button>
+        </div>
+      </sc-if>
+      <sc-if value="{{ tr.conc.none }}" hint-placeholder-val="{{ true }}">
+        <span style="color:oklch(0.66 0.01 260);">None</span>
+      </sc-if>
+    </div>
+    <div style="background:oklch(0.215 0.008 260); padding:8px 10px; display:flex; flex-direction:column; gap:6px;">
+      <div style="font-family:'Marcellus SC', serif; font-size:15px; color:oklch(0.95 0.006 80); display:flex; justify-content:space-between; align-items:baseline; gap:8px;"><span>Eldritch Cannon</span><span style="font-family:'Atkinson Hyperlegible', sans-serif; font-size:11.5px; color:oklch(0.70 0.01 260);">{{ tr.cannon.note }}</span></div>
+      <sc-if value="{{ tr.cannon.has }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex; align-items:center; gap:10px;"><div style="width:52px; height:52px; flex:none; object-fit:cover; border-radius:6px; border:2px solid {{ tr.cannon.c }}; box-shadow:0 0 12px {{ tr.cannon.glow }}; background-image:url({{ tr.cannon.bgImg }}); background-size:cover; background-position:center;"></div><b>{{ tr.cannon.name }}</b><span style="margin-left:auto; font-family:'JetBrains Mono', monospace; font-weight:700;">{{ tr.cannon.hp }} / {{ tr.cannon.max }} HP</span></div>
+        <div style="height:8px; background:oklch(0.13 0.006 260); border-radius:4px; overflow:hidden;"><div style="height:100%; width:{{ tr.cannon.pct }}; background:{{ tr.cannon.c }};"></div></div>
+        <div style="display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:center; gap:10px; padding:8px 10px; border-radius:8px; background:oklch(0.16 0.008 260);">
+          <span style="font-size:10.5px; letter-spacing:0.08em; text-transform:uppercase; color:oklch(0.70 0.01 260);">Shots</span>
+          <div style="display:flex; gap:2px; height:14px;">
+            <sc-for list="{{ tr.cannon.ticks }}" as="tk" hint-placeholder-count="18">
+              <span style="flex:1 1 0; border-radius:2px; background:{{ tk.bg }};"></span>
+            </sc-for>
+          </div>
+          <span style="display:flex; align-items:baseline; gap:2px; font-family:'JetBrains Mono', monospace;"><b style="font-size:17px; color:oklch(0.95 0.006 80);">{{ tr.cannon.shotsLeft }}</b><span style="font-size:12px; color:oklch(0.62 0.01 260);">/{{ tr.cannon.shotCap }}</span></span>
+        </div>
+        <div style="display:flex; gap:6px;">
+          <button onClick="{{ tr.cannon.shotBack }}" style="cursor:pointer; flex:1 1 0; min-height:36px; border-radius:6px; border:1px solid oklch(0.42 0.01 260); background:linear-gradient(oklch(0.30 0.01 260), oklch(0.235 0.01 260)); color:oklch(0.95 0.006 80); font-size:12.5px; font-weight:700;">↶ Shot</button>
+          <button onClick="{{ tr.cannon.shotUse }}" style="cursor:pointer; flex:2 1 0; min-height:36px; border-radius:6px; border:1px solid oklch(0.42 0.01 260); background:linear-gradient(oklch(0.30 0.01 260), oklch(0.235 0.01 260)); color:oklch(0.95 0.006 80); font-size:12.5px; font-weight:700;">Fire (−1 shot)</button>
+        </div>
+        <div style="display:flex; gap:6px;">
+          <button onClick="{{ tr.cannon.dmg5 }}" style="cursor:pointer; flex:1 1 0; min-height:36px; padding:4px 8px; border-radius:6px; border:1px solid oklch(0.42 0.01 260); background:linear-gradient(oklch(0.30 0.01 260), oklch(0.235 0.01 260)); box-shadow:inset 0 1px 0 oklch(1 0 0 / 0.07), 0 1px 2px oklch(0 0 0 / 0.4); color:oklch(0.95 0.006 80); font-size:12.5px; font-weight:700; letter-spacing:0.01em; white-space:nowrap;">−5</button>
+          <button onClick="{{ tr.cannon.dmg1 }}" style="cursor:pointer; flex:1 1 0; min-height:36px; padding:4px 8px; border-radius:6px; border:1px solid oklch(0.42 0.01 260); background:linear-gradient(oklch(0.30 0.01 260), oklch(0.235 0.01 260)); box-shadow:inset 0 1px 0 oklch(1 0 0 / 0.07), 0 1px 2px oklch(0 0 0 / 0.4); color:oklch(0.95 0.006 80); font-size:12.5px; font-weight:700; letter-spacing:0.01em; white-space:nowrap;">−1</button>
+          <button onClick="{{ tr.cannon.heal1 }}" style="cursor:pointer; flex:1 1 0; min-height:36px; padding:4px 8px; border-radius:6px; border:1px solid oklch(0.42 0.01 260); background:linear-gradient(oklch(0.30 0.01 260), oklch(0.235 0.01 260)); box-shadow:inset 0 1px 0 oklch(1 0 0 / 0.07), 0 1px 2px oklch(0 0 0 / 0.4); color:oklch(0.95 0.006 80); font-size:12.5px; font-weight:700; letter-spacing:0.01em; white-space:nowrap;">+1</button>
+          <button onClick="{{ tr.cannon.dismiss }}" style="cursor:pointer; flex:1 1 0; min-height:36px; padding:4px 8px; border-radius:6px; border:1px solid oklch(0.42 0.01 260); background:linear-gradient(oklch(0.30 0.01 260), oklch(0.235 0.01 260)); box-shadow:inset 0 1px 0 oklch(1 0 0 / 0.07), 0 1px 2px oklch(0 0 0 / 0.4); color:oklch(0.95 0.006 80); font-size:12.5px; font-weight:700; letter-spacing:0.01em; white-space:nowrap;">Dismiss</button>
+        </div>
+      </sc-if>
+      <sc-if value="{{ tr.cannon.none }}" hint-placeholder-val="{{ true }}">
+        <div style="display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:6px;">
+          <sc-for list="{{ tr.cannon.builds }}" as="b" hint-placeholder-count="3">
+            <button onClick="{{ b.build }}" style="cursor:pointer; padding:0 0 5px; border-radius:6px; overflow:hidden; border:1px solid oklch(0.40 0.01 260); background:oklch(0.13 0.006 260); color:oklch(0.95 0.006 80); font-size:11.5px; font-weight:700; opacity:{{ b.op }}; display:flex; flex-direction:column; align-items:stretch; gap:5px;"><div style="width:100%; aspect-ratio:1; object-fit:cover; display:block; border-bottom:2px solid {{ b.c }}; background-image:url({{ b.bgImg }}); background-size:cover; background-position:center;"></div><span>{{ b.label }}</span></button>
+          </sc-for>
+        </div>
+      </sc-if>
+    </div>
+    <div style="background:oklch(0.215 0.008 260); padding:8px 10px; display:flex; flex-direction:column; gap:6px;">
+      <div style="font-family:'Marcellus SC', serif; font-size:15px; color:oklch(0.95 0.006 80); display:flex; justify-content:space-between; align-items:baseline; gap:8px;"><span>Magic Stone orbs</span><span style="font-family:'Atkinson Hyperlegible', sans-serif; font-size:11.5px; color:oklch(0.70 0.01 260);">{{ tr.orbs.sub }}</span></div>
+      <div style="display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:6px;">
+        <sc-for list="{{ tr.orbs.pips }}" as="p" hint-placeholder-count="3">
+          <button onClick="{{ p.tap }}" style="cursor:{{ p.cursor }}; min-height:84px; border-radius:10px; background:{{ p.bg }}; border:1.5px {{ p.bs }} {{ p.bd }}; color:oklch(0.95 0.006 80); opacity:{{ p.op }}; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1px; padding:2px;">
+            <div style="width:56px; height:56px; object-fit:cover; border-radius:50%; border:2px solid {{ p.c }}; opacity:{{ p.imgOp }}; background-image:url({{ p.bgImg }}); background-size:cover; background-position:center;"></div>
+            <span style="font-size:10.5px; font-weight:700;">{{ p.label }}</span>
+          </button>
+        </sc-for>
+      </div>
+      <sc-if value="{{ tr.orbs.has }}" hint-placeholder-val="{{ false }}">
+        <div style="font-size:12px; color:oklch(0.78 0.01 260);">{{ tr.orbs.counts }}</div>
+        <div style="display:flex; gap:6px;">
+          <button onClick="{{ tr.orbs.throwSelf }}" style="cursor:pointer; flex:1 1 0; min-height:36px; padding:4px 8px; border-radius:6px; border:1px solid oklch(0.42 0.01 260); background:linear-gradient(oklch(0.30 0.01 260), oklch(0.235 0.01 260)); box-shadow:inset 0 1px 0 oklch(1 0 0 / 0.07), 0 1px 2px oklch(0 0 0 / 0.4); color:oklch(0.95 0.006 80); font-size:12.5px; font-weight:700; letter-spacing:0.01em; white-space:nowrap;">Throw</button>
+          <button onClick="{{ tr.orbs.gift }}" style="cursor:pointer; flex:1 1 0; min-height:36px; padding:4px 8px; border-radius:6px; border:1px solid oklch(0.42 0.01 260); background:linear-gradient(oklch(0.30 0.01 260), oklch(0.235 0.01 260)); box-shadow:inset 0 1px 0 oklch(1 0 0 / 0.07), 0 1px 2px oklch(0 0 0 / 0.4); color:oklch(0.95 0.006 80); font-size:12.5px; font-weight:700; letter-spacing:0.01em; white-space:nowrap;">Gift to ally</button>
+          <button onClick="{{ tr.orbs.allyThrew }}" style="cursor:pointer; flex:1 1 0; min-height:36px; padding:4px 8px; border-radius:6px; border:1px solid oklch(0.42 0.01 260); background:linear-gradient(oklch(0.30 0.01 260), oklch(0.235 0.01 260)); box-shadow:inset 0 1px 0 oklch(1 0 0 / 0.07), 0 1px 2px oklch(0 0 0 / 0.4); color:oklch(0.95 0.006 80); font-size:12.5px; font-weight:700; letter-spacing:0.01em; white-space:nowrap;">Ally threw</button>
+        </div>
+        <div style="display:flex; gap:6px;">
+          <button onClick="{{ tr.orbs.imbue }}" style="cursor:pointer; flex:1 1 0; min-height:36px; padding:4px 8px; border-radius:6px; border:1px solid oklch(0.76 0.14 305 / 0.7); background:linear-gradient(oklch(0.34 0.05 305 / 0.9), oklch(0.26 0.03 305 / 0.9)); color:oklch(0.95 0.006 80); font-size:12.5px; font-weight:700; white-space:nowrap; opacity:{{ tr.orbs.imbueOp }};">Re-imbue</button>
+          <button onClick="{{ tr.orbs.end }}" style="cursor:pointer; flex:1 1 0; min-height:36px; padding:4px 8px; border-radius:6px; border:1px solid oklch(0.42 0.01 260); background:linear-gradient(oklch(0.30 0.01 260), oklch(0.235 0.01 260)); box-shadow:inset 0 1px 0 oklch(1 0 0 / 0.07), 0 1px 2px oklch(0 0 0 / 0.4); color:oklch(0.95 0.006 80); font-size:12.5px; font-weight:700; letter-spacing:0.01em; white-space:nowrap;">End</button>
+        </div>
+      </sc-if>
+      <sc-if value="{{ tr.orbs.none }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex; flex-direction:column; gap:4px;">
+          <button onClick="{{ tr.orbs.imbue }}" style="cursor:pointer; flex:1 1 0; min-height:36px; padding:4px 8px; border-radius:6px; border:1px solid oklch(0.42 0.01 260); background:linear-gradient(oklch(0.30 0.01 260), oklch(0.235 0.01 260)); box-shadow:inset 0 1px 0 oklch(1 0 0 / 0.07), 0 1px 2px oklch(0 0 0 / 0.4); color:oklch(0.95 0.006 80); font-size:12.5px; font-weight:700; letter-spacing:0.01em; white-space:nowrap; opacity:{{ tr.orbs.imbueOp }};">Imbue<br></button>
+          <span style="font-size:11.5px; color:oklch(0.66 0.01 260); text-align:center;">Tap an orb to change its payload</span>
+        </div>
+      </sc-if>
+    </div>
+    <div style="background:oklch(0.215 0.008 260); padding:8px 10px; display:flex; flex-direction:column; gap:6px;">
+      <div style="font-family:'Marcellus SC', serif; font-size:15px; color:oklch(0.95 0.006 80); display:flex; justify-content:space-between; align-items:baseline; gap:8px;"><span>Consumables</span></div>
+      <sc-for list="{{ tr.stock }}" as="s" hint-placeholder-count="6">
+        <div style="display:grid; grid-template-columns:48px minmax(0,1fr) auto; align-items:center; gap:10px;">
+          <div style="width:48px; height:48px; object-fit:cover; border-radius:5px; border:1.5px solid {{ s.c }}; background-image:url({{ s.bgImg }}); background-size:cover; background-position:center;"></div>
+          <span>{{ s.label }}</span>
+          <div style="display:flex; align-items:center; gap:4px;">
+            <button onClick="{{ s.dec }}" style="cursor:pointer; width:28px; height:28px; border-radius:4px; border:1px solid oklch(0.40 0.01 260); background:oklch(0.26 0.01 260); color:oklch(0.95 0.006 80); font-size:14px; padding:0;">−</button>
+            <span style="font-family:'JetBrains Mono', monospace; font-weight:700; min-width:30px; text-align:center;">{{ s.n }}</span>
+            <button onClick="{{ s.inc }}" style="cursor:pointer; width:28px; height:28px; border-radius:4px; border:1px solid oklch(0.40 0.01 260); background:oklch(0.26 0.01 260); color:oklch(0.95 0.006 80); font-size:14px; padding:0;">+</button>
+          </div>
+        </div>
+      </sc-for>
+      <div style="display:flex; align-items:center; gap:6px; padding-top:6px; border-top:1px solid oklch(0.29 0.01 260);">
+        <span style="flex:1 1 0; font-size:11.5px; color:oklch(0.70 0.01 260);">Alchemy jug<br>1 / day</span>
+        <sc-for list="{{ tr.jug }}" as="j" hint-placeholder-count="2">
+          <button onClick="{{ j.use }}" style="cursor:pointer; flex:1 1 0; min-height:36px; padding:4px 8px; border-radius:6px; border:1px solid oklch(0.42 0.01 260); background:linear-gradient(oklch(0.30 0.01 260), oklch(0.235 0.01 260)); box-shadow:inset 0 1px 0 oklch(1 0 0 / 0.07), 0 1px 2px oklch(0 0 0 / 0.4); color:oklch(0.95 0.006 80); font-size:12.5px; font-weight:700; letter-spacing:0.01em; white-space:nowrap; opacity:{{ j.op }};">{{ j.label }}</button>
+        </sc-for>
+      </div>
+    </div>
+    <div style="background:oklch(0.215 0.008 260); padding:8px 10px; display:flex; flex-direction:row; gap:6px;">
+      <button onClick="{{ tr.undo }}" style="cursor:pointer; flex:1 1 0; min-height:36px; padding:4px 8px; border-radius:6px; border:1px solid oklch(0.42 0.01 260); background:linear-gradient(oklch(0.30 0.01 260), oklch(0.235 0.01 260)); box-shadow:inset 0 1px 0 oklch(1 0 0 / 0.07), 0 1px 2px oklch(0 0 0 / 0.4); color:oklch(0.95 0.006 80); font-size:12.5px; font-weight:700; letter-spacing:0.01em; white-space:nowrap; opacity:{{ tr.undoOp }};">↶ Undo</button>
+      <button onClick="{{ tr.shortRest }}" style="cursor:pointer; flex:1 1 0; min-height:36px; padding:4px 8px; border-radius:6px; border:1px solid oklch(0.42 0.01 260); background:linear-gradient(oklch(0.30 0.01 260), oklch(0.235 0.01 260)); box-shadow:inset 0 1px 0 oklch(1 0 0 / 0.07), 0 1px 2px oklch(0 0 0 / 0.4); color:oklch(0.95 0.006 80); font-size:12.5px; font-weight:700; letter-spacing:0.01em; white-space:nowrap;">Short rest</button>
+      <button onClick="{{ tr.longRest }}" style="cursor:pointer; flex:1 1 0; min-height:36px; padding:4px 8px; border-radius:6px; border:1px solid oklch(0.42 0.01 260); background:linear-gradient(oklch(0.30 0.01 260), oklch(0.235 0.01 260)); box-shadow:inset 0 1px 0 oklch(1 0 0 / 0.07), 0 1px 2px oklch(0 0 0 / 0.4); color:oklch(0.95 0.006 80); font-size:12.5px; font-weight:700; letter-spacing:0.01em; white-space:nowrap;">Long rest</button>
+      <button onClick="{{ tr.reset }}" style="cursor:pointer; flex:1 1 0; min-height:36px; padding:4px 8px; border-radius:6px; border:1px solid oklch(0.42 0.01 260); background:linear-gradient(oklch(0.30 0.01 260), oklch(0.235 0.01 260)); box-shadow:inset 0 1px 0 oklch(1 0 0 / 0.07), 0 1px 2px oklch(0 0 0 / 0.4); color:oklch(0.95 0.006 80); font-size:12.5px; font-weight:700; letter-spacing:0.01em; white-space:nowrap;">Reset</button>
+    </div>
+  </div>
+  <div style="border:3px solid oklch(0.11 0.005 260); box-shadow:0 0 0 1px oklch(0.36 0.01 260); border-radius:6px; background:oklch(0.11 0.005 260); display:flex; flex-direction:column; gap:2px; font-size:12.5px; overflow:hidden; flex:none;">
+    <div style="background:oklch(0.26 0.01 260); padding:7px 11px; font-family:'Marcellus SC', serif; font-size:16px;">Action log</div>
+    <sc-for list="{{ tr.log }}" as="l" hint-placeholder-count="3">
+      <div style="background:oklch(0.215 0.008 260); padding:5px 10px; display:grid; grid-template-columns:28px minmax(0,1fr); gap:6px; font-size:12px; line-height:1.35;">
+        <span style="font-family:'JetBrains Mono', monospace; color:oklch(0.66 0.01 260);">{{ l.r }}</span><span>{{ l.t }}</span>
+      </div>
+    </sc-for>
+    <sc-if value="{{ tr.logEmpty }}" hint-placeholder-val="{{ true }}">
+      <div style="background:oklch(0.215 0.008 260); padding:7px 10px; font-size:12px; color:oklch(0.66 0.01 260);">Tap a lane on any play to log it.</div>
+    </sc-if>
+  </div>
+</aside>
+<sc-if value="{{ dlg.open }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ dlg.close }}" data-print-hide="1" style="position:fixed; inset:0; z-index:50; background:oklch(0.08 0.005 260 / 0.72); backdrop-filter:blur(3px); display:flex; align-items:flex-start; justify-content:center; padding:5vh 16px; overflow:auto;">
+    <div onClick="{{ dlg.stop }}" role="dialog" aria-modal="true" aria-label="{{ dlg.name }}" style="width:100%; max-width:620px; background:oklch(0.195 0.008 260); border:3px solid oklch(0.11 0.005 260); box-shadow:0 0 0 1px oklch(0.40 0.01 260), 0 24px 60px oklch(0 0 0 / 0.6); border-radius:8px; overflow:hidden; display:flex; flex-direction:column; color:oklch(0.95 0.006 80); font-family:'Atkinson Hyperlegible', system-ui, sans-serif;">
+      <div style="background:{{ dlg.tint }}; border-bottom:3px solid oklch(0.11 0.005 260); padding:14px 16px 12px; display:grid; grid-template-columns:minmax(0,1fr) auto; gap:4px 12px; align-items:start;">
+        <div style="display:flex; flex-direction:column; gap:3px; min-width:0;">
+          <div style="display:flex; align-items:center; gap:9px;"><span style="color:{{ dlg.accent }}; font-size:17px;">{{ dlg.glyph }}</span><span style="font-family:'Marcellus SC', serif; font-size:26px; line-height:1.05;">{{ dlg.name }}</span></div>
+          <div style="font-size:14px; color:oklch(0.84 0.01 260);">{{ dlg.use }}</div>
+        </div>
+        <button onClick="{{ dlg.close }}" aria-label="Close" style="cursor:pointer; width:36px; height:36px; border-radius:6px; border:1px solid oklch(0.42 0.01 260); background:oklch(0.16 0.008 260 / 0.6); color:oklch(0.95 0.006 80); font-size:16px;">✕</button>
+        <div style="grid-column:1 / -1; display:flex; flex-wrap:wrap; gap:4px; margin-top:4px;">
+          <sc-for list="{{ dlg.badges }}" as="b" hint-placeholder-count="2">
+            <span style="font-size:11px; font-weight:700; letter-spacing:0.05em; padding:1px 6px; border-radius:3px; background:{{ b.bg }}; color:{{ b.fg }}; border:1.5px {{ b.bs }} {{ b.bd }}; white-space:nowrap;">{{ b.txt }}</span>
+          </sc-for>
+        </div>
+      </div>
+      <sc-if value="{{ dlg.hasWarn }}" hint-placeholder-val="{{ false }}">
+        <div style="margin:12px 16px 0; padding:7px 10px; border-radius:5px; border:1.5px dashed oklch(0.80 0.15 65); font-size:13px; font-weight:700; color:oklch(0.88 0.12 65);">{{ dlg.warn }}</div>
+      </sc-if>
+      <div style="display:flex; flex-direction:column; gap:6px; padding:12px 16px;">
+        <sc-for list="{{ dlg.lanes }}" as="ln" hint-placeholder-count="3">
+          <div onClick="{{ ln.toggle }}" style="cursor:{{ ln.cursor }}; display:grid; grid-template-columns:28px 74px minmax(0,1fr); gap:10px; align-items:start; padding:10px 12px; border-radius:6px; background:{{ ln.rowBg }}; border:1px solid {{ ln.rowBd }}; opacity:{{ ln.op }};">
+            <span style="width:24px; height:24px; margin-top:1px; border-radius:5px; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; border:2px solid {{ ln.boxBd }}; background:{{ ln.boxBg }}; color:oklch(0.16 0.008 260);">{{ ln.mark }}</span>
+            <div style="display:flex; flex-direction:column; gap:3px; align-items:flex-start;">
+              <span style="font-size:11px; font-weight:700; letter-spacing:0.06em; padding:2px 6px; border-radius:3px; background:{{ ln.bg }}; color:{{ ln.fg }}; border:1px solid {{ ln.bd }};">{{ ln.k }}</span>
+              <span style="font-size:11px; color:oklch(0.70 0.01 260); line-height:1.2;">{{ ln.q }}</span>
+            </div>
+            <div style="min-width:0; display:flex; flex-direction:column; gap:4px;">
+              <div style="font-size:14px; line-height:1.35; text-wrap:pretty;"><b>{{ ln.name }}</b> <span style="color:oklch(0.80 0.01 260);">{{ ln.txt }}</span></div>
+              <sc-for list="{{ ln.dice }}" as="d" hint-placeholder-count="1">
+                <div style="display:flex; flex-wrap:wrap; align-items:baseline; gap:2px 6px;">
+                  <span style="font-family:'JetBrains Mono', monospace; font-size:15px; font-weight:700;">{{ d.e }}</span>
+                  <span style="font-size:12px; color:oklch(0.66 0.01 260);">{{ d.p }}</span>
+                  <span style="font-size:12px; color:oklch(0.66 0.01 260); font-family:'JetBrains Mono', monospace;">{{ d.avg }}</span>
+                  <span style="font-size:11px; font-weight:700; color:{{ d.c }}; white-space:nowrap; padding:0 6px 0 4px; border-radius:3px; border:1px solid {{ d.c }}; background:oklch(0.13 0.006 260); display:inline-flex; align-items:center; gap:4px;"><span style="font-size:12px;">{{ d.g }}</span>{{ d.t }}</span>
+                </div>
+              </sc-for>
+              <div style="display:flex; flex-wrap:wrap; align-items:center; gap:4px 10px;">
+                <span style="font-size:12px; color:oklch(0.66 0.01 260);">{{ ln.costTxt }}</span>
+                <span style="font-size:12px; font-weight:700; color:{{ ln.statusFg }}; margin-left:auto;">{{ ln.status }}</span>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <sc-if value="{{ dlg.hasNote }}" hint-placeholder-val="{{ false }}">
+        <div style="margin:0 16px 12px; padding:9px 12px; border-radius:6px; background:oklch(0.16 0.008 260); font-size:13px; line-height:1.4; color:oklch(0.82 0.01 260);">{{ dlg.note }}</div>
+      </sc-if>
+      <div style="border-top:3px solid oklch(0.11 0.005 260); background:oklch(0.165 0.008 260); padding:12px 16px; display:flex; flex-direction:column; gap:10px;">
+        <div style="display:flex; flex-direction:column; gap:2px;">
+          <span style="font-size:10.5px; letter-spacing:0.08em; text-transform:uppercase; color:oklch(0.66 0.01 260);">Will spend</span>
+          <span style="font-size:13.5px; color:{{ dlg.sumFg }};">{{ dlg.summary }}</span>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button onClick="{{ dlg.close }}" style="cursor:pointer; min-height:40px; padding:4px 16px; border-radius:6px; border:1px solid oklch(0.42 0.01 260); background:linear-gradient(oklch(0.30 0.01 260), oklch(0.235 0.01 260)); color:oklch(0.95 0.006 80); font-size:13px; font-weight:700; flex:1 1 0;">Cancel</button>
+          <button onClick="{{ dlg.run }}" style="cursor:{{ dlg.runCursor }}; flex:2 1 0; min-height:40px; padding:4px 16px; border-radius:6px; border:1px solid {{ dlg.runBd }}; background:{{ dlg.runBg }}; color:{{ dlg.runFg }}; font-size:14px; font-weight:700; letter-spacing:0.02em;">{{ dlg.runLabel }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;lockedCards&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;dim&quot;,&quot;hide&quot;],&quot;default&quot;:&quot;dim&quot;,&quot;tsType&quot;:&quot;'dim'|'hide'&quot;,&quot;section&quot;:&quot;Cards&quot;},&quot;filterBehavior&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;hide&quot;,&quot;dim&quot;],&quot;default&quot;:&quot;hide&quot;,&quot;tsType&quot;:&quot;'hide'|'dim'&quot;,&quot;section&quot;:&quot;Cards&quot;},&quot;columns&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;auto&quot;,&quot;3&quot;,&quot;4&quot;],&quot;default&quot;:&quot;auto&quot;,&quot;tsType&quot;:&quot;'auto'|'3'|'4'&quot;,&quot;section&quot;:&quot;Cards&quot;}}">
+const INK = 'oklch(0.95 0.006 80)', MUTED = 'oklch(0.74 0.01 260)', DARKTXT = 'oklch(0.16 0.008 260)';
+const T = {
+  fire: { c: 'oklch(0.80 0.15 65)', g: '▲', t: 'fire' },
+  force: { c: 'oklch(0.74 0.14 255)', g: '◆', t: 'force' },
+  acid: { c: 'oklch(0.80 0.15 150)', g: '●', t: 'acid' },
+  psychic: { c: 'oklch(0.76 0.14 305)', g: '✦', t: 'psychic' },
+  control: { c: 'oklch(0.76 0.14 305)', g: '◎', t: 'control' },
+  bludg: { c: 'oklch(0.84 0.01 260)', g: '■', t: 'bludgeoning' },
+  phys: { c: 'oklch(0.84 0.01 260)', g: '■', t: 'bludg. + pierc.' },
+  thunder: { c: 'oklch(0.84 0.01 260)', g: '≋', t: 'thunder' },
+  cold: { c: 'oklch(0.86 0.08 220)', g: '✱', t: 'cold' },
+  obscure: { c: 'oklch(0.72 0.015 260)', g: '◐', t: 'smoke' },
+  light: { c: 'oklch(0.90 0.13 95)', g: '☼', t: 'light' },
+  move: { c: 'oklch(0.74 0.12 25)', g: '⬢', t: 'movement' },
+  pierce: { c: 'oklch(0.84 0.01 260)', g: '▪', t: 'piercing' }
+};
+const THEMES = [['all', 'All', null], ['fire', 'Fire', 'fire'], ['acid', 'Acid', 'acid'], ['visibility', 'Visibility', 'obscure'], ['movement', 'Movement', 'move'], ['cold', 'Cold', 'cold']];
+const ALL_THEMES = ['fire', 'acid', 'visibility', 'movement', 'cold'];
+const CARD_THEMES = {
+  glassfire: ['fire'], pebble: ['fire'], chistera: ['fire'], glassshot: ['fire'], handoff: ['fire'], prism: ['fire'], shatter: ['fire'],
+  kill: ['fire', 'movement'], rkill: ['fire', 'movement'], acid: ['acid'], etcher: ['acid'],
+  lamp: ['visibility'], blackout: ['visibility'], willie: ['visibility'], flare: ['visibility'],
+  carpet: ['movement'], blackice: ['movement'], foam: ['movement'], pinball: ['movement'],
+  coldsnap: ['cold'], clean: ALL_THEMES
+};
+const tint = k => T[k].c.replace(')', ' / 0.17)');
+const fmt = n => String(Math.round(n * 100) / 100);
+const RULINGS = [
+  { n: 1, txt: 'Glass orbs count as Magic Stone “pebbles”', plays: 'Smart Bomb · Party Favors · Pineapple · Hailstorm' },
+  { n: 2, txt: 'Chistera counts as a sling (proficient)', plays: 'Fox Two' },
+  { n: 3, txt: 'Shrapnel adds +1d4 piercing to chistera orbs', plays: 'Fox Two' },
+  { n: 4, txt: 'A Catapulted orb that shatters coats the target in oil', plays: 'Spooky' },
+  { n: 5, l5: true, txt: 'Force Ballista can fire oil orbs (same damage, adds oil)', plays: 'Glass-shot Ballista' },
+  { n: 6, l5: true, txt: 'Fire Bolt can target and ignite a Web', plays: 'Ranged Welcome Mat' },
+  { n: 7, l5: true, txt: 'Arcane Firearm +1d8 can apply to one Magic Stone throw', plays: 'Magic Stone (L5)' },
+  { n: 8, txt: 'Payload rule: on a hit, the target takes the delivery’s damage plus the payload’s normal effect', plays: 'Pineapple · Hailstorm' },
+  { n: 9, txt: 'Dewar orb is a consumable; target loses 10 ft of speed until my next turn, no damage', plays: 'Hailstorm' },
+  { n: 10, txt: 'Chistera can lob area payloads (marbles, shards, beads, oil) to a point within range', plays: 'Shoes Off · Night Light' }
+];
+const STEPS = [
+  ['Caught in melee?', ['clean'], 'In melee'],
+  ['Target immune/resistant to fire?', ['etcher', 'acid'], 'Fire-immune'],
+  ['Boss hard to hit and allies can capitalize?', ['lamp'], 'Hard-to-hit boss'],
+  ['Mob swarm + time to prepare?', ['kill', 'rkill'], 'Swarm + prep'],
+  ['Enemy caster is the problem?', ['blackout'], 'Enemy caster'],
+  ['Enemy archers or casters have clear sightlines?', ['willie', 'blackout'], 'Sightlines'],
+  ['Fighting in the dark, or invisible enemies?', ['flare', 'lamp'], 'Dark / invisible'],
+  ['Chokepoint or door to hold?', ['carpet', 'kill'], 'Chokepoint'],
+  ['Something rushing the backline?', ['coldsnap', 'blackice', 'pinball'], 'Rush'],
+  ['Pack of mobs to pin down?', ['foam', 'blackice'], 'Pin a pack'],
+  ['Mobs clustered?', ['shatter'], 'Clustered mobs'],
+  ['Boss within ~30 ft of cannon?', ['glassfire', 'pebble', 'chistera'], 'Boss near'],
+  ['Boss at range?', ['glassshot', 'handoff', 'prism', 'glassfire'], 'Boss far']
+];
+const STORE = 'siris-playbook-v1';
+const SHOW_L5 = false;
+const TKEY = 'siris-tracker-v1';
+const PAY = { oil: ['▲', 'Oil', 'oklch(0.80 0.15 65)'], acid: ['●', 'Acid', 'oklch(0.80 0.15 150)'], dewar: ['✱', 'Dewar', 'oklch(0.86 0.08 220)'] };
+const PAY_ORDER = ['oil', 'acid', 'dewar'];
+const ART = { oil: 'assets/grenade-oil.png', acid: 'assets/payload-acid.png', dewar: 'assets/payload-dewar.png', shards: 'assets/payload-shards.png', marbles: 'assets/payload-marbles.png', bead: 'assets/gear-bead.png', ft: 'assets/cannon-flamethrower.png', bal: 'assets/cannon-ballista.png', prot: 'assets/cannon-protector.png' };
+const STOCK = [['oil', 'fire', 'Oil flasks'], ['acid', 'acid', 'Acid vials'], ['dewar', 'cold', 'Dewar orbs'], ['shards', 'pierce', 'Shard bags'], ['marbles', 'move', 'Marble bags']];
+const CANNONS = { ft: ['▲', 'Flamethrower', 'oklch(0.80 0.15 65)'], bal: ['◆', 'Force Ballista', 'oklch(0.74 0.14 255)'], prot: ['✚', 'Protector', 'oklch(0.80 0.15 150)'] };
+const ORD = { 1: '1st', 2: '2nd' };
+const SHOT_CAP = 18;
+const PAYLOAD_BY_CARD = { pebble: 'oil', handoff: 'oil', etcher: 'acid', coldsnap: 'dewar' };
+const freshTr = () => ({ round: 0, econ: { action: false, bonus: false, reaction: false }, slots: { 1: 0, 2: 0 }, free: { misty: false, whispers: false }, conc: null, cannon: null, cannonFree: false, orbs: null, pick: ['oil', 'oil', 'oil'], stock: { oil: 6, acid: 2, dewar: 3, shards: 2, marbles: 1 }, beads: { light: 0, sound: 0 }, jug: false, taken: [], log: [] });
+const COST = {
+  'Catapult': { econ: 'action', stock: { oil: 1 } },
+  'Flamethrower': { econ: 'bonus', cannon: 'ft' },
+  'Force Ballista': { econ: 'bonus', cannon: 'bal' },
+  'Magic Stone': { econ: 'bonus' },
+  'Throw orb': { econ: 'action', orb: 'self' },
+  'Throw acid orb': { econ: 'action', orb: 'self', p: 'acid' },
+  'Throw Dewar orb': { econ: 'action', orb: 'self', p: 'dewar' },
+  'Chistera orb': { econ: 'action', stock: { oil: 1 } },
+  'Chistera acid orb': { econ: 'action', stock: { acid: 1 } },
+  'Oil puddle': { econ: 'action', stock: { oil: 1 } },
+  'Oil orb': { econ: 'action', stock: { oil: 1 } },
+  'Fire Bolt': { econ: 'action' },
+  'Scorching Ray': { econ: 'action', slot: 2 },
+  'Faerie Fire': { econ: 'action', slot: 1, conc: 1 },
+  'Tasha’s Caustic Brew': { econ: 'action', slot: 1, conc: 1 },
+  'Grease': { econ: 'action', slot: 1 },
+  'Web': { econ: 'action', slot: 2, conc: 1 },
+  'Pyrotechnics': { econ: 'action', slot: 2 },
+  'Shatter': { econ: 'action', slot: 2 },
+  'Shield': { econ: 'reaction', slot: 1 },
+  'Dissonant Whispers': { econ: 'action', free: 'whispers' },
+  'Misty Step': { econ: 'bonus', free: 'misty' },
+  'Set the trap': { stock: { oil: 2 }, beads: 'sound' },
+  'Magical Tinkering': { econ: 'action', beads: 'light' },
+  'Lob a bead': { econ: 'action' },
+  'Glass shards': { stock: { shards: 1 } },
+  'Glass marbles': { econ: 'action', stock: { marbles: 1 } }
+};
+function costFor(cardId, ln, l5) {
+  if (ln.k === 'ALLY') return { orb: 'ally' };
+  if (cardId === 'acid' && ln.name === 'Magic Stone') return { econ: 'action', orb: 'self', p: 'oil' };
+  if (ln.k === 'AFTER') return null;
+  const b = COST[ln.name];
+  if (!b) return null;
+  const c = { ...b, stock: b.stock ? { ...b.stock } : null };
+  if (ln.k === 'ACTION') c.econ = 'action'; else if (ln.k === 'BONUS') c.econ = 'bonus'; else if (ln.k === 'REACTION') c.econ = 'reaction';
+  if (ln.k === 'PREP') c.prep = true;
+  if (c.conc) c.conc = ln.name;
+  if (ln.name === 'Catapult') c.slot = l5 ? 2 : 1;
+  if (ln.name === 'Magic Stone') c.imbue = PAYLOAD_BY_CARD[cardId] || 'oil';
+  if (ln.name === 'Throw orb') c.p = PAYLOAD_BY_CARD[cardId] || 'oil';
+  if (cardId === 'glassshot' && ln.name === 'Force Ballista') c.stock = { oil: 1 };
+  return c;
+}
+function costChips(c) {
+  const out = [];
+  if (c.econ) out.push(c.econ + (c.prep ? ' (in combat)' : ''));
+  if (c.slot) out.push(ORD[c.slot] + ' slot');
+  if (c.free) out.push('free 1/LR');
+  if (c.conc) out.push('◎ conc');
+  if (c.cannon) out.push(CANNONS[c.cannon][0] + ' ' + CANNONS[c.cannon][1]);
+  if (c.stock) Object.entries(c.stock).forEach(([k, n]) => { const s = STOCK.find(x => x[0] === k); out.push(T[s[1]].g + ' ' + s[2].toLowerCase() + ' −' + n); });
+  if (c.imbue) out.push('3 × ' + PAY[c.imbue][0] + ' ' + PAY[c.imbue][1].toLowerCase() + ' orbs');
+  if (c.orb === 'self') out.push('orb −1');
+  if (c.orb === 'ally') out.push('gifted orb −1');
+  if (c.beads) out.push((c.beads === 'light' ? '☼ light' : '≋ sound') + ' bead +1');
+  return out;
+}
+const GEAR = { glassfire: ['ft', 'bal'], pebble: ['ft', 'bal'], chistera: ['ch', 'ft', 'bal'], handoff: ['bal'], lamp: ['bal'], acid: ['bal'], kill: ['ft'], glassshot: ['bal'], prism: ['bal'], rkill: ['bal'], shatter: ['ft'], etcher: ['bal', 'ch'], willie: ['ft'], flare: ['ch'], carpet: ['ch'], blackice: ['bal'], foam: ['bal'], pinball: ['bal'], coldsnap: ['bal'] };
+const GEAR_LBL = { ft: ['▲', 'Flamethrower', 'oklch(0.80 0.15 65)'], bal: ['◆', 'Force Ballista', 'oklch(0.74 0.14 255)'], ch: ['■', 'Chistera', 'oklch(0.84 0.01 260)'] };
+const SPELL_INFO = (dc, atk) => ({
+  'Fire Bolt': { meta: ['Action', '120 ft', 'Cantrip'], lines: [['Roll', '', 'Ranged spell attack ' + atk], ['Hit', '1d10', 'fire ≈ 5.5'], ['Also', '', 'Ignites unattended flammable objects. Triggers oil +5']] },
+  'Magic Stone': { meta: ['Bonus action', 'Touch', '1 min', 'Cantrip'], lines: [['Setup', '', 'Imbue up to 3 pebbles (glass orbs: DM? 1)'], ['Roll', '', 'Thrown 60 ft · ranged spell attack ' + atk + ' (allies use yours too)'], ['Hit', '1d6 + 4', 'bludgeoning ≈ 7.5'], ['Also', '', 'Recasting ends any stones still imbued']] },
+  'Catapult': { meta: ['Action', '60 ft', '1st slot', 'Somatic only'], lines: [['Setup', '', 'Object 1–5 lb, not worn or carried: drop the orb at your feet first'], ['Save', '', 'Creature in its 90-ft path: Dex DC ' + dc], ['Fail', '3d8', 'bludgeoning ≈ 13.5 · object shatters (oils target: DM? 4)'], ['Pass', '', 'No damage; object keeps flying']] },
+  'Faerie Fire': { meta: ['Action', '60 ft', '20-ft cube', '1st slot', '◎ Conc 1 min'], lines: [['Save', '', 'Each creature in the cube: Dex DC ' + dc], ['Fail', '', 'Outlined in light · attacks against it have advantage · can’t benefit from invisibility'], ['Also', '', 'Party, Fire Bolt and Force Ballista all roll with advantage']] },
+  'Tasha’s Caustic Brew': { meta: ['Action', '30-ft line, 5 ft wide', '1st slot', '◎ Conc 1 min'], lines: [['Save', '', 'Each creature in the line: Dex DC ' + dc], ['Fail', '2d4', 'acid ≈ 5 at the start of each of its turns'], ['Ends', '', 'It or an adjacent creature uses an action to scrape it off']] },
+  'Grease': { meta: ['Action', '60 ft', '10-ft square', '1st slot', '1 min'], lines: [['Effect', '', 'Area becomes difficult terrain'], ['Save', '', 'Dex DC ' + dc + ' when it appears, or when a creature enters or ends its turn there'], ['Fail', '', 'Falls prone'], ['Flavor', '', 'Grease Gun (Movement)']] },
+  'Snare': { meta: ['1 minute to cast', 'Touch', '1st slot', '8 hours'], lines: [['Setup', '', '5-ft-radius loop, nearly invisible (Investigation DC ' + dc + ' to spot)'], ['Save', '', 'Creature entering: Dex DC ' + dc], ['Fail', '', 'Hoisted 3 ft upside down, restrained · repeats the save at end of each of its turns']] },
+  'Shield': { meta: ['Reaction', 'Self', '1st slot'], lines: [['Trigger', '', 'You’re hit by an attack or targeted by magic missile'], ['Effect', '+5 AC', 'until the start of your next turn, including against the triggering attack']] },
+  'Misty Step': { meta: ['Bonus action', 'Self', 'Free 1/LR'], lines: [['Effect', '', 'Teleport up to 30 ft to an unoccupied space you can see'], ['Cost', '', 'Uses your bonus action: no cannon shot this turn']] },
+  'Dissonant Whispers': { meta: ['Action', '60 ft', 'Free 1/LR', 'Verbal only'], lines: [['Save', '', 'One creature: Wis DC ' + dc + ' (deafened creatures succeed)'], ['Fail', '3d6', 'psychic ≈ 10.5 · uses its reaction to move away as far as it can, provoking opportunity attacks'], ['Pass', '', 'Half damage, no movement']] },
+  'Web': { meta: ['Action', '60 ft', '20-ft cube', '2nd slot', '◎ Conc 1 hr'], lines: [['Effect', '', 'Difficult terrain, lightly obscured'], ['Save', '', 'Dex DC ' + dc + ' when it appears or when a creature enters or starts its turn there'], ['Fail', '', 'Restrained · escape: action, Str check vs DC ' + dc], ['Anchor', '', 'Must be anchored between two solid masses or laid across a surface, or it collapses'], ['Fire', '2d4', 'fire · burns a 5-ft cube in 1 round, to anyone starting its turn in the fire']] },
+  'Pyrotechnics': { meta: ['Action', '60 ft', '2nd slot'], lines: [['Target', '', 'A nonmagical flame (≤ 5-ft cube), which is extinguished'], ['Fireworks', '', 'Each creature within 10 ft: Con DC ' + dc + ' or blinded until end of your next turn'], ['Smoke', '', '20-ft radius heavily obscured, 1 min or until strong wind']] },
+  'Continual Flame': { meta: ['Action', 'Touch', '2nd slot', '50 gp ruby dust'], lines: [['Effect', '', 'Torch-bright flame, no heat, lasts until dispelled'], ['Cost', '', 'Ruby dust is consumed']] },
+  'Acid Splash': { meta: ['Action', '60 ft', 'Cantrip', 'Not known'], lines: [['Target', '', 'One creature, or two within 5 ft of each other'], ['Save', '', 'Dex DC ' + dc], ['Fail', '1d6', 'acid (2d6 at L5)']] },
+  'Ray of Frost': { meta: ['Action', '60 ft', 'Cantrip', 'Not known'], lines: [['Roll', '', 'Ranged spell attack ' + atk], ['Hit', '1d8', 'cold (2d8 at L5) · −10 ft speed until your next turn']] },
+  'Frostbite': { meta: ['Action', '60 ft', 'Cantrip', 'Not known'], lines: [['Save', '', 'Con DC ' + dc], ['Fail', '1d6', 'cold (2d6 at L5) · disadvantage on its next weapon attack before the end of its next turn']] }
+});
+const SPELLS = [
+  ['Cantrips', 0, [['Fire Bolt'], ['Magic Stone']]],
+  ['Cantrip swaps', 'swap', [['Acid Splash'], ['Ray of Frost'], ['Frostbite']]],
+  ['1st level', 1, [['Catapult'], ['Faerie Fire', 1], ['Tasha’s Caustic Brew', 1], ['Grease'], ['Snare'], ['Shield']]],
+  ['Fey Touched', 3, [['Misty Step'], ['Dissonant Whispers']]],
+  ['2nd level', 2, [['Web', 1], ['Shatter'], ['Scorching Ray'], ['Pyrotechnics'], ['Continual Flame'], ['Heat Metal', 1]]]
+];
+
+function buildCards(L, dex, dc) {
+  const l5 = L === 5;
+  const D = (e, p, a, t) => ({ e, p, a, t });
+  const fb = l5 ? { e: '2d10 + 1d8', p: 'cantrip + firearm', a: 15.5 } : { e: '1d10', p: 'cantrip', a: 5.5 };
+  const ch = 5 + dex, prof = l5 ? 3 : 2, atk = l5 ? '+7' : '+6';
+  const FT = D('2d8 + 5', 'cannon + oil', 14, 'fire'), FT0 = D('2d8', 'cannon', 9, 'fire'), BAL = D('2d8', 'cannon', 9, 'force');
+  const STONE = D('1d6 + 4', 'stone + Int', 7.5, 'bludg');
+  const CH = D('1d4 + 1d4 + ' + dex, 'impact + shrapnel + Dex', ch, 'phys');
+  const ACID = D('2d6', 'acid payload', 7, 'acid');
+  const fbOil = D(fb.e + ' + 5', fb.p + ' + oil', fb.a + 5, 'fire');
+  return [
+    { id: 'glassfire', name: 'Spooky', use: 'Boss burst opener', k: 'fire', tags: ['slot', 'near', 'far'],
+      badges: [['slot', l5 ? '2nd' : '1st'], ['dm', 4]],
+      lanes: [
+        { k: 'ACTION', name: 'Catapult', txt: (l5 ? 'at 2nd level through glass rod · ' : '') + 'oil orb · Dex save DC ' + dc + ' · orb shatters and oils target', dice: [l5 ? D('4d8 + 1d8', 'upcast + firearm', 22.5, 'bludg') : D('3d8', 'catapult', 13.5, 'bludg')] },
+        { k: 'BONUS', q: 'near', name: 'Flamethrower', txt: 'ignites the oil', dice: [FT] },
+        { k: 'BONUS', q: 'far', name: 'Force Ballista', txt: 'next turn Fire Bolt ignites oil (+5)', dice: [BAL] }],
+      totals: [['near', l5 ? 36.5 : 27.5], ['far', l5 ? 31.5 : 22.5]],
+      note: 'Catapult can’t move a held object: drop the orb at your feet first. Somatic only (works silenced).' },
+    { id: 'pebble', name: 'Smart Bomb', use: 'Spell attack · Magic Stone orbs', k: 'fire', tags: ['free', 'near', 'far'],
+      badges: [['free'], ['dm', 1]],
+      lanes: [
+        { k: 'PREP', q: 'bonus, pre-combat', name: 'Magic Stone', txt: 'imbue 3 oil orbs', dice: [] },
+        { k: 'ACTION', name: 'Throw orb', txt: '60 ft · spell atk ' + atk + ' · target oiled', dice: [STONE] },
+        { k: 'BONUS', q: 'near', name: 'Flamethrower', txt: 'ignites the oil', dice: [FT] },
+        { k: 'ALT', q: 'far', name: 'Alternate turns', txt: 'orb + Ballista (16.5) · then Fire Bolt ignite + Ballista (' + fmt(fb.a + 14) + ')', dice: [] }],
+      totals: [['near', 21.5], ['far', (16.5 + fb.a + 14) / 2]],
+      note: l5 ? 'L5: Fire Bolt route (24.5) wins; use orbs vs fire immunity or hand them off.' : '' },
+    { id: 'chistera', name: 'Fox Two', use: 'Weapon attack · chistera, no slots', k: 'fire', tags: ['free', 'near', 'far'],
+      badges: [['free'], ['dm', 2], ['dm', 3]],
+      lanes: [
+        { k: 'ACTION', name: 'Chistera orb', txt: 'atk +' + (dex + prof) + ' · 30/120 ft · target oiled', dice: [CH] },
+        { k: 'BONUS', q: 'near', name: 'Flamethrower', txt: 'ignites the oil', dice: [FT] },
+        { k: 'ALT', q: 'far', name: 'Alternate with Fire Bolt ignite', txt: 'orb + Ballista (' + fmt(ch + 9) + ') · then Fire Bolt + Ballista (' + fmt(fb.a + 14) + ')', dice: [] },
+        { k: 'GROUND', name: 'Oil puddle', txt: 'shatter orb on the floor · 5-ft square · lasts 2 rounds once lit', dice: [D('5', 'per entry / turn end', 5, 'fire')] }],
+      totals: [['near', ch + 14], ['far', (ch + 9 + fb.a + 14) / 2]] },
+    { id: 'glassshot', l5only: true, name: 'Glass-shot Ballista', use: 'Sustained ranged, any range', k: 'force', tags: ['free', 'near', 'far', 'l5'],
+      badges: [['free'], ['dm', 5], ['l5']],
+      lanes: [
+        { k: 'BONUS', q: 'first', name: 'Force Ballista', txt: 'fires an oil orb · target oiled', dice: [BAL] },
+        { k: 'ACTION', name: 'Fire Bolt', txt: '120 ft · ignites the oil', dice: [D('2d10 + 1d8 + 5', 'cantrip + firearm + oil', 20.5, 'fire')] }],
+      totals: [['per turn', 29.5]], note: 'Baseline is 24.5.' },
+    { id: 'handoff', name: 'Party Favors', use: 'Team damage', k: 'fire', tags: ['free', 'near', 'far'],
+      badges: [['free'], ['dm', 1]],
+      lanes: [
+        { k: 'PREP', q: 'pre-combat', name: 'Magic Stone', txt: 'imbue 3 oil orbs, give to an ally without a good ranged attack', dice: [] },
+        { k: 'ALLY', q: 'action', name: 'Throw orb', txt: 'uses your ' + atk + ' · 60 ft · target oiled', dice: [STONE] },
+        { k: 'ACTION', name: 'Fire Bolt', txt: 'on the oiled target', dice: [fbOil] },
+        { k: 'BONUS', name: 'Force Ballista', txt: '', dice: [BAL] }],
+      totals: [['you', fb.a + 14], ['+ ally', fb.a + 14 + 7.5]] },
+    { id: 'prism', l5only: true, name: 'Prism Ray', use: 'Boss burst', k: 'fire', tags: ['slot', 'near', 'far', 'l5'],
+      badges: [['slot', '2nd'], ['l5']],
+      lanes: [
+        { k: 'ACTION', name: 'Scorching Ray', txt: 'refracted through a glass prism · 3 rays, 3 attack rolls', dice: [D('3 × 2d6 + 1d8 + 5', 'rays + firearm on one ray + oil if oiled', 30.5, 'fire')] },
+        { k: 'BONUS', name: 'Force Ballista', txt: '', dice: [BAL] }],
+      totals: [['all hit', 39.5]] },
+    { id: 'lamp', name: 'Fox One', use: 'Hard-to-hit boss', k: 'control', tags: ['slot', 'near', 'far'],
+      badges: [['slot', '1st'], ['conc']],
+      lanes: [
+        { k: 'ACTION', name: 'Faerie Fire', txt: 'luminous glass dust · 20-ft cube · Dex save DC ' + dc + ' · attacks vs targets have advantage', dice: [] },
+        { k: 'BONUS', name: 'Force Ballista', txt: 'with advantage', dice: [BAL] },
+        { k: 'AFTER', q: '1 min', name: 'Everyone', txt: 'party, Fire Bolt and cannon all attack with advantage', dice: [] }],
+      totals: [['turn 1', 9]] },
+    { id: 'acid', name: 'Agent Orange', use: 'Fire-immune enemies', k: 'acid', tags: ['slot', 'near', 'far'],
+      badges: [['slot', '1st'], ['conc']],
+      lanes: [
+        { k: 'ACTION', name: 'Tasha’s Caustic Brew', txt: '30-ft line · Dex save DC ' + dc + ' · ticks at the start of each of its turns until scraped off (action)', dice: l5 ? [D('2d4 + 1d8', 'per turn + firearm on first tick', 9.5, 'acid')] : [D('2d4', 'per turn', 5, 'acid')] },
+        { k: 'BONUS', name: 'Force Ballista', txt: '', dice: [BAL] },
+        { k: 'AFTER', name: 'Magic Stone', txt: 'throw', dice: [STONE] }],
+      totals: [['turn 1', l5 ? 18.5 : 14]] },
+    { id: 'kill', name: 'Welcome Mat', use: 'Mob swarm, prep time', k: 'fire', tags: ['free', 'slot', 'near'],
+      badges: l5 ? [['slot', '0–2'], ['conc']] : [['slot', '0–2']],
+      lanes: [
+        { k: 'PREP', q: 'before combat', name: 'Set the trap', txt: 'Snare the chokepoint · Magical Tinkering bead (recorded footsteps/voices) to lure · shatter oil orbs on the floor · pre-place Flamethrower cannon near the chokepoint', dice: [] },
+        l5 ? { k: 'ACTION', name: 'Web', txt: 'instead of Grease · burns when lit', dice: [D('2d4', 'burning web, each turn start', 5, 'fire')] }
+           : { k: 'ACTION', q: 'optional', name: 'Grease', txt: 'the approach', dice: [] },
+        { k: 'BONUS', name: 'Flamethrower', txt: 'cone + lights the oil', dice: [FT0, D('5', 'burning oil, per entry / turn end · 2 rounds', 5, 'fire')] }],
+      totals: [['cone', 9]] },
+    { id: 'rkill', l5only: true, name: 'Ranged Welcome Mat', use: 'Mob at range', k: 'fire', tags: ['slot', 'far', 'l5'],
+      badges: [['slot', '2nd'], ['conc'], ['dm', 6], ['l5']],
+      lanes: [
+        { k: 'ACTION', q: 'turn 1', name: 'Web', txt: '60 ft · 20-ft cube · Dex save DC 15 or restrained', dice: [] },
+        { k: 'ACTION', q: 'turn 2', name: 'Fire Bolt', txt: 'ignites the web from up to 120 ft', dice: [D('2d4', 'burning web, each turn start', 5, 'fire')] },
+        { k: 'BONUS', name: 'Force Ballista', txt: 'cannon stays safe with you', dice: [BAL] }],
+      totals: [] },
+    { id: 'blackout', l5only: true, name: 'Blackout', use: 'Shut down a caster', k: 'control', tags: ['slot', 'free', 'near', 'far', 'l5'],
+      badges: [['slot', '2nd'], ['free', 'or 1/LR'], ['l5']],
+      lanes: [
+        { k: 'ACTION', q: 'A · slot', name: 'Pyrotechnics', txt: 'light an oil puddle near the caster, then use that fire · Con save DC 15 or blinded until end of your next turn (all within 10 ft of the flame), or a 20-ft smoke cloud', dice: [] },
+        { k: 'ACTION', q: 'B · free 1/LR', name: 'Dissonant Whispers', txt: 'Wis save DC 15 · half on success · on a fail it flees, provoking opportunity attacks from allies', dice: [D('3d6', 'spell', 10.5, 'psychic')] }],
+      totals: [], note: 'If the cannon is within 15 ft of the puddle, Flamethrower lights it as your bonus action and Pyrotechnics goes off the same turn.' },
+    { id: 'shatter', l5only: true, name: 'Shatterpoint', use: 'Clustered mobs', k: 'thunder', tags: ['slot', 'near', 'l5'],
+      badges: [['slot', '2nd'], ['l5']],
+      lanes: [
+        { k: 'ACTION', name: 'Shatter', txt: 'through glass rod · 10-ft burst · Con save DC 15, half on success', dice: [D('3d8 + 1d8', 'spell + firearm', 18, 'thunder')] },
+        { k: 'BONUS', name: 'Flamethrower', txt: 'on survivors', dice: [FT0] }],
+      totals: [['per target', 27]] },
+    { id: 'etcher', name: 'Pineapple', use: 'Fire-immune boss, no slots', k: 'acid', tags: ['free', 'near', 'far'],
+      badges: [['free'], ['dm', 1], ['dm', 8]],
+      lanes: [
+        { k: 'PREP', q: 'bonus, pre-combat', name: 'Magic Stone', txt: 'imbue acid orbs', dice: [] },
+        { k: 'ACTION', name: 'Throw acid orb', txt: '60 ft · spell atk ' + atk, dice: [STONE, ACID] },
+        { k: 'BONUS', name: 'Force Ballista', txt: '', dice: [BAL] },
+        { k: 'ALT', q: 'chistera', name: 'Chistera acid orb', txt: 'atk +' + (dex + prof) + ' · plus the acid payload', dice: [CH, ACID] }],
+      totals: [['per turn', 23.5]],
+      note: 'L4 baseline 14.5 · L5 baseline 24.5: about even, but acid gets past fire resistance. Jug: 2 free vials/day, then 25 gp each.' },
+    { id: 'willie', l5only: true, name: 'Willie Pete', use: 'Blind their archers and casters', k: 'obscure', tags: ['slot', 'near', 'far', 'l5'],
+      badges: [['slot', '2nd'], ['l5']],
+      lanes: [
+        { k: 'ACTION', q: 'turn 1', name: 'Oil orb', txt: 'shatter near the enemy backline, creating a 5-ft puddle', dice: [] },
+        { k: 'BONUS', q: 'turn 1', name: 'Flamethrower', txt: 'lights the puddle if the cannon can get within 15 ft', dice: [D('5', 'burning oil, per entry / turn end', 5, 'fire')] },
+        { k: 'ACTION', q: 'turn 2', name: 'Pyrotechnics', txt: 'smoke option: 20-ft radius heavily obscured for 1 min; puts out the source flame', dice: [] }],
+      totals: [],
+      note: 'No cannon in reach? Light it with Fire Bolt and cast Pyrotechnics a turn later. At L4, a crafted Eversmoking Bottle (Uncommon, 500 gp, 20 days, 60-ft cloud) does the job. Siris has no darkvision, and darkvision doesn’t see through smoke anyway.' },
+    { id: 'flare', name: 'Night Light', use: 'Dark tombs, hidden enemies', k: 'light', tags: ['free', 'near', 'far'],
+      badges: [['free'], ['dm', 10]],
+      lanes: [
+        { k: 'PREP', q: 'before combat', name: 'Magical Tinkering', txt: 'up to 4 glowing glass beads (action each, tinker’s tools)', dice: [] },
+        { k: 'ACTION', name: 'Lob a bead', txt: 'chistera or hand throw lights a spot · 5 ft bright + 5 ft dim', dice: [] },
+        { k: 'AFTER', name: 'Fox One', txt: 'Faerie Fire reveals invisible creatures', dice: [] }],
+      totals: [],
+      note: 'Permanent option at L5: Continual Flame (2nd slot, 50 gp ruby dust consumed) sealed in a glass sphere.' },
+    { id: 'carpet', name: 'Shoes Off', use: 'Hold a chokepoint', k: 'move', tags: ['free', 'near'],
+      badges: [['free'], ['dm', 10]],
+      lanes: [
+        { k: 'PREP', q: 'before combat', name: 'Glass shards', txt: 'spread across a 5-ft door or stair', dice: [] },
+        { k: 'AFTER', name: 'Anyone crossing at full speed', txt: 'Dex DC 15 (fixed) or stop moving, lose 10 ft speed until healed', dice: [D('1', 'shards', 1, 'pierce')] },
+        { k: 'ALT', name: 'Glass marbles', txt: '10-ft square, Dex DC 10 (fixed) or prone', dice: [] }],
+      totals: [],
+      note: 'Deploying at range with the chistera needs DM? 10. By default, spreading takes an action at your feet.' },
+    { id: 'blackice', name: 'Grease Gun', use: 'Knock the rush flat for your melee', k: 'move', tags: ['slot', 'near', 'far'],
+      badges: [['slot', '1st']],
+      lanes: [
+        { k: 'BONUS', q: 'first', name: 'Force Ballista', txt: 'push target 5 ft away from the cannon into the zone', dice: [BAL] },
+        { k: 'ACTION', name: 'Grease', txt: '10-ft square · Dex DC ' + dc + ' or prone · difficult terrain · re-save on entering or ending a turn there', dice: [] },
+        { k: 'AFTER', name: 'Melee allies', txt: 'advantage vs prone targets', dice: [] }],
+      totals: [['turn 1', 9]],
+      note: 'Fire the Ballista BEFORE the Grease: ranged attacks vs prone targets have disadvantage, including yours. Follow up with saves instead (Flamethrower, Catapult, Caustic Brew).' },
+    { id: 'foam', l5only: true, name: 'Sticky Foam', use: 'Pin a pack in place', k: 'move', tags: ['slot', 'near', 'far', 'l5'],
+      badges: [['slot', '2nd'], ['conc'], ['l5']],
+      lanes: [
+        { k: 'ACTION', name: 'Web', txt: '60 ft · 20-ft cube · Dex DC ' + dc + ' or restrained · must be anchored or laid across floor/walls', dice: [] },
+        { k: 'BONUS', name: 'Force Ballista', txt: 'with advantage', dice: [BAL] },
+        { k: 'AFTER', name: 'Everyone', txt: 'advantage vs restrained targets; their Dex saves have disadvantage, so follow with Flamethrower or Catapult', dice: [] }],
+      totals: [['turn 1', 9]],
+      note: 'Webs are flammable: see Welcome Mat to burn them.' },
+    { id: 'pinball', name: 'Kettle', use: 'Shove them into your hazards', k: 'move', tags: ['free', 'near', 'far'],
+      badges: [['free']],
+      lanes: [
+        { k: 'BONUS', name: 'Force Ballista', txt: 'pushes 5 ft away from the cannon', dice: [BAL] },
+        { k: 'AFTER', name: 'Into a hazard', txt: 'glass shards (1 piercing + stop), burning oil (5 fire), or off a ledge', dice: [] }],
+      totals: [['per turn', '9 + hazard']],
+      note: 'Position the cannon on the far side of the target: the push goes away from the cannon, not from you.' },
+    { id: 'coldsnap', name: 'Hailstorm', use: 'Stop the charge at your backline', k: 'cold', tags: ['free', 'near', 'far'],
+      badges: [['free'], ['dm', 1], ['dm', 9]],
+      lanes: [
+        { k: 'PREP', q: 'bonus, pre-combat', name: 'Magic Stone', txt: 'imbue Dewar orbs', dice: [] },
+        { k: 'ACTION', name: 'Throw Dewar orb', txt: '60 ft · spell atk ' + atk + ' · target loses 10 ft of speed until your next turn', dice: [STONE] },
+        { k: 'BONUS', name: 'Force Ballista', txt: 'pushes 5 ft', dice: [BAL] }],
+      totals: [['per turn', 16.5]],
+      note: 'Charging enemies lose ~15 ft of ground per turn. Stacks well with Grease Gun. Cold is your thinnest theme: real cold damage needs a cantrip swap (Ray of Frost or Frostbite).' },
+    { id: 'clean', name: 'Dust Off', use: 'Escape melee', k: 'psychic', tags: ['free', 'near'],
+      badges: [['free', 'mostly']],
+      lanes: [
+        { k: 'REACTION', name: 'Shield', txt: '+5 AC until your next turn · 1st-level slot', dice: [] },
+        { k: 'ACTION', name: 'Dissonant Whispers', txt: 'free 1/LR · Wis save DC ' + dc + ' · target flees', dice: [D('3d6', 'spell', 10.5, 'psychic')] },
+        { k: 'BONUS', q: 'last resort', name: 'Misty Step', txt: 'free 1/LR · 30 ft · costs this turn’s cannon shot', dice: [] }],
+      totals: [] }
+  ];
+}
+
+const LANE = {
+  ACTION: { bg: 'oklch(0.92 0.01 80)', fg: DARKTXT, bd: 'oklch(0.92 0.01 80)' },
+  BONUS: { bg: 'oklch(0.32 0.01 260)', fg: INK, bd: 'oklch(0.60 0.01 260)' },
+  REACTION: { bg: 'transparent', fg: INK, bd: 'oklch(0.80 0.01 260)' },
+  other: { bg: 'transparent', fg: MUTED, bd: 'oklch(0.36 0.01 260)' }
+};
+
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    let s = {};
+    try { s = JSON.parse(localStorage.getItem(STORE) || '{}'); } catch (e) {}
+    this.state = { level: s.level || 4, dex: s.dex ?? 2, appr: s.appr || {}, showLoadout: s.showLoadout ?? true, theme: s.theme || 'all', flowOpen: s.flowOpen ?? true, filters: [], step: null, dlg: null };
+    this.playbookRef = React.createRef();
+    let t = {};
+    try { t = JSON.parse(localStorage.getItem(TKEY) || '{}'); } catch (e) {}
+    const f = freshTr();
+    this.state.tr = t.tr ? { ...f, ...t.tr, econ: { ...f.econ, ...(t.tr.econ || {}) }, stock: { ...f.stock, ...(t.tr.stock || {}) }, beads: typeof t.tr.beads === 'object' && t.tr.beads ? { ...f.beads, ...t.tr.beads } : { light: +t.tr.beads || 0, sound: 0 } } : f;
+    this.hist = Array.isArray(t.hist) ? t.hist : [];
+  }
+  L() { return SHOW_L5 ? this.state.level : 4; }
+  slotMax() { return this.L() === 5 ? { 1: 4, 2: 2 } : { 1: 3 }; }
+  slotAvail(tr, n) { const m = this.slotMax(); for (let lv = n; lv <= 2; lv++) if ((m[lv] || 0) - (tr.slots[lv] || 0) > 0) return lv; return 0; }
+  spendSlot(tr, n) { const lv = this.slotAvail(tr, n); if (lv) tr.slots[lv] = (tr.slots[lv] || 0) + 1; return lv; }
+  persistTr() { try { localStorage.setItem(TKEY, JSON.stringify({ tr: this.state.tr, hist: this.hist })); } catch (e) {} }
+  commit(mut, text) {
+    const prev = this.state.tr, tr = JSON.parse(JSON.stringify(prev));
+    const extra = mut(tr);
+    if (extra === false) return;
+    if (text) tr.log = [{ r: tr.round ? 'R' + tr.round : '·', t: text + (extra ? ' · ' + extra : '') }].concat(tr.log).slice(0, 40);
+    this.hist = this.hist.concat([prev]).slice(-30);
+    this.setState({ tr }, () => this.persistTr());
+  }
+  check(c, tr) {
+    if (c.econ && (!c.prep || tr.round > 0) && tr.econ[c.econ]) return c.econ + ' used';
+    if (c.cannon && (!tr.cannon || tr.cannon.type !== c.cannon)) return 'needs ' + CANNONS[c.cannon][1];
+    if (c.cannon && (tr.cannon.shots || 0) >= SHOT_CAP) return 'cannon out of shots';
+    if (c.slot && !this.slotAvail(tr, c.slot)) return 'no slot left';
+    if (c.free && tr.free[c.free] && !this.slotAvail(tr, c.free === 'misty' ? 2 : 1)) return 'used today';
+    if (c.stock) for (const [k, n] of Object.entries(c.stock)) if ((tr.stock[k] || 0) < n) return 'out of ' + STOCK.find(x => x[0] === k)[2].toLowerCase();
+    if (c.imbue && (tr.stock[c.imbue] || 0) < 1) return 'out of ' + PAY[c.imbue][1].toLowerCase();
+    if (c.orb === 'self' && !(tr.orbs && tr.orbs.list.some(o => o.s === 'held'))) return 'no orbs held';
+    if (c.orb === 'ally' && !(tr.orbs && tr.orbs.list.some(o => o.s === 'gifted'))) return 'no gifted orbs';
+    if (c.beads && tr.beads.light + tr.beads.sound >= 4) return '4 beads active';
+    return '';
+  }
+  componentDidMount() {
+    this.onKey = e => { if (e.key === 'Escape' && this.state.dlg) this.setState({ dlg: null }); };
+    window.addEventListener('keydown', this.onKey);
+  }
+  componentWillUnmount() { window.removeEventListener('keydown', this.onKey); }
+  apply(tr, c, key) {
+      const notes = [];
+      if (c.econ && (!c.prep || tr.round > 0)) tr.econ[c.econ] = true;
+      if (c.slot) notes.push(ORD[this.spendSlot(tr, c.slot)] + ' slot');
+      if (c.free) { if (!tr.free[c.free]) { tr.free[c.free] = true; notes.push('free use'); } else notes.push(ORD[this.spendSlot(tr, c.free === 'misty' ? 2 : 1)] + ' slot'); }
+      if (c.conc) { if (tr.conc && tr.conc.name !== c.conc) notes.push('dropped ' + tr.conc.name); tr.conc = { name: c.conc, round: tr.round, dur: c.conc === 'Web' ? 600 : 10 }; }
+      if (c.stock) Object.entries(c.stock).forEach(([k, n]) => { tr.stock[k] -= n; });
+      if (c.imbue) { if (tr.orbs && tr.orbs.list.some(o => o.s === 'held' || o.s === 'gifted')) notes.push('previous orbs lost magic'); const n = Math.min(3, tr.stock[c.imbue]); tr.stock[c.imbue] -= n; tr.orbs = { round: tr.round, list: Array.from({ length: n }, () => ({ p: c.imbue, s: 'held' })) }; notes.push(n + ' orbs imbued'); }
+      if (c.orb === 'self') { const L = tr.orbs.list; let i = L.findIndex(o => o.s === 'held' && o.p === c.p); if (i < 0) i = L.findIndex(o => o.s === 'held'); L[i].s = 'self'; notes.push(PAY[L[i].p][1].toLowerCase() + ' orb'); }
+      if (c.orb === 'ally') { const o = tr.orbs.list.find(o => o.s === 'gifted'); o.s = 'ally'; }
+      if (c.beads) tr.beads[c.beads] += 1;
+      if (c.cannon && tr.cannon) { tr.cannon.shots = (tr.cannon.shots || 0) + 1; notes.push('shot ' + tr.cannon.shots + '/' + SHOT_CAP); }
+      tr.taken.push(key);
+      return notes;
+  }
+  plan(c, sel) {
+    const sim = JSON.parse(JSON.stringify(this.state.tr)), l5 = this.L() === 5, locked = !!c.l5only && !l5;
+    return c.lanes.map((ln, li) => {
+      const cost = locked ? null : costFor(c.id, ln, l5), key = c.id + ':' + li;
+      if (!cost) return { li, cost, key, kind: 'info' };
+      if (sim.taken.includes(key)) return { li, cost, key, kind: 'done' };
+      const why = this.check(cost, sim);
+      if (why) return { li, cost, key, kind: 'blocked', why };
+      if (sel[li]) { this.apply(sim, cost, key); return { li, cost, key, kind: 'run' }; }
+      return { li, cost, key, kind: 'skip' };
+    });
+  }
+  openDlg(c) {
+    const sel = {};
+    c.lanes.forEach((ln, li) => { if (ln.k !== 'ALT') sel[li] = true; });
+    this.setState({ dlg: { id: c.id, sel } });
+  }
+  runDlg(c) {
+    const p = this.plan(c, this.state.dlg.sel).filter(x => x.kind === 'run');
+    if (!p.length) return;
+    this.commit(t => {
+      const notes = [];
+      p.forEach(x => { if (!this.check(x.cost, t)) notes.push(...this.apply(t, x.cost, x.key)); });
+      return notes.join(' · ');
+    }, c.name + ': ' + p.map(x => c.lanes[x.li].name).join(' → '));
+    this.setState({ dlg: null });
+  }
+  trVals(l5) {
+    const tr = this.state.tr, L = this.L(), m = this.slotMax();
+    const inCombat = tr.round > 0;
+    const onOff = (used, label, toggle, hue = '65') => ({ label, toggle,
+      bg: used ? 'oklch(0.17 0.006 260)' : 'linear-gradient(oklch(0.34 0.05 ' + hue + ' / 0.9), oklch(0.26 0.03 ' + hue + ' / 0.9))',
+      fg: used ? 'oklch(0.56 0.01 260)' : 'oklch(0.96 0.01 80)', bd: used ? 'oklch(0.32 0.01 260)' : 'oklch(0.72 0.13 ' + hue + ' / 0.8)',
+      sh: used ? 'inset 0 1px 3px oklch(0 0 0 / 0.5)' : 'inset 0 1px 0 oklch(1 0 0 / 0.1), 0 0 10px oklch(0.75 0.14 ' + hue + ' / 0.18)',
+      dot: used ? 'oklch(0.40 0.01 260)' : 'oklch(0.82 0.15 ' + hue + ')', deco: used ? 'line-through' : 'none' });
+    const econ = [['action', 'Action', '65'], ['bonus', 'Bonus', '255'], ['reaction', 'Reaction', '150']].map(([k, label, hue]) => onOff(tr.econ[k], label, () => this.commit(t => { t.econ[k] = !t.econ[k]; }, null), hue));
+    const slots = Object.keys(m).map(lv => {
+      const used = tr.slots[lv] || 0;
+      return { label: ORD[lv], left: (m[lv] - used) + ' / ' + m[lv], n: String(m[lv] - used), max: String(m[lv]),
+        pips: Array.from({ length: m[lv] }, (_, i) => { const on = i < m[lv] - used; return {
+          aria: on ? 'Spend slot' : 'Restore slot',
+          bg: on ? 'oklch(0.76 0.14 305)' : 'transparent',
+          bd: on ? 'oklch(0.76 0.14 305)' : 'oklch(0.45 0.01 260)',
+          sh: 'none',
+          toggle: () => this.commit(t => { const avail = m[lv] - (t.slots[lv] || 0); t.slots[lv] = m[lv] - (i < avail ? i : i + 1); }, null) }; }) };
+    });
+    const frees = [['misty', 'Misty Step'], ['whispers', 'Dissonant Whispers']].map(([k, label]) => onOff(tr.free[k], label, () => this.commit(t => { t.free[k] = !t.free[k]; }, null), '305'));
+    let concLeft = 'active';
+    if (tr.conc && inCombat) { const left = tr.conc.dur - (tr.round - tr.conc.round); concLeft = tr.conc.dur > 10 ? 'up to 1 hr' : left > 0 ? left + (left === 1 ? ' round' : ' rounds') + ' left' : 'expired'; }
+    const conc = { has: !!tr.conc, none: !tr.conc, name: tr.conc ? tr.conc.name : '', left: concLeft, end: () => this.commit(t => { const n = t.conc.name; t.conc = null; return n; }, 'Concentration ended') };
+    const cn = tr.cannon;
+    const canBuild = !(inCombat && tr.econ.action) && (!tr.cannonFree || this.slotAvail(tr, 1));
+    const cannon = {
+      opFt: cn && cn.type === 'ft' ? 1 : 0.25, opBal: cn && cn.type === 'bal' ? 1 : 0.25, opProt: cn && cn.type === 'prot' ? 1 : 0.25,
+      img: cn ? ART[cn.type] : '', bgImg: cn ? ART[cn.type] : '', glow: cn ? CANNONS[cn.type][2].replace(')', ' / 0.45)') : 'transparent',
+      has: !!cn, none: !cn, note: cn ? '' : (tr.cannonFree ? 'next build: 1st slot' : 'free build ready'),
+      g: cn ? CANNONS[cn.type][0] : '', c: cn ? CANNONS[cn.type][2] : INK, name: cn ? CANNONS[cn.type][1] : '',
+      hp: cn ? cn.hp : 0, max: cn ? cn.max : 0, pct: cn ? Math.round(cn.hp / cn.max * 100) + '%' : '0%',
+      shotsLeft: cn ? String(SHOT_CAP - (cn.shots || 0)) : '0', shotCap: String(SHOT_CAP),
+      ticks: cn ? Array.from({ length: SHOT_CAP }, (_, i) => ({ bg: i < SHOT_CAP - (cn.shots || 0) ? CANNONS[cn.type][2] : 'oklch(0.28 0.01 260)' })) : [],
+      shotUse: () => this.commit(t => { if (!t.cannon || (t.cannon.shots || 0) >= SHOT_CAP) return false; t.cannon.shots = (t.cannon.shots || 0) + 1; return (SHOT_CAP - t.cannon.shots) + ' left'; }, 'Cannon fired'),
+      shotBack: () => this.commit(t => { if (!t.cannon || !(t.cannon.shots > 0)) return false; t.cannon.shots -= 1; }, null),
+      dmg5: () => this.hp(-5), dmg1: () => this.hp(-1), heal1: () => this.hp(1),
+      dismiss: () => this.commit(t => { t.cannon = null; }, 'Cannon dismissed'),
+      builds: Object.entries(CANNONS).map(([k, [g, label, c]]) => ({ g, label: label.replace('Force ', ''), c, img: ART[k], bgImg: ART[k], op: canBuild ? 1 : 0.45,
+        build: () => { if (!canBuild) return; this.commit(t => { if (t.round > 0) t.econ.action = true; let note; if (!t.cannonFree) { t.cannonFree = true; note = 'free build'; } else note = ORD[this.spendSlot(t, 1)] + ' slot'; t.cannon = { type: k, hp: 5 * L, max: 5 * L, shots: 0 }; return note; }, 'Built ' + label); } }))
+    };
+    const ob = tr.orbs;
+    const cnt = s => ob ? ob.list.filter(o => o.s === s).length : 0;
+    let orbSub = 'not imbued';
+    if (ob) { if (inCombat) { const left = 10 - (tr.round - ob.round); orbSub = left > 0 ? left + (left === 1 ? ' round' : ' rounds') + ' left' : 'expired'; } else orbSub = 'lasts 1 min'; }
+    const ST = { held: ['held', 'oklch(0.28 0.01 260)', 'solid', 'oklch(0.55 0.01 260)', 1], gifted: ['gifted', 'oklch(0.76 0.14 305 / 0.22)', 'dashed', 'oklch(0.76 0.14 305)', 1], self: ['thrown', 'transparent', 'solid', 'oklch(0.36 0.01 260)', 0.4], ally: ['ally threw', 'transparent', 'dashed', 'oklch(0.36 0.01 260)', 0.4] };
+    const pips = ob
+      ? Array.from({ length: 3 }, (_, i) => { const o = ob.list[i]; if (!o) return { img: ART.oil, bgImg: ART.oil, imgOp: 0.15, g: '·', c: 'oklch(0.45 0.01 260)', label: 'none', bg: 'transparent', bs: 'dotted', bd: 'oklch(0.36 0.01 260)', op: 0.5, cursor: 'default', tap: () => {} }; const s = ST[o.s]; return { img: ART[o.p], bgImg: ART[o.p], imgOp: 1, g: PAY[o.p][0], c: PAY[o.p][2], label: s[0], bg: s[1], bs: s[2], bd: s[3], op: s[4], cursor: 'default', tap: () => {} }; })
+      : tr.pick.map((p, i) => ({ img: ART[p], bgImg: ART[p], imgOp: 0.85, g: PAY[p][0], c: PAY[p][2], label: PAY[p][1], bg: 'transparent', bs: 'dashed', bd: 'oklch(0.55 0.01 260)', op: 1, cursor: 'pointer',
+          tap: () => this.setState(st => { const pick = st.tr.pick.slice(); pick[i] = PAY_ORDER[(PAY_ORDER.indexOf(pick[i]) + 1) % 3]; return { tr: { ...st.tr, pick } }; }, () => this.persistTr()) }));
+    const need = {}; tr.pick.forEach(p => { need[p] = (need[p] || 0) + 1; });
+    const canImbue = !(inCombat && tr.econ.bonus) && tr.pick.some(p => tr.stock[p] > 0);
+    const orbAct = (from, to, label, useAction) => () => { if (!ob || !ob.list.some(o => o.s === from)) return; if (useAction && inCombat && tr.econ.action) return; this.commit(t => { const o = t.orbs.list.find(o => o.s === from); o.s = to; if (useAction && t.round > 0) t.econ.action = true; return PAY[o.p][1].toLowerCase(); }, label); };
+    const orbs = {
+      has: !!ob, none: !ob, sub: orbSub, pips,
+      counts: cnt('held') + ' held · ' + cnt('gifted') + ' with allies · thrown: ' + cnt('self') + ' by you, ' + cnt('ally') + ' by allies',
+      throwSelf: orbAct('held', 'self', 'Threw orb', true), gift: orbAct('held', 'gifted', 'Gave orb to ally', false), allyThrew: orbAct('gifted', 'ally', 'Ally threw orb', false),
+      end: () => this.commit(t => { t.orbs = null; }, 'Magic Stone ended'),
+      imbueOp: canImbue ? 1 : 0.45,
+      imbue: () => { if (!canImbue) return; this.commit(t => { if (t.round > 0) t.econ.bonus = true; const list = []; t.pick.forEach(p => { if (t.stock[p] > 0) { t.stock[p] -= 1; list.push({ p, s: 'held' }); } }); const lost = t.orbs ? t.orbs.list.filter(o => o.s === 'held' || o.s === 'gifted').length : 0; t.orbs = { round: t.round, list }; return list.map(o => PAY[o.p][1].toLowerCase()).join(', ') + (lost ? ' · ' + lost + ' old orb' + (lost > 1 ? 's' : '') + ' lost magic' : ''); }, 'Magic Stone'); }
+    };
+    const stock = STOCK.map(([k, tk, label]) => ({ img: ART[k], bgImg: ART[k], g: T[tk].g, c: T[tk].c, label, n: String(tr.stock[k]),
+      dec: () => this.commit(t => { if (t.stock[k] <= 0) return false; t.stock[k] -= 1; }, null), inc: () => this.commit(t => { t.stock[k] += 1; }, null) }))
+      .concat([['light', T.light, 'Tinkering beads: light'], ['sound', T.thunder, 'Tinkering beads: sound']].map(([m, tk, label]) => ({ img: ART.bead, bgImg: ART.bead, g: tk.g, c: tk.c, label: label + ' (' + (tr.beads.light + tr.beads.sound) + '/4)', n: String(tr.beads[m]),
+        dec: () => this.commit(t => { if (t.beads[m] <= 0) return false; t.beads[m] -= 1; }, null), inc: () => this.commit(t => { if (t.beads.light + t.beads.sound >= 4) return false; t.beads[m] += 1; }, null) })));
+    const jug = [['oil', '+2 oil'], ['acid', '+2 acid']].map(([k, label]) => ({ label, op: tr.jug ? 0.4 : 1, use: () => { if (tr.jug) return; this.commit(t => { t.stock[k] += 2; t.jug = true; }, 'Alchemy jug ' + label); } }));
+    const resetTurn = t => { t.econ = { action: false, bonus: false, reaction: false }; t.taken = []; };
+    return {
+      roundLabel: inCombat ? 'Round ' + tr.round : 'Out of combat', inCombat,
+      advanceLabel: inCombat ? 'End turn → R' + (tr.round + 1) : 'Start combat',
+      advance: () => this.commit(t => { resetTurn(t); if (t.round === 0) { t.round = 1; if (t.orbs && t.orbs.round === 0) t.orbs.round = 1; if (t.conc && t.conc.round === 0) t.conc.round = 1; } else t.round += 1; }, inCombat ? 'Turn ended' : 'Combat started'),
+      endCombat: () => this.commit(t => { resetTurn(t); t.round = 0; }, 'Combat ended'),
+      econ, slots, frees, conc, cannon, orbs, stock, jug,
+      undoOp: this.hist.length ? 1 : 0.4,
+      undo: () => { if (!this.hist.length) return; const prev = this.hist[this.hist.length - 1]; this.hist = this.hist.slice(0, -1); this.setState({ tr: prev }, () => this.persistTr()); },
+      reset: () => { if (!window.confirm('Reset the tracker? This clears slots, cannon, orbs, consumables and the log.')) return; this.hist = []; this.setState({ tr: freshTr() }, () => this.persistTr()); },
+      shortRest: () => this.commit(t => { resetTurn(t); t.round = 0; }, 'Short rest'),
+      longRest: () => this.commit(t => { resetTurn(t); t.round = 0; t.slots = { 1: 0, 2: 0 }; t.free = { misty: false, whispers: false }; t.cannon = null; t.cannonFree = false; t.conc = null; t.orbs = null; t.jug = false; }, 'Long rest: slots, free spells, cannon build and jug reset'),
+      log: tr.log, logEmpty: !tr.log.length
+    };
+  }
+  hp(n) {
+    this.commit(t => { if (!t.cannon) return false; t.cannon.hp = Math.max(0, Math.min(t.cannon.max, t.cannon.hp + n)); if (t.cannon.hp === 0) { t.cannon = null; return 'destroyed'; } }, 'Cannon ' + (n > 0 ? '+' : '') + n + ' HP');
+  }
+  jumpToPlaybook() {
+    const el = this.playbookRef.current;
+    if (!el) return;
+    const top = el.getBoundingClientRect().top;
+    if (top > window.innerHeight * 0.5 || top < 0) window.scrollTo({ top: window.scrollY + top - 10, behavior: 'smooth' });
+  }
+  save(patch) {
+    this.setState(patch, () => {
+      const { level, dex, appr, showLoadout, theme, flowOpen } = this.state;
+      try { localStorage.setItem(STORE, JSON.stringify({ level, dex, appr, showLoadout, theme, flowOpen })); } catch (e) {}
+    });
+  }
+  renderVals() {
+    const { dex, appr, filters, step } = this.state;
+    const theme = THEMES.some(t => t[0] === this.state.theme) ? this.state.theme : 'all';
+    const L = SHOW_L5 ? this.state.level : 4;
+    const l5 = L === 5, dc = l5 ? 15 : 14, prof = l5 ? 3 : 2;
+    const lockedMode = this.props.lockedCards ?? 'dim';
+    const filterMode = this.props.filterBehavior ?? 'hide';
+    const cols = this.props.columns ?? 'auto';
+    const focus = step === null ? null : STEPS[step][1];
+    const raw = buildCards(L, dex, dc).filter(c => SHOW_L5 || !c.l5only).map(c => ({ ...c, themes: CARD_THEMES[c.id] || [] }));
+    const byId = Object.fromEntries(raw.map(c => [c.id, c]));
+
+    const badge = ([kind, v]) => {
+      if (kind === 'free') return { txt: 'FREE' + (v ? ' · ' + v : ''), bg: 'transparent', fg: INK, bd: 'oklch(0.80 0.01 260)', bs: 'solid' };
+      if (kind === 'slot') return { txt: 'SLOT · ' + v, bg: 'oklch(0.90 0.01 80)', fg: DARKTXT, bd: 'oklch(0.90 0.01 80)', bs: 'solid' };
+      if (kind === 'conc') return { txt: '◎ CONC', bg: 'transparent', fg: T.control.c, bd: T.control.c, bs: 'solid' };
+      if (kind === 'l5') return { txt: 'L5', bg: T.force.c, fg: DARKTXT, bd: T.force.c, bs: 'solid' };
+      const ok = !!appr[v];
+      return ok ? { txt: 'DM ✓ ' + v, bg: 'transparent', fg: T.acid.c, bd: T.acid.c, bs: 'solid' }
+                : { txt: 'DM? ' + v, bg: 'transparent', fg: T.fire.c, bd: T.fire.c, bs: 'dashed' };
+    };
+
+    const tr = this.state.tr;
+    const cards = raw.map(c => {
+      const locked = !!c.l5only && !l5;
+      const needs = [...new Set(c.lanes.map(ln => ln.name === 'Flamethrower' ? 'ft' : ln.name === 'Force Ballista' ? 'bal' : null).filter(Boolean))];
+      const gated = needs.length > 0 && !!tr.cannon && !needs.includes(tr.cannon.type);
+      const gate = gated ? 'Needs ' + needs.map(n => CANNONS[n][1]).join(' or ') + ' · you have ' + CANNONS[tr.cannon.type][1] : '';
+      const match = filters.every(f => c.tags.includes(f));
+      const inFocus = !focus || focus.includes(c.id);
+      const inTheme = theme === 'all' || c.themes.includes(theme);
+      const hide = !inTheme || (!match && filterMode === 'hide') || (locked && lockedMode === 'hide');
+      const dim = locked || !match;
+      return {
+        open: () => this.openDlg(c),
+        id: c.id, name: c.name, use: c.use, accent: T[c.k].c, glyph: T[c.k].g, tint: tint(c.k),
+        display: hide ? 'none' : 'flex', opacity: dim ? 0.32 : gated ? 0.5 : (inFocus ? 1 : 0.55), gate, hasGate: gated,
+        gear: (GEAR[c.id] || []).map(g => ({ g: GEAR_LBL[g][0], label: GEAR_LBL[g][1], c: GEAR_LBL[g][2] })),
+        scen: STEPS.map(([q, ids, short], i) => ids.includes(c.id) ? { num: i + 1, short, bg: step === i ? T.fire.c : 'oklch(0.13 0.006 260)', fg: step === i ? DARKTXT : 'oklch(0.90 0.01 80)', bd: step === i ? T.fire.c : 'oklch(0.45 0.01 260)' } : null).filter(Boolean),
+        ring: focus && inFocus ? T.fire.c : 'oklch(0.36 0.01 260)', ringW: focus && inFocus ? '2px' : '1px',
+        locked, note: c.note || '', hasNote: !!c.note,
+        badges: c.badges.map(badge),
+        totals: c.totals.map(([l, v]) => ({ l, v: typeof v === 'number' ? fmt(v) : v })),
+        lanes: c.lanes.map((ln, li) => {
+          const cost = locked ? null : costFor(c.id, ln, l5), key = c.id + ':' + li;
+          const taken = tr.taken.includes(key), why = cost && !taken ? this.check(cost, tr) : '';
+          const ok = !!cost && !why && !taken;
+          return {
+          ...(LANE[ln.k] || LANE.other), k: ln.k, q: ln.q || '', name: ln.name, txt: ln.txt,
+          rowBg: taken ? 'oklch(0.80 0.15 150 / 0.12)' : 'transparent', op: cost && why ? 0.6 : 1,
+          hasCost: !!cost, costTxt: cost ? 'Costs ' + costChips(cost).join(' · ') : '',
+          status: taken ? '✓ taken' : why, statusFg: taken ? T.acid.c : why ? T.fire.c : 'oklch(0.62 0.01 260)',
+          dice: ln.dice.map(d => ({ e: d.e, p: '(' + d.p + ')', avg: '≈ ' + fmt(d.a), c: T[d.t].c, g: T[d.t].g, t: T[d.t].t }))
+        }; })
+      };
+    });
+
+    let dlg = { open: false, lanes: [], badges: [] };
+    const dc0 = this.state.dlg && raw.find(x => x.id === this.state.dlg.id);
+    if (dc0) {
+      const cv = cards.find(x => x.id === dc0.id), sel = this.state.dlg.sel, plan = this.plan(dc0, sel);
+      const setSel = (li, v) => this.setState(st => ({ dlg: { ...st.dlg, sel: { ...st.dlg.sel, [li]: v } } }));
+      const ST = {
+        info: ['', 'reference', MUTED, 'transparent', 'oklch(0.28 0.01 260)', 'oklch(0.36 0.01 260)', 'transparent'],
+        done: ['✓', 'already done this turn', T.acid.c, 'oklch(0.80 0.15 150 / 0.08)', 'oklch(0.80 0.15 150 / 0.4)', T.acid.c, 'oklch(0.80 0.15 150 / 0.5)'],
+        blocked: ['✕', '', T.fire.c, 'oklch(0.70 0.18 30 / 0.07)', 'oklch(0.70 0.18 30 / 0.35)', 'oklch(0.55 0.1 30)', 'transparent'],
+        run: ['✓', 'will run', 'oklch(0.86 0.12 70)', 'oklch(0.80 0.15 65 / 0.12)', 'oklch(0.80 0.15 65 / 0.55)', 'oklch(0.80 0.15 65)', 'oklch(0.80 0.15 65)'],
+        skip: ['', 'skipped · tap to include', MUTED, 'oklch(0.215 0.008 260)', 'oklch(0.34 0.01 260)', 'oklch(0.50 0.01 260)', 'transparent']
+      };
+      const runs = plan.filter(x => x.kind === 'run');
+      const spend = runs.flatMap(x => costChips(x.cost));
+      const lockedD = !!dc0.l5only && !l5;
+      const blockedN = plan.filter(x => x.kind === 'blocked').length;
+      dlg = {
+        open: true, name: cv.name, use: cv.use, glyph: cv.glyph, accent: cv.accent, tint: cv.tint, badges: cv.badges,
+        note: cv.note, hasNote: cv.hasNote,
+        warn: lockedD ? 'Unlocks at Level 5. Nothing can be spent yet.' : cv.hasGate ? cv.gate : blockedN ? blockedN + (blockedN === 1 ? ' step is' : ' steps are') + ' unavailable right now' : '',
+        hasWarn: lockedD || cv.hasGate || blockedN > 0,
+        lanes: plan.map(x => {
+          const v = cv.lanes[x.li], s = ST[x.kind], can = x.kind === 'run' || x.kind === 'skip';
+          return { ...v, mark: s[0], status: x.kind === 'blocked' ? x.why : s[1], statusFg: s[2], rowBg: s[3], rowBd: s[4], boxBd: x.kind === 'info' ? 'transparent' : s[5], boxBg: s[6],
+            costTxt: x.cost ? 'Costs ' + costChips(x.cost).join(' · ') : '', op: x.kind === 'blocked' ? 0.75 : x.kind === 'info' ? 0.85 : 1,
+            cursor: can ? 'pointer' : 'default', toggle: can ? () => setSel(x.li, x.kind !== 'run') : () => {} };
+        }),
+        summary: runs.length ? spend.join(' · ') : 'Nothing selected', sumFg: runs.length ? INK : MUTED,
+        runLabel: runs.length ? 'Execute ' + runs.length + (runs.length === 1 ? ' step' : ' steps') : 'Nothing to execute',
+        runBg: runs.length ? 'linear-gradient(oklch(0.84 0.14 68), oklch(0.74 0.15 60))' : 'oklch(0.22 0.008 260)',
+        runFg: runs.length ? 'oklch(0.16 0.008 260)' : MUTED, runBd: runs.length ? 'oklch(0.86 0.13 65)' : 'oklch(0.34 0.01 260)', runCursor: runs.length ? 'pointer' : 'default',
+        run: () => this.runDlg(dc0), close: () => this.setState({ dlg: null }), stop: e => e.stopPropagation()
+      };
+    }
+
+    const steps = STEPS.map(([q, ids], i) => {
+      const active = step === i;
+      if (!ids.some(id => byId[id])) return null;
+      return {
+        num: i + 1, q,
+        bg: active ? 'oklch(0.80 0.15 65 / 0.22)' : 'oklch(0.215 0.008 260)',
+        ringW: active ? '2px' : '1px', ringC: active ? T.fire.c : 'oklch(0.36 0.01 260)',
+        select: () => { this.save({ theme: 'all' }); this.setState({ step: active ? null : i }, () => { if (!active) this.jumpToPlaybook(); }); },
+        plays: ids.filter(id => byId[id]).map(id => {
+          const c = byId[id], lock = c.l5only && !l5;
+          return { name: c.name + (c.l5only ? ' (L5)' : ''), fg: lock ? 'oklch(0.58 0.01 260)' : INK, deco: lock ? 'line-through' : 'none' };
+        })
+      };
+    }).filter(Boolean).map((s, j) => ({ ...s, num: j + 1 }));
+
+    const tabs = THEMES.map(([id, label, k]) => {
+      const on = theme === id, c = k ? T[k].c : 'oklch(0.84 0.01 260)';
+      return {
+        label, g: k ? T[k].g : '◇', c, n: raw.filter(x => id === 'all' || x.themes.includes(id)).length,
+        bg: on ? (k ? tint(k) : 'oklch(0.84 0.01 260 / 0.14)') : 'transparent', fg: on ? INK : MUTED, bd: on ? c : 'transparent',
+        select: () => this.save({ theme: id })
+      };
+    });
+
+    const dmB = n => badge(['dm', n]);
+    const atkS = l5 ? '+7' : '+6', NEUT = 'oklch(0.84 0.01 260)';
+    const SLOT_ID = { 'Oil': 'payload-oil', 'Acid': 'payload-acid', 'Glass marbles': 'payload-marbles', 'Glass shards': 'payload-shards', 'Dewar orb': 'payload-dewar' };
+    const row = (k, name, txt, o = {}) => ({ hasSlot: !!SLOT_ID[name] && !o.noSlot, slot: SLOT_ID[name], src: ({ 'Oil': 'assets/grenade-oil.png', 'Acid': 'assets/payload-acid.png', 'Glass marbles': 'assets/payload-marbles.png', 'Glass shards': 'assets/payload-shards.png', 'Dewar orb': 'assets/payload-dewar.png', 'Hand throw': 'assets/delivery-hand.png', 'Chistera': 'assets/delivery-chistera.png' })[name] || '', g: T[k].g, c: T[k].c, name, txt, dms: (o.dm || []).map(dmB), dice: o.dice || '', avg: o.avg ? '≈ ' + o.avg : '', hasDice: !!o.dice, dc: o.dt ? T[o.dt].c : T[k].c, dg: o.dt ? T[o.dt].g : T[k].g, t: o.dt ? T[o.dt].t : '', tip: o.tip || '', hasTip: !!o.tip, opacity: o.lock ? 0.45 : 1 });
+    const kits = [
+      { title: 'Payloads', sub: 'what’s inside the orb', g: '●', c: T.acid.c, tint: tint('acid'), hasIntro: false, intro: '', introDms: [], rows: [
+        row('fire', 'Oil', 'Jug makes 2 pints/day · 1 sp per flask. Coats target: +5 fire on next fire damage within 1 min. Puddle: 5-ft square, burns 2 rounds once lit, 5 fire per entry / turn end'),
+        row('acid', 'Acid', 'Jug makes 8 oz/day = 2 vials · 25 gp per vial', { dice: '2d6', avg: 7, dt: 'acid' }),
+        row('move', 'Glass marbles', 'Ball bearings, 1 gp/bag · 10-ft square · Dex DC 10 (fixed) or prone'),
+        row('pierce', 'Glass shards', 'Caltrops, 1 gp/20 · 5-ft square · Dex DC 15 (fixed) or stop moving, 1 piercing, −10 ft speed until healed · movers at half speed skip the save'),
+        row('cold', 'Dewar orb', 'Homebrew · target loses 10 ft of speed until the start of my next turn · no damage from the payload itself', { dm: [9] })] },
+      { title: 'Deliveries', sub: 'how the orb gets there', g: '◆', c: T.force.c, tint: tint('force'), hasIntro: true, intro: 'Delivery sets the attack roll and base damage; payload adds its effect', introDms: [dmB(8)], rows: [
+        { ...row('bludg', 'Hand throw', '20 ft · improvised (no proficiency)'), c: NEUT },
+        row('phys', 'Chistera', 'atk +' + (dex + prof) + ' · 30/120 ft', { dm: [2, 3], dice: '1d4 + 1d4 + ' + dex, avg: fmt(5 + dex), dt: 'phys' }),
+        row('bludg', 'Smart Bomb (Magic Stone)', 'Bonus action imbues up to 3 orbs for 1 min · spell atk ' + atkS, { dm: [1], dice: '1d6 + 4', avg: 7.5, dt: 'bludg', tip: 'mix payloads in one cast (1 oil, 1 acid, 1 Dewar)' }),
+        row('bludg', 'Catapult', '1st slot · Dex save DC ' + dc, { dm: [4], dice: '3d8', avg: 13.5, dt: 'bludg' }),
+        row('force', 'Glass-shot Ballista', l5 ? 'Force Ballista fires the orb' : 'Unlocks at Level 5', { dm: [5], lock: !l5 })] }
+    ];
+
+    const CHIPS = [['free', 'Free'], ['slot', 'Uses slot'], ['near', 'Near ≤30 ft'], ['far', 'Far']].concat(SHOW_L5 ? [['l5', 'Level 5 only']] : []);
+    const chips = CHIPS.map(([id, label]) => {
+      const on = filters.includes(id);
+      return {
+        label, mark: on ? '✓' : '',
+        bg: on ? 'oklch(0.90 0.01 80)' : 'oklch(0.215 0.008 260)', fg: on ? DARKTXT : INK, bd: on ? 'oklch(0.90 0.01 80)' : 'oklch(0.40 0.01 260)',
+        toggle: () => this.setState(s => ({ filters: s.filters.includes(id) ? s.filters.filter(x => x !== id) : [...s.filters, id] }))
+      };
+    });
+
+    const rulings = RULINGS.filter(r => SHOW_L5 || !r.l5).map(({ n, txt, plays }) => {
+      const ok = !!appr[n];
+      return {
+        txt, plays, badge: ok ? '✓ ' + n : '? ' + n, bs: ok ? 'solid' : 'dashed', bd: ok ? T.acid.c : T.fire.c, fg: ok ? T.acid.c : T.fire.c,
+        deco: 'none', txtFg: ok ? MUTED : INK,
+        toggle: () => this.save({ appr: { ...this.state.appr, [n]: !ok } })
+      };
+    });
+
+    const fbAvg = l5 ? 15.5 : 5.5;
+    const INFO = SPELL_INFO(dc, l5 ? '+7' : '+6');
+    const spellGroups = SPELLS.filter(g => SHOW_L5 || g[1] !== 2).map(([title, tier, items]) => {
+      const lock = tier === 2 && !l5;
+      const swap = tier === 'swap';
+      const sub = swap ? 'not known' : tier === 1 ? (l5 ? '4 slots' : '3 slots') : tier === 2 ? (l5 ? '2 slots' : 'unlocks L5') : tier === 3 ? 'free 1 / long rest' : 'at will';
+      return {
+        title, sub, subFg: lock ? T.force.c : 'oklch(0.74 0.01 260)',
+        note: swap ? 'Only 2 cantrips known (Fire Bolt + Magic Stone). Swap one at a level-up.' : '', hasNote: swap,
+        items: items.map(([name, conc]) => {
+          const info = INFO[name] || { meta: [], lines: [] }, open = this.state.spellOpen === name;
+          return {
+            name, conc: conc ? ' ◎' : '', fg: lock ? 'oklch(0.58 0.01 260)' : swap ? 'oklch(0.80 0.01 260)' : INK, deco: lock ? 'line-through' : 'none',
+            bg: open ? 'oklch(0.76 0.14 305 / 0.35)' : swap ? 'transparent' : 'oklch(0.28 0.01 260)', open,
+            bs: swap ? 'dashed' : 'dotted', bd: swap ? 'oklch(0.55 0.01 260)' : 'transparent transparent oklch(0.60 0.01 260) transparent',
+            meta: info.meta, lines: info.lines.map(([k, dice, v]) => ({ k, dice, v })),
+            enter: () => { this.openedAt = Date.now(); this.setState({ spellOpen: name }); },
+            leave: () => this.setState(st => st.spellOpen === name ? { spellOpen: null } : null),
+            tap: () => { if (this.state.spellOpen === name && Date.now() - (this.openedAt || 0) > 400) this.setState({ spellOpen: null }); else { this.openedAt = Date.now(); this.setState({ spellOpen: name }); } }
+          };
+        })
+      };
+    });
+    return {
+      spellGroups, playbookRef: this.playbookRef, tabs, kits, tr: this.trVals(l5), dlg,
+      flowOpen: this.state.flowOpen, flowChevron: this.state.flowOpen ? '▾' : '▸',
+      flowHint: this.state.flowOpen ? 'Tap a situation to highlight its plays across all themes' : 'Show situations',
+      toggleFlow: () => this.save({ flowOpen: !this.state.flowOpen }),
+      showLoadout: this.state.showLoadout,
+      loadoutLabel: this.state.showLoadout ? '▴ Collapse details' : '▾ Show spells & gear',
+      toggleLoadout: () => this.save({ showLoadout: !this.state.showLoadout }),
+      stats: {
+        atk: l5 ? '+7' : '+6', dc, chAtk: '+' + (dex + prof), chAtkParts: '(Dex ' + dex + ' + ' + prof + ')',
+        slots: l5 ? '4× 1st · 2× 2nd' : '3× 1st',
+        fb: (l5 ? '2d10 + 1d8' : '1d10') + ' ≈ ' + fbAvg, fbParts: l5 ? '(cantrip + firearm)' : '(cantrip)',
+        baseline: '≈' + fmt(fbAvg + 9), baselineNum: fmt(fbAvg + 9), cannonHp: 5 * L + ' (5 × level)', cannonHpNum: 5 * L,
+        rodTxt: l5 ? 'Arcane Firearm: +1d8 to ONE damage roll of an artificer spell cast through it; never the cannon' : 'Arcane Firearm unlocks at L5: +1d8 to one spell damage roll',
+        dexStr: (dex >= 0 ? '+' : '') + dex, chExpr: '1d4 + 1d4 + ' + dex, chAvg: fmt(5 + dex)
+      },
+      lvl: {
+        l4bg: l5 ? 'oklch(0.215 0.008 260)' : 'oklch(0.80 0.15 65)', l4fg: l5 ? MUTED : DARKTXT,
+        l5bg: l5 ? 'oklch(0.74 0.14 255)' : 'oklch(0.215 0.008 260)', l5fg: l5 ? DARKTXT : MUTED
+      },
+      setL4: () => this.save({ level: 4 }), setL5: () => this.save({ level: 5 }),
+      dexUp: () => this.save({ dex: Math.min(5, dex + 1) }), dexDown: () => this.save({ dex: Math.max(-1, dex - 1) }),
+      steps, chips, cards, rulings,
+      anyFilter: filters.length > 0 || step !== null,
+      clearLabel: step !== null ? 'step ' + (step + 1) + (filters.length ? ' + filters' : '') : 'filters',
+      clearAll: () => this.setState({ filters: [], step: null }),
+      gridCols: cols === 'auto' ? 'repeat(auto-fill, minmax(272px, 1fr))' : 'repeat(' + cols + ', minmax(0, 1fr))'
+    };
+  }
+}
+</script>
+</body>
+</html>

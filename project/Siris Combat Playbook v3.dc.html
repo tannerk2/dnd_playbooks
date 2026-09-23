@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&amp;family=JetBrains+Mono:wght@500;700&amp;family=Marcellus+SC&amp;display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;background:oklch(0.165 0.008 260);}
+*{box-sizing:border-box;}
+a{color:oklch(0.80 0.15 65);} a:hover{color:oklch(0.88 0.12 65);}
+button{font:inherit;}
+@media print{@page{size:landscape;margin:5mm;} html{zoom:0.52;} html,body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}
+</style>
+</helmet>
+<div style="min-height:100vh; background:oklch(0.165 0.008 260); color:oklch(0.95 0.006 80); font-family:'Atkinson Hyperlegible', system-ui, sans-serif; padding:14px; display:flex; flex-direction:column; gap:14px; font-variant-numeric:tabular-nums;">
+
+  <header style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px;">
+    <div style="display:flex; align-items:baseline; gap:14px; flex-wrap:wrap;">
+      <div style="font-family:'Marcellus SC', serif; font-size:32px; line-height:1; letter-spacing:0.06em; color:oklch(0.88 0.12 65);">Siris</div>
+      <div style="font-size:13px; color:oklch(0.74 0.01 260);">Kalashtar Artillerist Artificer · The Eighth Fold · Combat Playbook</div>
+    </div>
+    <div style="display:flex; flex-wrap:wrap; align-items:center; gap:14px;">
+      <div style="display:flex; align-items:center; gap:6px; font-size:12px; color:oklch(0.74 0.01 260);">
+        <span>Dex mod <span style="border:1px dashed oklch(0.55 0.01 260); border-radius:3px; padding:0 4px; font-size:10px;">EDIT</span></span>
+        <button onClick="{{ dexDown }}" style="width:34px; height:34px; border-radius:4px; border:1px solid oklch(0.40 0.01 260); background:oklch(0.215 0.008 260); color:oklch(0.95 0.006 80); cursor:pointer; font-size:16px;">−</button>
+        <span style="font-family:'JetBrains Mono', monospace; font-size:17px; font-weight:700; color:oklch(0.95 0.006 80); min-width:26px; text-align:center;">{{ stats.dexStr }}</span>
+        <button onClick="{{ dexUp }}" style="width:34px; height:34px; border-radius:4px; border:1px solid oklch(0.40 0.01 260); background:oklch(0.215 0.008 260); color:oklch(0.95 0.006 80); cursor:pointer; font-size:16px;">+</button>
+      </div>
+    </div>
+  </header>
+
+  <section data-screen-label="Tier I Loadout" style="display:flex; flex-direction:column; gap:10px;">
+    
+  <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+    <span style="width:34px; height:34px; flex:none; transform:rotate(45deg); border:3px solid oklch(0.11 0.005 260); box-shadow:0 0 0 1px oklch(0.36 0.01 260); background:oklch(0.74 0.14 255 / 0.35); display:flex; align-items:center; justify-content:center; margin:0 4px;"><span style="transform:rotate(-45deg); font-family:'Marcellus SC', serif; font-size:15px; color:oklch(0.95 0.006 80);">I</span></span>
+    <span style="font-family:'Marcellus SC', serif; font-size:25px; line-height:1;">Loadout</span>
+    <span style="font-size:13px; color:oklch(0.74 0.01 260);">What Siris carries into the fight</span>
+    <span style="flex:1 1 40px; height:5px; background:oklch(0.11 0.005 260); border-top:1px solid oklch(0.36 0.01 260); border-bottom:1px solid oklch(0.36 0.01 260);"></span>
+    <button onClick="{{ toggleLoadout }}" style="cursor:pointer; min-height:34px; padding:4px 12px; border-radius:17px; font-size:12.5px; background:transparent; color:oklch(0.80 0.01 260); border:1px solid oklch(0.40 0.01 260);">{{ loadoutLabel }}</button>
+  </div>
+    <div style="display:grid; grid-template-columns:repeat(7, minmax(0, 1fr)); border:3px solid oklch(0.11 0.005 260); box-shadow:0 0 0 1px oklch(0.36 0.01 260); border-radius:6px; background:oklch(0.11 0.005 260); gap:3px; overflow:hidden;">
+      <div style="background:oklch(0.215 0.008 260); padding:7px 10px; min-width:0;"><div style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:oklch(0.74 0.01 260); white-space:nowrap;">Spell atk</div><div style="font-family:'JetBrains Mono', monospace; font-size:24px; font-weight:700;">{{ stats.atk }}</div></div>
+      <div style="background:oklch(0.215 0.008 260); padding:7px 10px; min-width:0;"><div style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:oklch(0.74 0.01 260); white-space:nowrap;">Save DC</div><div style="font-family:'JetBrains Mono', monospace; font-size:24px; font-weight:700;">{{ stats.dc }}</div></div>
+      <div style="background:oklch(0.215 0.008 260); padding:7px 10px; min-width:0;"><div style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:oklch(0.74 0.01 260); white-space:nowrap;">Chistera atk</div><div style="display:flex; align-items:baseline; gap:6px; flex-wrap:wrap;"><span style="font-family:'JetBrains Mono', monospace; font-size:24px; font-weight:700;">{{ stats.chAtk }}</span><span style="font-size:11px; color:oklch(0.62 0.01 260);">{{ stats.chAtkParts }}</span></div></div>
+      <div style="background:oklch(0.215 0.008 260); padding:7px 10px; min-width:0;"><div style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:oklch(0.74 0.01 260); white-space:nowrap;">Slots</div><div style="font-family:'JetBrains Mono', monospace; font-size:16px; font-weight:700; margin-top:5px;">{{ stats.slots }}</div></div>
+      <div style="background:oklch(0.215 0.008 260); padding:7px 10px; min-width:0;"><div style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:oklch(0.74 0.01 260); white-space:nowrap;">▲ Fire Bolt</div><div style="font-family:'JetBrains Mono', monospace; font-size:15px; font-weight:700; margin-top:5px; white-space:nowrap;">{{ stats.fb }}</div><div style="font-size:11px; color:oklch(0.62 0.01 260);">{{ stats.fbParts }}</div></div>
+      <div style="background:oklch(0.215 0.008 260); padding:7px 10px; min-width:0;"><div style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:oklch(0.74 0.01 260); white-space:nowrap;">Baseline</div><div style="font-family:'JetBrains Mono', monospace; font-size:24px; font-weight:700;">{{ stats.baseline }}</div><div style="font-size:11px; color:oklch(0.62 0.01 260);">Fire Bolt + cannon</div></div>
+      <div style="background:oklch(0.215 0.008 260); padding:7px 10px; min-width:0;"><div style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:oklch(0.74 0.01 260); white-space:nowrap;">Cannon</div><div style="font-family:'JetBrains Mono', monospace; font-size:14px; font-weight:700; margin-top:5px; white-space:nowrap;">AC 18 · HP {{ stats.cannonHpNum }}</div><div style="font-size:11px; color:oklch(0.62 0.01 260);">5 × level</div></div>
+    </div>
+    <sc-if value="{{ showLoadout }}" hint-placeholder-val="{{ true }}">
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:12px; align-items:start;">
+      
+      <div style="border:3px solid oklch(0.11 0.005 260); box-shadow:0 0 0 1px oklch(0.36 0.01 260); border-radius:6px; background:oklch(0.11 0.005 260); display:flex; flex-direction:column; gap:2px; font-size:12.5px; line-height:1.4; color:oklch(0.80 0.01 260);">
+        <div style="background:oklch(0.76 0.14 305 / 0.16); border-radius:3px 3px 0 0; padding:7px 11px; font-family:'Marcellus SC', serif; font-size:18px; color:oklch(0.95 0.006 80); display:flex; gap:8px; align-items:center;"><span style="color:oklch(0.76 0.14 305); font-size:13px;">✦</span>Spells</div>
+        <sc-for list="{{ spellGroups }}" as="g" hint-placeholder-count="4">
+          <div style="background:oklch(0.215 0.008 260); padding:7px 11px; display:flex; flex-direction:column; gap:5px;">
+            <div style="display:flex; justify-content:space-between; gap:8px; font-size:11px; letter-spacing:0.07em; text-transform:uppercase; color:oklch(0.74 0.01 260);"><span>{{ g.title }}</span><span style="color:{{ g.subFg }};">{{ g.sub }}</span></div>
+            <div style="display:flex; flex-wrap:wrap; gap:4px;">
+              <sc-for list="{{ g.items }}" as="it" hint-placeholder-count="3">
+                <span onMouseEnter="{{ it.enter }}" onMouseLeave="{{ it.leave }}" onClick="{{ it.tap }}" style="position:relative; display:flex;">
+                  <span style="cursor:help; font-size:12.5px; font-weight:700; padding:2px 7px; border-radius:3px; background:{{ it.bg }}; color:{{ it.fg }}; text-decoration:{{ it.deco }}; border-width:1px; border-style:{{ it.bs }}; border-color:{{ it.bd }};">{{ it.name }}<span style="color:oklch(0.76 0.14 305);">{{ it.conc }}</span></span>
+                  <sc-if value="{{ it.open }}" hint-placeholder-val="{{ false }}">
+                    <span style="position:absolute; left:0; top:100%; z-index:40; padding-top:6px; width:300px; max-width:80vw;">
+                      <span style="display:flex; flex-direction:column; gap:6px; background:oklch(0.13 0.006 260); border:3px solid oklch(0.08 0.004 260); box-shadow:0 0 0 1px oklch(0.76 0.14 305), 0 12px 28px oklch(0 0 0 / 0.55); border-radius:6px; padding:10px 12px; color:oklch(0.95 0.006 80); text-decoration:none; font-weight:400;">
+                        <span style="font-family:'Marcellus SC', serif; font-size:17px; line-height:1.1;">{{ it.name }}</span>
+                        <span style="display:flex; flex-wrap:wrap; gap:4px;">
+                          <sc-for list="{{ it.meta }}" as="m" hint-placeholder-count="3">
+                            <span style="font-size:11px; font-weight:700; letter-spacing:0.04em; padding:1px 6px; border-radius:3px; background:oklch(0.26 0.01 260); color:oklch(0.88 0.01 260); white-space:nowrap;">{{ m }}</span>
+                          </sc-for>
+                        </span>
+                        <sc-for list="{{ it.lines }}" as="ln" hint-placeholder-count="2">
+                          <span style="display:grid; grid-template-columns:62px minmax(0,1fr); gap:8px; font-size:12.5px; line-height:1.35; border-top:1px solid oklch(0.26 0.01 260); padding-top:5px;">
+                            <span style="font-size:10.5px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:oklch(0.70 0.01 260); padding-top:1px;">{{ ln.k }}</span>
+                            <span><span style="font-family:'JetBrains Mono', monospace; font-weight:700;">{{ ln.dice }}</span> <span style="color:oklch(0.82 0.01 260);">{{ ln.v }}</span></span>
+                          </span>
+                        </sc-for>
+                      </span>
+                    </span>
+                  </sc-if>
+                </span>
+              </sc-for>
+            </div>
+            <sc-if value="{{ g.hasNote }}" hint-placeholder-val="{{ false }}">
+              <div style="font-size:11.5px; color:oklch(0.70 0.01 260);">{{ g.note }}</div>
+            </sc-if>
+          </div>
+        </sc-for>
+        <div style="background:oklch(0.215 0.008 260); padding:6px 11px; font-size:11.5px; color:oklch(0.66 0.01 260);"><span style="color:oklch(0.76 0.14 305);">◎</span> = concentration · one at a time</div>
+      </div>
+      
+      <div style="border:3px solid oklch(0.11 0.005 260); box-shadow:0 0 0 1px oklch(0.36 0.01 260); border-radius:6px; overflow:hidden; background:oklch(0.11 0.005 260); display:flex; flex-direction:column; gap:2px; font-size:12.5px; line-height:1.4; color:oklch(0.80 0.01 260);">
+        <div style="background:oklch(0.74 0.14 255 / 0.16); padding:7px 11px; font-family:'Marcellus SC', serif; font-size:18px; color:oklch(0.95 0.006 80); display:flex; gap:8px; align-items:center;"><span style="color:oklch(0.74 0.14 255); font-size:13px;">◆</span>Eldritch Cannon</div>
+        
+        <div style="background:oklch(0.215 0.008 260); padding:7px 11px;"><div style="font-weight:700; font-size:13px; color:oklch(0.95 0.006 80);">Rules</div>Bonus action to fire · within 60 ft of you · walks/climbs 15 ft as part of that bonus action · type locked when summoned; rebuild costs a slot</div>
+        
+        <div style="background:oklch(0.215 0.008 260); padding:7px 11px;"><div style="font-weight:700; font-size:13px; color:oklch(0.95 0.006 80);"><span style="color:oklch(0.74 0.14 255);">◆</span> Force Ballista</div>Spell atk {{ stats.atk }} · 120 ft · <span style="font-family:'JetBrains Mono', monospace; color:oklch(0.95 0.006 80);">2d8</span> force <span style="color:oklch(0.62 0.01 260);">≈ 9</span> · push 5 ft</div>
+        
+        <div style="background:oklch(0.215 0.008 260); padding:7px 11px;"><div style="font-weight:700; font-size:13px; color:oklch(0.95 0.006 80);"><span style="color:oklch(0.80 0.15 65);">▲</span> Flamethrower</div>15-ft cone · Dex save {{ stats.dc }} · <span style="font-family:'JetBrains Mono', monospace; color:oklch(0.95 0.006 80);">2d8</span> fire <span style="color:oklch(0.62 0.01 260);">≈ 9</span>, half on save · ignites unattended flammables · reach ≈ 30 ft (15 move + 15 cone)</div>
+      </div>
+      
+      <div style="border:3px solid oklch(0.11 0.005 260); box-shadow:0 0 0 1px oklch(0.36 0.01 260); border-radius:6px; overflow:hidden; background:oklch(0.11 0.005 260); display:flex; flex-direction:column; gap:2px; font-size:12.5px; line-height:1.4; color:oklch(0.80 0.01 260);">
+        <div style="background:oklch(0.80 0.15 65 / 0.16); padding:7px 11px; font-family:'Marcellus SC', serif; font-size:18px; color:oklch(0.95 0.006 80); display:flex; gap:8px; align-items:center;"><span style="color:oklch(0.80 0.15 65); font-size:13px;">■</span>Equipment</div>
+        
+        <div style="background:oklch(0.215 0.008 260); padding:7px 11px;"><div style="font-weight:700; font-size:13px; color:oklch(0.95 0.006 80);"><span style="color:oklch(0.84 0.01 260);">■</span> Chistera</div>Glass jai-alai launcher, sling-style · 30/120 ft · atk {{ stats.chAtk }} · <span style="font-family:'JetBrains Mono', monospace; color:oklch(0.95 0.006 80);">{{ stats.chExpr }}</span> <span style="color:oklch(0.62 0.01 260);">≈ {{ stats.chAvg }}</span></div>
+        
+        <div style="background:oklch(0.215 0.008 260); padding:7px 11px;"><div style="font-weight:700; font-size:13px; color:oklch(0.95 0.006 80);">Tinkering bead</div>Replays recorded footsteps/voices to lure</div>
+      </div>
+      <sc-for list="{{ kits }}" as="kit" hint-placeholder-count="2">
+      <div style="border:3px solid oklch(0.11 0.005 260); box-shadow:0 0 0 1px oklch(0.36 0.01 260); border-radius:6px; overflow:hidden; background:oklch(0.11 0.005 260); display:flex; flex-direction:column; gap:2px; font-size:12.5px; line-height:1.4; color:oklch(0.80 0.01 260);">
+        <div style="background:{{ kit.tint }}; padding:7px 11px; font-family:'Marcellus SC', serif; font-size:18px; color:oklch(0.95 0.006 80); display:flex; gap:8px; align-items:baseline; flex-wrap:wrap;"><span style="color:{{ kit.c }}; font-size:13px;">{{ kit.g }}</span>{{ kit.title }}<span style="font-family:'Atkinson Hyperlegible', sans-serif; font-size:12px; color:oklch(0.74 0.01 260);">{{ kit.sub }}</span></div>
+        <sc-if value="{{ kit.hasIntro }}" hint-placeholder-val="{{ false }}">
+          <div style="background:oklch(0.19 0.008 260); padding:6px 11px; display:flex; flex-wrap:wrap; gap:6px; align-items:center; color:oklch(0.86 0.01 260);">{{ kit.intro }}<sc-for list="{{ kit.introDms }}" as="b" hint-placeholder-count="1"><span style="font-size:11px; font-weight:700; letter-spacing:0.05em; padding:1px 6px; border-radius:3px; background:{{ b.bg }}; color:{{ b.fg }}; border:1.5px {{ b.bs }} {{ b.bd }}; white-space:nowrap;">{{ b.txt }}</span></sc-for></div>
+        </sc-if>
+        <sc-for list="{{ kit.rows }}" as="row" hint-placeholder-count="5">
+          <div style="background:oklch(0.215 0.008 260); padding:7px 11px; display:flex; flex-direction:column; gap:2px; opacity:{{ row.opacity }};">
+            <div style="display:flex; flex-wrap:wrap; align-items:center; gap:6px; font-weight:700; font-size:13px; color:oklch(0.95 0.006 80);"><span style="color:{{ row.c }};">{{ row.g }}</span><span>{{ row.name }}</span><sc-for list="{{ row.dms }}" as="b" hint-placeholder-count="1"><span style="font-size:11px; font-weight:700; letter-spacing:0.05em; padding:1px 6px; border-radius:3px; background:{{ b.bg }}; color:{{ b.fg }}; border:1.5px {{ b.bs }} {{ b.bd }}; white-space:nowrap;">{{ b.txt }}</span></sc-for></div>
+            <sc-if value="{{ row.hasDice }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex; flex-wrap:wrap; align-items:baseline; gap:2px 6px;"><span style="font-family:'JetBrains Mono', monospace; font-size:13.5px; font-weight:700; color:oklch(0.95 0.006 80);">{{ row.dice }}</span><span style="font-family:'JetBrains Mono', monospace; font-size:11.5px; color:oklch(0.66 0.01 260);">{{ row.avg }}</span><span style="font-size:11px; font-weight:700; color:{{ row.dc }};">{{ row.dg }} {{ row.t }}</span></div>
+            </sc-if>
+            <div style="text-wrap:pretty;">{{ row.txt }}</div>
+            <sc-if value="{{ row.hasTip }}" hint-placeholder-val="{{ false }}">
+              <div style="font-size:12px; color:oklch(0.86 0.08 255);">Tip: {{ row.tip }}</div>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+      </sc-for>
+    </div>
+    </sc-if>
+  </section>
+
+  
+  
+  <section data-screen-label="Tier II Playbook" ref="{{ playbookRef }}" style="display:flex; flex-direction:column; gap:10px;">
+    
+  <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+    <span style="width:34px; height:34px; flex:none; transform:rotate(45deg); border:3px solid oklch(0.11 0.005 260); box-shadow:0 0 0 1px oklch(0.36 0.01 260); background:oklch(0.80 0.15 150 / 0.30); display:flex; align-items:center; justify-content:center; margin:0 4px;"><span style="transform:rotate(-45deg); font-family:'Marcellus SC', serif; font-size:15px; color:oklch(0.95 0.006 80);">II</span></span>
+    <span style="font-family:'Marcellus SC', serif; font-size:25px; line-height:1;">Playbook</span>
+    <span style="font-size:13px; color:oklch(0.74 0.01 260);">Run the play</span>
+    <span style="flex:1 1 40px; height:5px; background:oklch(0.11 0.005 260); border-top:1px solid oklch(0.36 0.01 260); border-bottom:1px solid oklch(0.36 0.01 260);"></span>
+  </div>
+    <div role="tablist" style="display:flex; flex-wrap:wrap; gap:2px; border-bottom:3px solid oklch(0.11 0.005 260); box-shadow:0 1px 0 oklch(0.36 0.01 260);">
+      <sc-for list="{{ tabs }}" as="tb" hint-placeholder-count="6">
+        <button role="tab" onClick="{{ tb.select }}" style="cursor:pointer; min-height:42px; padding:6px 15px; display:flex; align-items:center; gap:7px; background:{{ tb.bg }}; color:{{ tb.fg }}; border:0; border-bottom:3px solid {{ tb.bd }}; margin-bottom:-3px; border-radius:4px 4px 0 0; font-family:'Marcellus SC', serif; font-size:16.5px;"><span style="color:{{ tb.c }}; font-size:13px;">{{ tb.g }}</span>{{ tb.label }}<span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:oklch(0.66 0.01 260);">{{ tb.n }}</span></button>
+      </sc-for>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:6px;">
+      <div style="display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;">
+        <span style="font-family:'Marcellus SC', serif; font-size:17px; color:oklch(0.90 0.10 65);">Decision flow</span>
+        <span style="font-size:11.5px; color:oklch(0.66 0.01 260);">Tap a situation to highlight its plays across all themes</span>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(250px, 1fr)); gap:6px;">
+        <sc-for list="{{ steps }}" as="s" hint-placeholder-count="8">
+          <button onClick="{{ s.select }}" style="cursor:pointer; text-align:left; display:grid; grid-template-columns:20px minmax(0,1fr); gap:8px; align-items:start; padding:7px 10px; border-radius:5px; background:{{ s.bg }}; border:0; box-shadow:0 0 0 {{ s.ringW }} {{ s.ringC }}; color:oklch(0.95 0.006 80); font-size:12.5px; line-height:1.3;">
+            <span style="font-family:'JetBrains Mono', monospace; font-weight:700; color:oklch(0.80 0.15 65);">{{ s.num }}</span>
+            <span style="display:flex; flex-direction:column; gap:3px; min-width:0;">
+              <span style="font-weight:700;">{{ s.q }}</span>
+              <span style="display:flex; flex-wrap:wrap; gap:2px 8px;">
+                <sc-for list="{{ s.plays }}" as="p" hint-placeholder-count="2">
+                  <span style="font-size:12px; color:{{ p.fg }}; text-decoration:{{ p.deco }};">→ {{ p.name }}</span>
+                </sc-for>
+              </span>
+            </span>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+    <div style="display:flex; flex-wrap:wrap; align-items:center; gap:6px;">
+      <sc-for list="{{ chips }}" as="c" hint-placeholder-count="5">
+        <button onClick="{{ c.toggle }}" style="cursor:pointer; min-height:36px; padding:5px 13px; border-radius:18px; font-size:13.5px; font-weight:700; background:{{ c.bg }}; color:{{ c.fg }}; border:1px solid {{ c.bd }};">{{ c.mark }} {{ c.label }}</button>
+      </sc-for>
+      <sc-if value="{{ anyFilter }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ clearAll }}" style="cursor:pointer; min-height:36px; padding:5px 12px; border-radius:18px; font-size:13px; background:transparent; color:oklch(0.80 0.15 65); border:1px dashed oklch(0.55 0.01 260);">✕ Clear {{ clearLabel }}</button>
+      </sc-if>
+    </div>
+    <div style="display:grid; grid-template-columns:{{ gridCols }}; gap:12px; align-items:start;">
+        <sc-for list="{{ cards }}" as="card" hint-placeholder-count="12">
+          <article style="display:{{ card.display }}; opacity:{{ card.opacity }}; flex-direction:column; background:oklch(0.215 0.008 260); border:3px solid oklch(0.11 0.005 260); box-shadow:0 0 0 {{ card.ringW }} {{ card.ring }}; border-radius:6px; overflow:hidden; transition:opacity .15s;">
+            <div style="background:{{ card.tint }}; border-bottom:3px solid oklch(0.11 0.005 260); padding:8px 10px 7px; display:grid; grid-template-columns:minmax(0,1fr) auto; gap:3px 10px; align-items:start;">
+              <div style="display:flex; flex-direction:column; gap:2px; min-width:0;">
+                <div style="display:flex; align-items:center; gap:7px;">
+                  <span style="color:{{ card.accent }}; font-size:14px;">{{ card.glyph }}</span>
+                  <span style="font-family:'Marcellus SC', serif; font-size:18px; line-height:1.1;">{{ card.name }}</span>
+                </div>
+                <div style="font-size:12.5px; color:oklch(0.82 0.01 260);">{{ card.use }}</div>
+                <div style="display:flex; flex-wrap:wrap; gap:4px; margin-top:3px;">
+                  <sc-for list="{{ card.gear }}" as="gr" hint-placeholder-count="1">
+                    <span style="display:flex; align-items:center; gap:4px; font-size:11px; font-weight:700; padding:1px 6px; border-radius:3px; background:oklch(0.13 0.006 260); color:oklch(0.92 0.01 80); border:1px solid {{ gr.c }}; white-space:nowrap;"><span style="color:{{ gr.c }};">{{ gr.g }}</span>{{ gr.label }}</span>
+                  </sc-for>
+                </div>
+              </div>
+              <div style="display:flex; flex-direction:column; align-items:flex-end; gap:1px;">
+                <sc-for list="{{ card.totals }}" as="t" hint-placeholder-count="1">
+                  <div style="display:flex; align-items:baseline; gap:5px; white-space:nowrap;">
+                    <span style="font-size:10.5px; text-transform:uppercase; letter-spacing:0.06em; color:oklch(0.74 0.01 260);">{{ t.l }}</span>
+                    <span style="font-family:'JetBrains Mono', monospace; font-size:19px; font-weight:700;">≈{{ t.v }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="display:flex; flex-wrap:wrap; gap:4px; padding:7px 10px 5px;">
+              <sc-for list="{{ card.badges }}" as="b" hint-placeholder-count="2">
+                <span style="font-size:11px; font-weight:700; letter-spacing:0.05em; padding:1px 6px; border-radius:3px; background:{{ b.bg }}; color:{{ b.fg }}; border:1.5px {{ b.bs }} {{ b.bd }}; white-space:nowrap;">{{ b.txt }}</span>
+              </sc-for>
+            </div>
+            <sc-for list="{{ card.lanes }}" as="lane" hint-placeholder-count="2">
+              <div style="display:grid; grid-template-columns:66px minmax(0,1fr); gap:8px; padding:6px 10px; border-top:1px solid oklch(0.29 0.01 260);">
+                <div style="display:flex; flex-direction:column; gap:2px; align-items:flex-start;">
+                  <span style="font-size:10.5px; font-weight:700; letter-spacing:0.06em; padding:2px 5px; border-radius:3px; background:{{ lane.bg }}; color:{{ lane.fg }}; border:1px solid {{ lane.bd }};">{{ lane.k }}</span>
+                  <span style="font-size:10.5px; color:oklch(0.70 0.01 260); line-height:1.2;">{{ lane.q }}</span>
+                </div>
+                <div style="min-width:0;">
+                  <div style="font-size:13px; line-height:1.32; text-wrap:pretty;"><b>{{ lane.name }}</b> <span style="color:oklch(0.78 0.01 260);">{{ lane.txt }}</span></div>
+                  <sc-for list="{{ lane.dice }}" as="d" hint-placeholder-count="1">
+                    <div style="display:flex; flex-wrap:wrap; align-items:baseline; gap:2px 6px; margin-top:3px;">
+                      <span style="font-family:'JetBrains Mono', monospace; font-size:14px; font-weight:700;">{{ d.e }}</span>
+                      <span style="font-size:11.5px; color:oklch(0.66 0.01 260);">{{ d.p }}</span>
+                      <span style="font-size:11.5px; color:oklch(0.66 0.01 260); font-family:'JetBrains Mono', monospace;">{{ d.avg }}</span>
+                      <span style="font-size:11px; font-weight:700; color:{{ d.c }}; white-space:nowrap;">{{ d.g }} {{ d.t }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+            <sc-if value="{{ card.hasNote }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:6px 10px 8px; border-top:1px solid oklch(0.29 0.01 260); font-size:12px; line-height:1.35; color:oklch(0.80 0.01 260); background:oklch(0.19 0.008 260);">{{ card.note }}</div>
+            </sc-if>
+            <sc-if value="{{ card.locked }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:5px 10px; border-top:1px solid oklch(0.29 0.01 260); font-size:11.5px; font-weight:700; color:oklch(0.86 0.08 255); background:oklch(0.19 0.008 260);">Unlocks at Level 5 · numbers shown at L5</div>
+            </sc-if>
+          </article>
+        </sc-for>
+      </div>
+  </section>
+
+  <div style="height:5px; background:oklch(0.11 0.005 260); border-top:1px solid oklch(0.36 0.01 260); border-bottom:1px solid oklch(0.36 0.01 260);"></div>
+
+  <footer style="display:grid; grid-template-columns:repeat(auto-fit, minmax(340px, 1fr)); gap:14px; font-size:12.5px; line-height:1.4;">
+    <div style="display:grid; grid-auto-rows:min-content; gap:5px; align-content:start;">
+      <div style="font-family:'Marcellus SC', serif; font-size:17px; color:oklch(0.90 0.10 65);">Rules reminders</div>
+      <div style="display:grid; grid-template-columns:14px minmax(0,1fr); column-gap:7px; line-height:1.4; min-height:min-content;"><span style="color:oklch(0.76 0.14 305);">◎</span><span><b>One concentration spell at a time:</b> Faerie Fire, Caustic Brew, Web, Heat Metal. Catapult, Shatter, Pyrotechnics, Snare, and Magic Stone don't need it</span></div>
+      <div style="display:grid; grid-template-columns:14px minmax(0,1fr); column-gap:7px; line-height:1.4; min-height:min-content;"><span style="color:oklch(0.80 0.15 65);">▲</span><span>Oil's +5 triggers <b>once per coating</b></span></div>
+      <div style="display:grid; grid-template-columns:14px minmax(0,1fr); column-gap:7px; line-height:1.4; min-height:min-content;"><span style="color:oklch(0.84 0.01 260);">■</span><span><b>Only one bonus action per turn:</b> cannon vs Magic Stone vs Misty Step</span></div>
+      <div style="display:grid; grid-template-columns:14px minmax(0,1fr); column-gap:7px; line-height:1.4; min-height:min-content;"><span style="color:oklch(0.84 0.01 260);">■</span><span><b>Bosses:</b> target Dex saves or attack rolls. <b>Casters:</b> target Con/Str saves</span></div>
+      <div style="display:grid; grid-template-columns:14px minmax(0,1fr); column-gap:7px; line-height:1.4; min-height:min-content;"><span style="color:oklch(0.74 0.12 25);">⬢</span><span><b>Prone:</b> melee within 5 ft has advantage; ranged has disadvantage, including yours. Saves unaffected</span></div>
+      <div style="display:grid; grid-template-columns:14px minmax(0,1fr); column-gap:7px; line-height:1.4; min-height:min-content;"><span style="color:oklch(0.74 0.12 25);">⬢</span><span><b>Restrained:</b> attacks against it have advantage; its Dex saves have disadvantage</span></div>
+      <div style="display:grid; grid-template-columns:14px minmax(0,1fr); column-gap:7px; line-height:1.4; min-height:min-content;"><span style="color:oklch(0.72 0.015 260);">◐</span><span><b>Heavily obscured</b> = effectively blinded, both ways. Siris has no darkvision; darkvision doesn’t see through smoke</span></div>
+      <div style="display:grid; grid-template-columns:14px minmax(0,1fr); column-gap:7px; line-height:1.4; min-height:min-content;"><span style="color:oklch(0.72 0.015 260);">◐</span><span>Pyrotechnics puts out the flame it uses</span></div>
+      <div style="display:grid; grid-template-columns:14px minmax(0,1fr); column-gap:7px; line-height:1.4; min-height:min-content;"><span style="color:oklch(0.84 0.01 260);">▪</span><span>Shards DC 15 and marbles DC 10 are <b>fixed</b>, not your DC. Enemies moving at half speed skip the save</span></div>
+      <div style="display:grid; grid-template-columns:14px minmax(0,1fr); column-gap:7px; line-height:1.4; min-height:min-content;"><span style="color:oklch(0.84 0.01 260);">■</span><span>After imbuing Magic Stone (bonus action spell), the only other spell that turn is Fire Bolt or another action cantrip</span></div>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:4px;">
+      <div style="display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;">
+        <span style="font-family:'Marcellus SC', serif; font-size:17px; color:oklch(0.90 0.10 65);">Pending DM rulings</span>
+        <span style="font-size:11.5px; color:oklch(0.66 0.01 260);">Tap to mark approved; badges go solid</span>
+      </div>
+      <sc-for list="{{ rulings }}" as="r" hint-placeholder-count="10">
+        <button onClick="{{ r.toggle }}" style="text-align:left; cursor:pointer; display:grid; grid-template-columns:52px minmax(0,1fr) auto; gap:8px; align-items:center; background:transparent; color:oklch(0.95 0.006 80); border:0; padding:2px 0; font-size:12.5px;">
+          <span style="font-size:11px; font-weight:700; padding:1px 5px; border-radius:3px; border:1.5px {{ r.bs }} {{ r.bd }}; color:{{ r.fg }}; text-align:center;">{{ r.badge }}</span>
+          <span style="text-decoration:{{ r.deco }}; color:{{ r.txtFg }};">{{ r.txt }}</span>
+          <span style="font-size:11px; color:oklch(0.66 0.01 260); white-space:nowrap;">{{ r.plays }}</span>
+        </button>
+      </sc-for>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;lockedCards&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;dim&quot;,&quot;hide&quot;],&quot;default&quot;:&quot;dim&quot;,&quot;tsType&quot;:&quot;'dim'|'hide'&quot;,&quot;section&quot;:&quot;Cards&quot;},&quot;filterBehavior&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;hide&quot;,&quot;dim&quot;],&quot;default&quot;:&quot;hide&quot;,&quot;tsType&quot;:&quot;'hide'|'dim'&quot;,&quot;section&quot;:&quot;Cards&quot;},&quot;columns&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;auto&quot;,&quot;3&quot;,&quot;4&quot;],&quot;default&quot;:&quot;auto&quot;,&quot;tsType&quot;:&quot;'auto'|'3'|'4'&quot;,&quot;section&quot;:&quot;Cards&quot;}}">
+const INK = 'oklch(0.95 0.006 80)', MUTED = 'oklch(0.74 0.01 260)', DARKTXT = 'oklch(0.16 0.008 260)';
+const T = {
+  fire: { c: 'oklch(0.80 0.15 65)', g: '▲', t: 'fire' },
+  force: { c: 'oklch(0.74 0.14 255)', g: '◆', t: 'force' },
+  acid: { c: 'oklch(0.80 0.15 150)', g: '●', t: 'acid' },
+  psychic: { c: 'oklch(0.76 0.14 305)', g: '✦', t: 'psychic' },
+  control: { c: 'oklch(0.76 0.14 305)', g: '◎', t: 'control' },
+  bludg: { c: 'oklch(0.84 0.01 260)', g: '■', t: 'bludgeoning' },
+  phys: { c: 'oklch(0.84 0.01 260)', g: '■', t: 'bludg. + pierc.' },
+  thunder: { c: 'oklch(0.84 0.01 260)', g: '≋', t: 'thunder' },
+  cold: { c: 'oklch(0.86 0.08 220)', g: '✱', t: 'cold' },
+  obscure: { c: 'oklch(0.72 0.015 260)', g: '◐', t: 'smoke' },
+  light: { c: 'oklch(0.90 0.13 95)', g: '☼', t: 'light' },
+  move: { c: 'oklch(0.74 0.12 25)', g: '⬢', t: 'movement' },
+  pierce: { c: 'oklch(0.84 0.01 260)', g: '▪', t: 'piercing' }
+};
+const THEMES = [['all', 'All', null], ['fire', 'Fire', 'fire'], ['acid', 'Acid', 'acid'], ['visibility', 'Visibility', 'obscure'], ['movement', 'Movement', 'move'], ['cold', 'Cold', 'cold']];
+const ALL_THEMES = ['fire', 'acid', 'visibility', 'movement', 'cold'];
+const CARD_THEMES = {
+  glassfire: ['fire'], pebble: ['fire'], chistera: ['fire'], glassshot: ['fire'], handoff: ['fire'], prism: ['fire'], shatter: ['fire'],
+  kill: ['fire', 'movement'], rkill: ['fire', 'movement'], acid: ['acid'], etcher: ['acid'],
+  lamp: ['visibility'], blackout: ['visibility'], willie: ['visibility'], flare: ['visibility'],
+  carpet: ['movement'], blackice: ['movement'], foam: ['movement'], pinball: ['movement'],
+  coldsnap: ['cold'], clean: ALL_THEMES
+};
+const tint = k => T[k].c.replace(')', ' / 0.17)');
+const fmt = n => String(Math.round(n * 100) / 100);
+const RULINGS = [
+  { n: 1, txt: 'Glass orbs count as Magic Stone “pebbles”', plays: 'Smart Bomb · Party Favors · Pineapple · Hailstorm' },
+  { n: 2, txt: 'Chistera counts as a sling (proficient)', plays: 'Fox Two' },
+  { n: 3, txt: 'Shrapnel adds +1d4 piercing to chistera orbs', plays: 'Fox Two' },
+  { n: 4, txt: 'A Catapulted orb that shatters coats the target in oil', plays: 'Spooky' },
+  { n: 5, l5: true, txt: 'Force Ballista can fire oil orbs (same damage, adds oil)', plays: 'Glass-shot Ballista' },
+  { n: 6, l5: true, txt: 'Fire Bolt can target and ignite a Web', plays: 'Ranged Welcome Mat' },
+  { n: 7, l5: true, txt: 'Arcane Firearm +1d8 can apply to one Magic Stone throw', plays: 'Magic Stone (L5)' },
+  { n: 8, txt: 'Payload rule: on a hit, the target takes the delivery’s damage plus the payload’s normal effect', plays: 'Pineapple · Hailstorm' },
+  { n: 9, txt: 'Dewar orb is a consumable; target loses 10 ft of speed until my next turn, no damage', plays: 'Hailstorm' },
+  { n: 10, txt: 'Chistera can lob area payloads (marbles, shards, beads, oil) to a point within range', plays: 'Shoes Off · Night Light' }
+];
+const STEPS = [
+  ['Caught in melee?', ['clean'], 'In melee'],
+  ['Target immune/resistant to fire?', ['etcher', 'acid'], 'Fire-immune'],
+  ['Boss hard to hit and allies can capitalize?', ['lamp'], 'Hard-to-hit boss'],
+  ['Mob swarm + time to prepare?', ['kill', 'rkill'], 'Swarm + prep'],
+  ['Enemy caster is the problem?', ['blackout'], 'Enemy caster'],
+  ['Enemy archers or casters have clear sightlines?', ['willie', 'blackout'], 'Sightlines'],
+  ['Fighting in the dark, or invisible enemies?', ['flare', 'lamp'], 'Dark / invisible'],
+  ['Chokepoint or door to hold?', ['carpet', 'kill'], 'Chokepoint'],
+  ['Something rushing the backline?', ['coldsnap', 'blackice', 'pinball'], 'Rush'],
+  ['Pack of mobs to pin down?', ['foam', 'blackice'], 'Pin a pack'],
+  ['Mobs clustered?', ['shatter'], 'Clustered mobs'],
+  ['Boss within ~30 ft of cannon?', ['glassfire', 'pebble', 'chistera'], 'Boss near'],
+  ['Boss at range?', ['glassshot', 'handoff', 'prism', 'glassfire'], 'Boss far']
+];
+const STORE = 'siris-playbook-v1';
+const SHOW_L5 = false;
+const GEAR = { glassfire: ['ft', 'bal'], pebble: ['ft', 'bal'], chistera: ['ch', 'ft', 'bal'], handoff: ['bal'], lamp: ['bal'], acid: ['bal'], kill: ['ft'], glassshot: ['bal'], prism: ['bal'], rkill: ['bal'], shatter: ['ft'], etcher: ['bal', 'ch'], willie: ['ft'], flare: ['ch'], carpet: ['ch'], blackice: ['bal'], foam: ['bal'], pinball: ['bal'], coldsnap: ['bal'] };
+const GEAR_LBL = { ft: ['▲', 'Flamethrower', 'oklch(0.80 0.15 65)'], bal: ['◆', 'Force Ballista', 'oklch(0.74 0.14 255)'], ch: ['■', 'Chistera', 'oklch(0.84 0.01 260)'] };
+const SPELL_INFO = (dc, atk) => ({
+  'Fire Bolt': { meta: ['Action', '120 ft', 'Cantrip'], lines: [['Roll', '', 'Ranged spell attack ' + atk], ['Hit', '1d10', 'fire ≈ 5.5'], ['Also', '', 'Ignites unattended flammable objects. Triggers oil +5']] },
+  'Magic Stone': { meta: ['Bonus action', 'Touch', '1 min', 'Cantrip'], lines: [['Setup', '', 'Imbue up to 3 pebbles (glass orbs: DM? 1)'], ['Roll', '', 'Thrown 60 ft · ranged spell attack ' + atk + ' (allies use yours too)'], ['Hit', '1d6 + 4', 'bludgeoning ≈ 7.5'], ['Also', '', 'Recasting ends any stones still imbued']] },
+  'Catapult': { meta: ['Action', '60 ft', '1st slot', 'Somatic only'], lines: [['Setup', '', 'Object 1–5 lb, not worn or carried: drop the orb at your feet first'], ['Save', '', 'Creature in its 90-ft path: Dex DC ' + dc], ['Fail', '3d8', 'bludgeoning ≈ 13.5 · object shatters (oils target: DM? 4)'], ['Pass', '', 'No damage; object keeps flying']] },
+  'Faerie Fire': { meta: ['Action', '60 ft', '20-ft cube', '1st slot', '◎ Conc 1 min'], lines: [['Save', '', 'Each creature in the cube: Dex DC ' + dc], ['Fail', '', 'Outlined in light · attacks against it have advantage · can’t benefit from invisibility'], ['Also', '', 'Party, Fire Bolt and Force Ballista all roll with advantage']] },
+  'Tasha’s Caustic Brew': { meta: ['Action', '30-ft line, 5 ft wide', '1st slot', '◎ Conc 1 min'], lines: [['Save', '', 'Each creature in the line: Dex DC ' + dc], ['Fail', '2d4', 'acid ≈ 5 at the start of each of its turns'], ['Ends', '', 'It or an adjacent creature uses an action to scrape it off']] },
+  'Grease': { meta: ['Action', '60 ft', '10-ft square', '1st slot', '1 min'], lines: [['Effect', '', 'Area becomes difficult terrain'], ['Save', '', 'Dex DC ' + dc + ' when it appears, or when a creature enters or ends its turn there'], ['Fail', '', 'Falls prone'], ['Flavor', '', 'Grease Gun (Movement)']] },
+  'Snare': { meta: ['1 minute to cast', 'Touch', '1st slot', '8 hours'], lines: [['Setup', '', '5-ft-radius loop, nearly invisible (Investigation DC ' + dc + ' to spot)'], ['Save', '', 'Creature entering: Dex DC ' + dc], ['Fail', '', 'Hoisted 3 ft upside down, restrained · repeats the save at end of each of its turns']] },
+  'Shield': { meta: ['Reaction', 'Self', '1st slot'], lines: [['Trigger', '', 'You’re hit by an attack or targeted by magic missile'], ['Effect', '+5 AC', 'until the start of your next turn, including against the triggering attack']] },
+  'Misty Step': { meta: ['Bonus action', 'Self', 'Free 1/LR'], lines: [['Effect', '', 'Teleport up to 30 ft to an unoccupied space you can see'], ['Cost', '', 'Uses your bonus action: no cannon shot this turn']] },
+  'Dissonant Whispers': { meta: ['Action', '60 ft', 'Free 1/LR', 'Verbal only'], lines: [['Save', '', 'One creature: Wis DC ' + dc + ' (deafened creatures succeed)'], ['Fail', '3d6', 'psychic ≈ 10.5 · uses its reaction to move away as far as it can, provoking opportunity attacks'], ['Pass', '', 'Half damage, no movement']] },
+  'Web': { meta: ['Action', '60 ft', '20-ft cube', '2nd slot', '◎ Conc 1 hr'], lines: [['Effect', '', 'Difficult terrain, lightly obscured'], ['Save', '', 'Dex DC ' + dc + ' when it appears or when a creature enters or starts its turn there'], ['Fail', '', 'Restrained · escape: action, Str check vs DC ' + dc], ['Anchor', '', 'Must be anchored between two solid masses or laid across a surface, or it collapses'], ['Fire', '2d4', 'fire · burns a 5-ft cube in 1 round, to anyone starting its turn in the fire']] },
+  'Pyrotechnics': { meta: ['Action', '60 ft', '2nd slot'], lines: [['Target', '', 'A nonmagical flame (≤ 5-ft cube), which is extinguished'], ['Fireworks', '', 'Each creature within 10 ft: Con DC ' + dc + ' or blinded until end of your next turn'], ['Smoke', '', '20-ft radius heavily obscured, 1 min or until strong wind']] },
+  'Continual Flame': { meta: ['Action', 'Touch', '2nd slot', '50 gp ruby dust'], lines: [['Effect', '', 'Torch-bright flame, no heat, lasts until dispelled'], ['Cost', '', 'Ruby dust is consumed']] },
+  'Acid Splash': { meta: ['Action', '60 ft', 'Cantrip', 'Not known'], lines: [['Target', '', 'One creature, or two within 5 ft of each other'], ['Save', '', 'Dex DC ' + dc], ['Fail', '1d6', 'acid (2d6 at L5)']] },
+  'Ray of Frost': { meta: ['Action', '60 ft', 'Cantrip', 'Not known'], lines: [['Roll', '', 'Ranged spell attack ' + atk], ['Hit', '1d8', 'cold (2d8 at L5) · −10 ft speed until your next turn']] },
+  'Frostbite': { meta: ['Action', '60 ft', 'Cantrip', 'Not known'], lines: [['Save', '', 'Con DC ' + dc], ['Fail', '1d6', 'cold (2d6 at L5) · disadvantage on its next weapon attack before the end of its next turn']] }
+});
+const SPELLS = [
+  ['Cantrips', 0, [['Fire Bolt'], ['Magic Stone']]],
+  ['Cantrip swaps', 'swap', [['Acid Splash'], ['Ray of Frost'], ['Frostbite']]],
+  ['1st level', 1, [['Catapult'], ['Faerie Fire', 1], ['Tasha’s Caustic Brew', 1], ['Grease'], ['Snare'], ['Shield']]],
+  ['Fey Touched', 3, [['Misty Step'], ['Dissonant Whispers']]],
+  ['2nd level', 2, [['Web', 1], ['Shatter'], ['Scorching Ray'], ['Pyrotechnics'], ['Continual Flame'], ['Heat Metal', 1]]]
+];
+
+function buildCards(L, dex, dc) {
+  const l5 = L === 5;
+  const D = (e, p, a, t) => ({ e, p, a, t });
+  const fb = l5 ? { e: '2d10 + 1d8', p: 'cantrip + firearm', a: 15.5 } : { e: '1d10', p: 'cantrip', a: 5.5 };
+  const ch = 5 + dex, prof = l5 ? 3 : 2, atk = l5 ? '+7' : '+6';
+  const FT = D('2d8 + 5', 'cannon + oil', 14, 'fire'), FT0 = D('2d8', 'cannon', 9, 'fire'), BAL = D('2d8', 'cannon', 9, 'force');
+  const STONE = D('1d6 + 4', 'stone + Int', 7.5, 'bludg');
+  const CH = D('1d4 + 1d4 + ' + dex, 'impact + shrapnel + Dex', ch, 'phys');
+  const ACID = D('2d6', 'acid payload', 7, 'acid');
+  const fbOil = D(fb.e + ' + 5', fb.p + ' + oil', fb.a + 5, 'fire');
+  return [
+    { id: 'glassfire', name: 'Spooky', use: 'Boss burst opener', k: 'fire', tags: ['slot', 'near', 'far'],
+      badges: [['slot', l5 ? '2nd' : '1st'], ['dm', 4]],
+      lanes: [
+        { k: 'ACTION', name: 'Catapult', txt: (l5 ? 'at 2nd level through glass rod · ' : '') + 'oil orb · Dex save DC ' + dc + ' · orb shatters and oils target', dice: [l5 ? D('4d8 + 1d8', 'upcast + firearm', 22.5, 'bludg') : D('3d8', 'catapult', 13.5, 'bludg')] },
+        { k: 'BONUS', q: 'near', name: 'Flamethrower', txt: 'ignites the oil', dice: [FT] },
+        { k: 'BONUS', q: 'far', name: 'Force Ballista', txt: 'next turn Fire Bolt ignites oil (+5)', dice: [BAL] }],
+      totals: [['near', l5 ? 36.5 : 27.5], ['far', l5 ? 31.5 : 22.5]],
+      note: 'Catapult can’t move a held object: drop the orb at your feet first. Somatic only (works silenced).' },
+    { id: 'pebble', name: 'Smart Bomb', use: 'Spell attack · Magic Stone orbs', k: 'fire', tags: ['free', 'near', 'far'],
+      badges: [['free'], ['dm', 1]],
+      lanes: [
+        { k: 'PREP', q: 'bonus, pre-combat', name: 'Magic Stone', txt: 'imbue 3 oil orbs', dice: [] },
+        { k: 'ACTION', name: 'Throw orb', txt: '60 ft · spell atk ' + atk + ' · target oiled', dice: [STONE] },
+        { k: 'BONUS', q: 'near', name: 'Flamethrower', txt: 'ignites the oil', dice: [FT] },
+        { k: 'ALT', q: 'far', name: 'Alternate turns', txt: 'orb + Ballista (16.5) · then Fire Bolt ignite + Ballista (' + fmt(fb.a + 14) + ')', dice: [] }],
+      totals: [['near', 21.5], ['far', (16.5 + fb.a + 14) / 2]],
+      note: l5 ? 'L5: Fire Bolt route (24.5) wins; use orbs vs fire immunity or hand them off.' : '' },
+    { id: 'chistera', name: 'Fox Two', use: 'Weapon attack · chistera, no slots', k: 'fire', tags: ['free', 'near', 'far'],
+      badges: [['free'], ['dm', 2], ['dm', 3]],
+      lanes: [
+        { k: 'ACTION', name: 'Chistera orb', txt: 'atk +' + (dex + prof) + ' · 30/120 ft · target oiled', dice: [CH] },
+        { k: 'BONUS', q: 'near', name: 'Flamethrower', txt: 'ignites the oil', dice: [FT] },
+        { k: 'ALT', q: 'far', name: 'Alternate with Fire Bolt ignite', txt: 'orb + Ballista (' + fmt(ch + 9) + ') · then Fire Bolt + Ballista (' + fmt(fb.a + 14) + ')', dice: [] },
+        { k: 'GROUND', name: 'Oil puddle', txt: 'shatter orb on the floor · 5-ft square · lasts 2 rounds once lit', dice: [D('5', 'per entry / turn end', 5, 'fire')] }],
+      totals: [['near', ch + 14], ['far', (ch + 9 + fb.a + 14) / 2]] },
+    { id: 'glassshot', l5only: true, name: 'Glass-shot Ballista', use: 'Sustained ranged, any range', k: 'force', tags: ['free', 'near', 'far', 'l5'],
+      badges: [['free'], ['dm', 5], ['l5']],
+      lanes: [
+        { k: 'BONUS', q: 'first', name: 'Force Ballista', txt: 'fires an oil orb · target oiled', dice: [BAL] },
+        { k: 'ACTION', name: 'Fire Bolt', txt: '120 ft · ignites the oil', dice: [D('2d10 + 1d8 + 5', 'cantrip + firearm + oil', 20.5, 'fire')] }],
+      totals: [['per turn', 29.5]], note: 'Baseline is 24.5.' },
+    { id: 'handoff', name: 'Party Favors', use: 'Team damage', k: 'fire', tags: ['free', 'near', 'far'],
+      badges: [['free'], ['dm', 1]],
+      lanes: [
+        { k: 'PREP', q: 'pre-combat', name: 'Magic Stone', txt: 'imbue 3 oil orbs, give to an ally without a good ranged attack', dice: [] },
+        { k: 'ALLY', q: 'action', name: 'Throw orb', txt: 'uses your ' + atk + ' · 60 ft · target oiled', dice: [STONE] },
+        { k: 'ACTION', name: 'Fire Bolt', txt: 'on the oiled target', dice: [fbOil] },
+        { k: 'BONUS', name: 'Force Ballista', txt: '', dice: [BAL] }],
+      totals: [['you', fb.a + 14], ['+ ally', fb.a + 14 + 7.5]] },
+    { id: 'prism', l5only: true, name: 'Prism Ray', use: 'Boss burst', k: 'fire', tags: ['slot', 'near', 'far', 'l5'],
+      badges: [['slot', '2nd'], ['l5']],
+      lanes: [
+        { k: 'ACTION', name: 'Scorching Ray', txt: 'refracted through a glass prism · 3 rays, 3 attack rolls', dice: [D('3 × 2d6 + 1d8 + 5', 'rays + firearm on one ray + oil if oiled', 30.5, 'fire')] },
+        { k: 'BONUS', name: 'Force Ballista', txt: '', dice: [BAL] }],
+      totals: [['all hit', 39.5]] },
+    { id: 'lamp', name: 'Fox One', use: 'Hard-to-hit boss', k: 'control', tags: ['slot', 'near', 'far'],
+      badges: [['slot', '1st'], ['conc']],
+      lanes: [
+        { k: 'ACTION', name: 'Faerie Fire', txt: 'luminous glass dust · 20-ft cube · Dex save DC ' + dc + ' · attacks vs targets have advantage', dice: [] },
+        { k: 'BONUS', name: 'Force Ballista', txt: 'with advantage', dice: [BAL] },
+        { k: 'AFTER', q: '1 min', name: 'Everyone', txt: 'party, Fire Bolt and cannon all attack with advantage', dice: [] }],
+      totals: [['turn 1', 9]] },
+    { id: 'acid', name: 'Agent Orange', use: 'Fire-immune enemies', k: 'acid', tags: ['slot', 'near', 'far'],
+      badges: [['slot', '1st'], ['conc']],
+      lanes: [
+        { k: 'ACTION', name: 'Tasha’s Caustic Brew', txt: '30-ft line · Dex save DC ' + dc + ' · ticks at the start of each of its turns until scraped off (action)', dice: l5 ? [D('2d4 + 1d8', 'per turn + firearm on first tick', 9.5, 'acid')] : [D('2d4', 'per turn', 5, 'acid')] },
+        { k: 'BONUS', name: 'Force Ballista', txt: '', dice: [BAL] },
+        { k: 'AFTER', name: 'Magic Stone', txt: 'throw', dice: [STONE] }],
+      totals: [['turn 1', l5 ? 18.5 : 14]] },
+    { id: 'kill', name: 'Welcome Mat', use: 'Mob swarm, prep time', k: 'fire', tags: ['free', 'slot', 'near'],
+      badges: l5 ? [['slot', '0–2'], ['conc']] : [['slot', '0–2']],
+      lanes: [
+        { k: 'PREP', q: 'before combat', name: 'Set the trap', txt: 'Snare the chokepoint · Magical Tinkering bead (recorded footsteps/voices) to lure · shatter oil orbs on the floor · pre-place Flamethrower cannon near the chokepoint', dice: [] },
+        l5 ? { k: 'ACTION', name: 'Web', txt: 'instead of Grease · burns when lit', dice: [D('2d4', 'burning web, each turn start', 5, 'fire')] }
+           : { k: 'ACTION', q: 'optional', name: 'Grease', txt: 'the approach', dice: [] },
+        { k: 'BONUS', name: 'Flamethrower', txt: 'cone + lights the oil', dice: [FT0, D('5', 'burning oil, per entry / turn end · 2 rounds', 5, 'fire')] }],
+      totals: [['cone', 9]] },
+    { id: 'rkill', l5only: true, name: 'Ranged Welcome Mat', use: 'Mob at range', k: 'fire', tags: ['slot', 'far', 'l5'],
+      badges: [['slot', '2nd'], ['conc'], ['dm', 6], ['l5']],
+      lanes: [
+        { k: 'ACTION', q: 'turn 1', name: 'Web', txt: '60 ft · 20-ft cube · Dex save DC 15 or restrained', dice: [] },
+        { k: 'ACTION', q: 'turn 2', name: 'Fire Bolt', txt: 'ignites the web from up to 120 ft', dice: [D('2d4', 'burning web, each turn start', 5, 'fire')] },
+        { k: 'BONUS', name: 'Force Ballista', txt: 'cannon stays safe with you', dice: [BAL] }],
+      totals: [] },
+    { id: 'blackout', l5only: true, name: 'Blackout', use: 'Shut down a caster', k: 'control', tags: ['slot', 'free', 'near', 'far', 'l5'],
+      badges: [['slot', '2nd'], ['free', 'or 1/LR'], ['l5']],
+      lanes: [
+        { k: 'ACTION', q: 'A · slot', name: 'Pyrotechnics', txt: 'light an oil puddle near the caster, then use that fire · Con save DC 15 or blinded until end of your next turn (all within 10 ft of the flame), or a 20-ft smoke cloud', dice: [] },
+        { k: 'ACTION', q: 'B · free 1/LR', name: 'Dissonant Whispers', txt: 'Wis save DC 15 · half on success · on a fail it flees, provoking opportunity attacks from allies', dice: [D('3d6', 'spell', 10.5, 'psychic')] }],
+      totals: [], note: 'If the cannon is within 15 ft of the puddle, Flamethrower lights it as your bonus action and Pyrotechnics goes off the same turn.' },
+    { id: 'shatter', l5only: true, name: 'Shatterpoint', use: 'Clustered mobs', k: 'thunder', tags: ['slot', 'near', 'l5'],
+      badges: [['slot', '2nd'], ['l5']],
+      lanes: [
+        { k: 'ACTION', name: 'Shatter', txt: 'through glass rod · 10-ft burst · Con save DC 15, half on success', dice: [D('3d8 + 1d8', 'spell + firearm', 18, 'thunder')] },
+        { k: 'BONUS', name: 'Flamethrower', txt: 'on survivors', dice: [FT0] }],
+      totals: [['per target', 27]] },
+    { id: 'etcher', name: 'Pineapple', use: 'Fire-immune boss, no slots', k: 'acid', tags: ['free', 'near', 'far'],
+      badges: [['free'], ['dm', 1], ['dm', 8]],
+      lanes: [
+        { k: 'PREP', q: 'bonus, pre-combat', name: 'Magic Stone', txt: 'imbue acid orbs', dice: [] },
+        { k: 'ACTION', name: 'Throw acid orb', txt: '60 ft · spell atk ' + atk, dice: [STONE, ACID] },
+        { k: 'BONUS', name: 'Force Ballista', txt: '', dice: [BAL] },
+        { k: 'ALT', q: 'chistera', name: 'Chistera acid orb', txt: 'atk +' + (dex + prof) + ' · plus the acid payload', dice: [CH, ACID] }],
+      totals: [['per turn', 23.5]],
+      note: 'L4 baseline 14.5 · L5 baseline 24.5: about even, but acid gets past fire resistance. Jug: 2 free vials/day, then 25 gp each.' },
+    { id: 'willie', l5only: true, name: 'Willie Pete', use: 'Blind their archers and casters', k: 'obscure', tags: ['slot', 'near', 'far', 'l5'],
+      badges: [['slot', '2nd'], ['l5']],
+      lanes: [
+        { k: 'ACTION', q: 'turn 1', name: 'Oil orb', txt: 'shatter near the enemy backline, creating a 5-ft puddle', dice: [] },
+        { k: 'BONUS', q: 'turn 1', name: 'Flamethrower', txt: 'lights the puddle if the cannon can get within 15 ft', dice: [D('5', 'burning oil, per entry / turn end', 5, 'fire')] },
+        { k: 'ACTION', q: 'turn 2', name: 'Pyrotechnics', txt: 'smoke option: 20-ft radius heavily obscured for 1 min; puts out the source flame', dice: [] }],
+      totals: [],
+      note: 'No cannon in reach? Light it with Fire Bolt and cast Pyrotechnics a turn later. At L4, a crafted Eversmoking Bottle (Uncommon, 500 gp, 20 days, 60-ft cloud) does the job. Siris has no darkvision, and darkvision doesn’t see through smoke anyway.' },
+    { id: 'flare', name: 'Night Light', use: 'Dark tombs, hidden enemies', k: 'light', tags: ['free', 'near', 'far'],
+      badges: [['free'], ['dm', 10]],
+      lanes: [
+        { k: 'PREP', q: 'before combat', name: 'Magical Tinkering', txt: 'up to 4 glowing glass beads (action each, tinker’s tools)', dice: [] },
+        { k: 'ACTION', name: 'Lob a bead', txt: 'chistera or hand throw lights a spot · 5 ft bright + 5 ft dim', dice: [] },
+        { k: 'AFTER', name: 'Fox One', txt: 'Faerie Fire reveals invisible creatures', dice: [] }],
+      totals: [],
+      note: 'Permanent option at L5: Continual Flame (2nd slot, 50 gp ruby dust consumed) sealed in a glass sphere.' },
+    { id: 'carpet', name: 'Shoes Off', use: 'Hold a chokepoint', k: 'move', tags: ['free', 'near'],
+      badges: [['free'], ['dm', 10]],
+      lanes: [
+        { k: 'PREP', q: 'before combat', name: 'Glass shards', txt: 'spread across a 5-ft door or stair', dice: [] },
+        { k: 'AFTER', name: 'Anyone crossing at full speed', txt: 'Dex DC 15 (fixed) or stop moving, lose 10 ft speed until healed', dice: [D('1', 'shards', 1, 'pierce')] },
+        { k: 'ALT', name: 'Glass marbles', txt: '10-ft square, Dex DC 10 (fixed) or prone', dice: [] }],
+      totals: [],
+      note: 'Deploying at range with the chistera needs DM? 10. By default, spreading takes an action at your feet.' },
+    { id: 'blackice', name: 'Grease Gun', use: 'Knock the rush flat for your melee', k: 'move', tags: ['slot', 'near', 'far'],
+      badges: [['slot', '1st']],
+      lanes: [
+        { k: 'BONUS', q: 'first', name: 'Force Ballista', txt: 'push target 5 ft away from the cannon into the zone', dice: [BAL] },
+        { k: 'ACTION', name: 'Grease', txt: '10-ft square · Dex DC ' + dc + ' or prone · difficult terrain · re-save on entering or ending a turn there', dice: [] },
+        { k: 'AFTER', name: 'Melee allies', txt: 'advantage vs prone targets', dice: [] }],
+      totals: [['turn 1', 9]],
+      note: 'Fire the Ballista BEFORE the Grease: ranged attacks vs prone targets have disadvantage, including yours. Follow up with saves instead (Flamethrower, Catapult, Caustic Brew).' },
+    { id: 'foam', l5only: true, name: 'Sticky Foam', use: 'Pin a pack in place', k: 'move', tags: ['slot', 'near', 'far', 'l5'],
+      badges: [['slot', '2nd'], ['conc'], ['l5']],
+      lanes: [
+        { k: 'ACTION', name: 'Web', txt: '60 ft · 20-ft cube · Dex DC ' + dc + ' or restrained · must be anchored or laid across floor/walls', dice: [] },
+        { k: 'BONUS', name: 'Force Ballista', txt: 'with advantage', dice: [BAL] },
+        { k: 'AFTER', name: 'Everyone', txt: 'advantage vs restrained targets; their Dex saves have disadvantage, so follow with Flamethrower or Catapult', dice: [] }],
+      totals: [['turn 1', 9]],
+      note: 'Webs are flammable: see Welcome Mat to burn them.' },
+    { id: 'pinball', name: 'Kettle', use: 'Shove them into your hazards', k: 'move', tags: ['free', 'near', 'far'],
+      badges: [['free']],
+      lanes: [
+        { k: 'BONUS', name: 'Force Ballista', txt: 'pushes 5 ft away from the cannon', dice: [BAL] },
+        { k: 'AFTER', name: 'Into a hazard', txt: 'glass shards (1 piercing + stop), burning oil (5 fire), or off a ledge', dice: [] }],
+      totals: [['per turn', '9 + hazard']],
+      note: 'Position the cannon on the far side of the target: the push goes away from the cannon, not from you.' },
+    { id: 'coldsnap', name: 'Hailstorm', use: 'Stop the charge at your backline', k: 'cold', tags: ['free', 'near', 'far'],
+      badges: [['free'], ['dm', 1], ['dm', 9]],
+      lanes: [
+        { k: 'PREP', q: 'bonus, pre-combat', name: 'Magic Stone', txt: 'imbue Dewar orbs', dice: [] },
+        { k: 'ACTION', name: 'Throw Dewar orb', txt: '60 ft · spell atk ' + atk + ' · target loses 10 ft of speed until your next turn', dice: [STONE] },
+        { k: 'BONUS', name: 'Force Ballista', txt: 'pushes 5 ft', dice: [BAL] }],
+      totals: [['per turn', 16.5]],
+      note: 'Charging enemies lose ~15 ft of ground per turn. Stacks well with Grease Gun. Cold is your thinnest theme: real cold damage needs a cantrip swap (Ray of Frost or Frostbite).' },
+    { id: 'clean', name: 'Dust Off', use: 'Escape melee', k: 'psychic', tags: ['free', 'near'],
+      badges: [['free', 'mostly']],
+      lanes: [
+        { k: 'REACTION', name: 'Shield', txt: '+5 AC until your next turn · 1st-level slot', dice: [] },
+        { k: 'ACTION', name: 'Dissonant Whispers', txt: 'free 1/LR · Wis save DC ' + dc + ' · target flees', dice: [D('3d6', 'spell', 10.5, 'psychic')] },
+        { k: 'BONUS', q: 'last resort', name: 'Misty Step', txt: 'free 1/LR · 30 ft · costs this turn’s cannon shot', dice: [] }],
+      totals: [] }
+  ];
+}
+
+const LANE = {
+  ACTION: { bg: 'oklch(0.92 0.01 80)', fg: DARKTXT, bd: 'oklch(0.92 0.01 80)' },
+  BONUS: { bg: 'oklch(0.32 0.01 260)', fg: INK, bd: 'oklch(0.60 0.01 260)' },
+  REACTION: { bg: 'transparent', fg: INK, bd: 'oklch(0.80 0.01 260)' },
+  other: { bg: 'transparent', fg: MUTED, bd: 'oklch(0.36 0.01 260)' }
+};
+
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    let s = {};
+    try { s = JSON.parse(localStorage.getItem(STORE) || '{}'); } catch (e) {}
+    this.state = { level: s.level || 4, dex: s.dex ?? 2, appr: s.appr || {}, showLoadout: s.showLoadout ?? true, theme: s.theme || 'all', filters: [], step: null };
+    this.playbookRef = React.createRef();
+  }
+  jumpToPlaybook() {
+    const el = this.playbookRef.current;
+    if (!el) return;
+    const top = el.getBoundingClientRect().top;
+    if (top > window.innerHeight * 0.5 || top < 0) window.scrollTo({ top: window.scrollY + top - 10, behavior: 'smooth' });
+  }
+  save(patch) {
+    this.setState(patch, () => {
+      const { level, dex, appr, showLoadout, theme } = this.state;
+      try { localStorage.setItem(STORE, JSON.stringify({ level, dex, appr, showLoadout, theme })); } catch (e) {}
+    });
+  }
+  renderVals() {
+    const { dex, appr, filters, step } = this.state;
+    const theme = THEMES.some(t => t[0] === this.state.theme) ? this.state.theme : 'all';
+    const L = SHOW_L5 ? this.state.level : 4;
+    const l5 = L === 5, dc = l5 ? 15 : 14, prof = l5 ? 3 : 2;
+    const lockedMode = this.props.lockedCards ?? 'dim';
+    const filterMode = this.props.filterBehavior ?? 'hide';
+    const cols = this.props.columns ?? 'auto';
+    const focus = step === null ? null : STEPS[step][1];
+    const raw = buildCards(L, dex, dc).filter(c => SHOW_L5 || !c.l5only).map(c => ({ ...c, themes: CARD_THEMES[c.id] || [] }));
+    const byId = Object.fromEntries(raw.map(c => [c.id, c]));
+
+    const badge = ([kind, v]) => {
+      if (kind === 'free') return { txt: 'FREE' + (v ? ' · ' + v : ''), bg: 'transparent', fg: INK, bd: 'oklch(0.80 0.01 260)', bs: 'solid' };
+      if (kind === 'slot') return { txt: 'SLOT · ' + v, bg: 'oklch(0.90 0.01 80)', fg: DARKTXT, bd: 'oklch(0.90 0.01 80)', bs: 'solid' };
+      if (kind === 'conc') return { txt: '◎ CONC', bg: 'transparent', fg: T.control.c, bd: T.control.c, bs: 'solid' };
+      if (kind === 'l5') return { txt: 'L5', bg: T.force.c, fg: DARKTXT, bd: T.force.c, bs: 'solid' };
+      const ok = !!appr[v];
+      return ok ? { txt: 'DM ✓ ' + v, bg: 'transparent', fg: T.acid.c, bd: T.acid.c, bs: 'solid' }
+                : { txt: 'DM? ' + v, bg: 'transparent', fg: T.fire.c, bd: T.fire.c, bs: 'dashed' };
+    };
+
+    const cards = raw.map(c => {
+      const locked = !!c.l5only && !l5;
+      const match = filters.every(f => c.tags.includes(f));
+      const inFocus = !focus || focus.includes(c.id);
+      const inTheme = theme === 'all' || c.themes.includes(theme);
+      const hide = !inTheme || (!match && filterMode === 'hide') || (locked && lockedMode === 'hide');
+      const dim = locked || !match;
+      return {
+        id: c.id, name: c.name, use: c.use, accent: T[c.k].c, glyph: T[c.k].g, tint: tint(c.k),
+        display: hide ? 'none' : 'flex', opacity: dim ? 0.32 : (inFocus ? 1 : 0.55),
+        gear: (GEAR[c.id] || []).map(g => ({ g: GEAR_LBL[g][0], label: GEAR_LBL[g][1], c: GEAR_LBL[g][2] })),
+        scen: STEPS.map(([q, ids, short], i) => ids.includes(c.id) ? { num: i + 1, short, bg: step === i ? T.fire.c : 'oklch(0.13 0.006 260)', fg: step === i ? DARKTXT : 'oklch(0.90 0.01 80)', bd: step === i ? T.fire.c : 'oklch(0.45 0.01 260)' } : null).filter(Boolean),
+        ring: focus && inFocus ? T.fire.c : 'oklch(0.36 0.01 260)', ringW: focus && inFocus ? '2px' : '1px',
+        locked, note: c.note || '', hasNote: !!c.note,
+        badges: c.badges.map(badge),
+        totals: c.totals.map(([l, v]) => ({ l, v: typeof v === 'number' ? fmt(v) : v })),
+        lanes: c.lanes.map(ln => ({
+          ...(LANE[ln.k] || LANE.other), k: ln.k, q: ln.q || '', name: ln.name, txt: ln.txt,
+          dice: ln.dice.map(d => ({ e: d.e, p: '(' + d.p + ')', avg: '≈ ' + fmt(d.a), c: T[d.t].c, g: T[d.t].g, t: T[d.t].t }))
+        }))
+      };
+    });
+
+    const steps = STEPS.map(([q, ids], i) => {
+      const active = step === i;
+      if (!ids.some(id => byId[id])) return null;
+      return {
+        num: i + 1, q,
+        bg: active ? 'oklch(0.80 0.15 65 / 0.22)' : 'oklch(0.215 0.008 260)',
+        ringW: active ? '2px' : '1px', ringC: active ? T.fire.c : 'oklch(0.36 0.01 260)',
+        select: () => { this.save({ theme: 'all' }); this.setState({ step: active ? null : i }, () => { if (!active) this.jumpToPlaybook(); }); },
+        plays: ids.filter(id => byId[id]).map(id => {
+          const c = byId[id], lock = c.l5only && !l5;
+          return { name: c.name + (c.l5only ? ' (L5)' : ''), fg: lock ? 'oklch(0.58 0.01 260)' : INK, deco: lock ? 'line-through' : 'none' };
+        })
+      };
+    }).filter(Boolean).map((s, j) => ({ ...s, num: j + 1 }));
+
+    const tabs = THEMES.map(([id, label, k]) => {
+      const on = theme === id, c = k ? T[k].c : 'oklch(0.84 0.01 260)';
+      return {
+        label, g: k ? T[k].g : '◇', c, n: raw.filter(x => id === 'all' || x.themes.includes(id)).length,
+        bg: on ? (k ? tint(k) : 'oklch(0.84 0.01 260 / 0.14)') : 'transparent', fg: on ? INK : MUTED, bd: on ? c : 'transparent',
+        select: () => this.save({ theme: id })
+      };
+    });
+
+    const dmB = n => badge(['dm', n]);
+    const atkS = l5 ? '+7' : '+6', NEUT = 'oklch(0.84 0.01 260)';
+    const row = (k, name, txt, o = {}) => ({ g: T[k].g, c: T[k].c, name, txt, dms: (o.dm || []).map(dmB), dice: o.dice || '', avg: o.avg ? '≈ ' + o.avg : '', hasDice: !!o.dice, dc: o.dt ? T[o.dt].c : T[k].c, dg: o.dt ? T[o.dt].g : T[k].g, t: o.dt ? T[o.dt].t : '', tip: o.tip || '', hasTip: !!o.tip, opacity: o.lock ? 0.45 : 1 });
+    const kits = [
+      { title: 'Payloads', sub: 'what’s inside the orb', g: '●', c: T.acid.c, tint: tint('acid'), hasIntro: false, intro: '', introDms: [], rows: [
+        row('fire', 'Oil', 'Jug makes 2 pints/day · 1 sp per flask. Coats target: +5 fire on next fire damage within 1 min. Puddle: 5-ft square, burns 2 rounds once lit, 5 fire per entry / turn end'),
+        row('acid', 'Acid', 'Jug makes 8 oz/day = 2 vials · 25 gp per vial', { dice: '2d6', avg: 7, dt: 'acid' }),
+        row('move', 'Glass marbles', 'Ball bearings, 1 gp/bag · 10-ft square · Dex DC 10 (fixed) or prone'),
+        row('pierce', 'Glass shards', 'Caltrops, 1 gp/20 · 5-ft square · Dex DC 15 (fixed) or stop moving, 1 piercing, −10 ft speed until healed · movers at half speed skip the save'),
+        row('light', 'Light bead', 'Magical Tinkering · free · 4 active · action + tinker’s tools · 5 ft bright + 5 ft dim'),
+        row('cold', 'Dewar orb', 'Homebrew · target loses 10 ft of speed until the start of my next turn · no damage from the payload itself', { dm: [9] })] },
+      { title: 'Deliveries', sub: 'how the orb gets there', g: '◆', c: T.force.c, tint: tint('force'), hasIntro: true, intro: 'Delivery sets the attack roll and base damage; payload adds its effect', introDms: [dmB(8)], rows: [
+        { ...row('bludg', 'Hand throw', '20 ft · improvised (no proficiency)'), c: NEUT },
+        row('phys', 'Chistera', 'atk +' + (dex + prof) + ' · 30/120 ft', { dm: [2, 3], dice: '1d4 + 1d4 + ' + dex, avg: fmt(5 + dex), dt: 'phys' }),
+        row('bludg', 'Smart Bomb (Magic Stone)', 'Bonus action imbues up to 3 orbs for 1 min · spell atk ' + atkS, { dm: [1], dice: '1d6 + 4', avg: 7.5, dt: 'bludg', tip: 'mix payloads in one cast (1 oil, 1 acid, 1 Dewar)' }),
+        row('bludg', 'Catapult', '1st slot · Dex save DC ' + dc, { dm: [4], dice: '3d8', avg: 13.5, dt: 'bludg' }),
+        row('force', 'Glass-shot Ballista', l5 ? 'Force Ballista fires the orb' : 'Unlocks at Level 5', { dm: [5], lock: !l5 })] }
+    ];
+
+    const CHIPS = [['free', 'Free'], ['slot', 'Uses slot'], ['near', 'Near ≤30 ft'], ['far', 'Far']].concat(SHOW_L5 ? [['l5', 'Level 5 only']] : []);
+    const chips = CHIPS.map(([id, label]) => {
+      const on = filters.includes(id);
+      return {
+        label, mark: on ? '✓' : '',
+        bg: on ? 'oklch(0.90 0.01 80)' : 'oklch(0.215 0.008 260)', fg: on ? DARKTXT : INK, bd: on ? 'oklch(0.90 0.01 80)' : 'oklch(0.40 0.01 260)',
+        toggle: () => this.setState(s => ({ filters: s.filters.includes(id) ? s.filters.filter(x => x !== id) : [...s.filters, id] }))
+      };
+    });
+
+    const rulings = RULINGS.filter(r => SHOW_L5 || !r.l5).map(({ n, txt, plays }) => {
+      const ok = !!appr[n];
+      return {
+        txt, plays, badge: ok ? '✓ ' + n : '? ' + n, bs: ok ? 'solid' : 'dashed', bd: ok ? T.acid.c : T.fire.c, fg: ok ? T.acid.c : T.fire.c,
+        deco: 'none', txtFg: ok ? MUTED : INK,
+        toggle: () => this.save({ appr: { ...this.state.appr, [n]: !ok } })
+      };
+    });
+
+    const fbAvg = l5 ? 15.5 : 5.5;
+    const INFO = SPELL_INFO(dc, l5 ? '+7' : '+6');
+    const spellGroups = SPELLS.filter(g => SHOW_L5 || g[1] !== 2).map(([title, tier, items]) => {
+      const lock = tier === 2 && !l5;
+      const swap = tier === 'swap';
+      const sub = swap ? 'not known' : tier === 1 ? (l5 ? '4 slots' : '3 slots') : tier === 2 ? (l5 ? '2 slots' : 'unlocks L5') : tier === 3 ? 'free 1 / long rest' : 'at will';
+      return {
+        title, sub, subFg: lock ? T.force.c : 'oklch(0.74 0.01 260)',
+        note: swap ? 'Only 2 cantrips known (Fire Bolt + Magic Stone). Swap one at a level-up.' : '', hasNote: swap,
+        items: items.map(([name, conc]) => {
+          const info = INFO[name] || { meta: [], lines: [] }, open = this.state.spellOpen === name;
+          return {
+            name, conc: conc ? ' ◎' : '', fg: lock ? 'oklch(0.58 0.01 260)' : swap ? 'oklch(0.80 0.01 260)' : INK, deco: lock ? 'line-through' : 'none',
+            bg: open ? 'oklch(0.76 0.14 305 / 0.35)' : swap ? 'transparent' : 'oklch(0.28 0.01 260)', open,
+            bs: swap ? 'dashed' : 'dotted', bd: swap ? 'oklch(0.55 0.01 260)' : 'transparent transparent oklch(0.60 0.01 260) transparent',
+            meta: info.meta, lines: info.lines.map(([k, dice, v]) => ({ k, dice, v })),
+            enter: () => { this.openedAt = Date.now(); this.setState({ spellOpen: name }); },
+            leave: () => this.setState(st => st.spellOpen === name ? { spellOpen: null } : null),
+            tap: () => { if (this.state.spellOpen === name && Date.now() - (this.openedAt || 0) > 400) this.setState({ spellOpen: null }); else { this.openedAt = Date.now(); this.setState({ spellOpen: name }); } }
+          };
+        })
+      };
+    });
+    return {
+      spellGroups, playbookRef: this.playbookRef, tabs, kits,
+      showLoadout: this.state.showLoadout,
+      loadoutLabel: this.state.showLoadout ? '▴ Collapse details' : '▾ Show spells & gear',
+      toggleLoadout: () => this.save({ showLoadout: !this.state.showLoadout }),
+      stats: {
+        atk: l5 ? '+7' : '+6', dc, chAtk: '+' + (dex + prof), chAtkParts: '(Dex ' + dex + ' + ' + prof + ')',
+        slots: l5 ? '4× 1st · 2× 2nd' : '3× 1st',
+        fb: (l5 ? '2d10 + 1d8' : '1d10') + ' ≈ ' + fbAvg, fbParts: l5 ? '(cantrip + firearm)' : '(cantrip)',
+        baseline: '≈' + fmt(fbAvg + 9), baselineNum: fmt(fbAvg + 9), cannonHp: 5 * L + ' (5 × level)', cannonHpNum: 5 * L,
+        rodTxt: l5 ? 'Arcane Firearm: +1d8 to ONE damage roll of an artificer spell cast through it; never the cannon' : 'Arcane Firearm unlocks at L5: +1d8 to one spell damage roll',
+        dexStr: (dex >= 0 ? '+' : '') + dex, chExpr: '1d4 + 1d4 + ' + dex, chAvg: fmt(5 + dex)
+      },
+      lvl: {
+        l4bg: l5 ? 'oklch(0.215 0.008 260)' : 'oklch(0.80 0.15 65)', l4fg: l5 ? MUTED : DARKTXT,
+        l5bg: l5 ? 'oklch(0.74 0.14 255)' : 'oklch(0.215 0.008 260)', l5fg: l5 ? DARKTXT : MUTED
+      },
+      setL4: () => this.save({ level: 4 }), setL5: () => this.save({ level: 5 }),
+      dexUp: () => this.save({ dex: Math.min(5, dex + 1) }), dexDown: () => this.save({ dex: Math.max(-1, dex - 1) }),
+      steps, chips, cards, rulings,
+      anyFilter: filters.length > 0 || step !== null,
+      clearLabel: step !== null ? 'step ' + (step + 1) + (filters.length ? ' + filters' : '') : 'filters',
+      clearAll: () => this.setState({ filters: [], step: null }),
+      gridCols: cols === 'auto' ? 'repeat(auto-fill, minmax(272px, 1fr))' : 'repeat(' + cols + ', minmax(0, 1fr))'
+    };
+  }
+}
+</script>
+</body>
+</html>

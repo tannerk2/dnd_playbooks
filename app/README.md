@@ -20,7 +20,17 @@ deploy/deploy.sh   # builds, tests, creates/updates the stack, uploads, prints t
 
 The first run takes about 5 minutes while CloudFront provisions; later runs take under a minute. You can set `STACK_NAME` (default `siris-playbook`) and `AWS_REGION` (default `us-east-1`). Running costs are well under $1/month at this traffic. To tear it down, empty the bucket, then run `aws cloudformation delete-stack --stack-name siris-playbook`.
 
-The credentials need CloudFormation, S3 and CloudFront permissions.
+The credentials need CloudFormation, S3, CloudFront, Lambda, DynamoDB, IAM and SSM permissions.
+
+## Shared state (sync)
+
+Tracker state and prefs sync across devices through a small API in the same stack: CloudFront routes `/api/state` to a Lambda function URL backed by a DynamoDB table. Access is guarded by a sync passphrase, generated on first deploy and kept in SSM Parameter Store (`/<stack>/sync-token`); `deploy.sh` prints it, or fetch it with:
+
+```sh
+aws ssm get-parameter --name /siris-playbook/sync-token --with-decryption --query Parameter.Value --output text
+```
+
+Tap the **Sync** chip in the tracker header and enter the passphrase once per device. After that the device pushes changes (debounced) and pulls newer revisions on load, on a 20 s poll while visible, and on tab focus. It's offline-first: without a connection the tracker keeps working from local storage and pushes when it reconnects. If two devices write at once, the server's copy wins and replaces the loser's local state. To rotate the passphrase, overwrite the SSM parameter and redeploy; every device then re-enters it. In `npm run dev` there is no backend, so the chip shows "Sync offline" and the app runs local-only.
 
 ## Layout
 
@@ -35,4 +45,4 @@ The credentials need CloudFormation, S3 and CloudFront permissions.
 - `SHOT_CAP`: the 18-shot cannon limit. This is a table rule, still pending DM confirmation.
 - `SETTINGS`: how Level 5 cards and filtered-out cards appear (dimmed or hidden), and the grid column count.
 
-State is saved in `localStorage` under the prototype's keys (`siris-playbook-v1`, `siris-tracker-v1`), so approvals, Dex and tracker state carry over from the prototype when it's served from the same origin.
+State is also cached in `localStorage` under the prototype's keys (`siris-playbook-v1`, `siris-tracker-v1`), which keeps the app working offline and carries state over from the prototype when served from the same origin.

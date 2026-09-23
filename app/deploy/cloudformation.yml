@@ -1,5 +1,12 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: Siris Combat Playbook - static site on a private S3 bucket served through CloudFront (HTTPS).
+Description: Siris Combat Playbook - static site on a private S3 bucket served through CloudFront (HTTPS), with a small Lambda + DynamoDB state-sync API under /api/*.
+
+Parameters:
+  SyncToken:
+    Type: String
+    NoEcho: true
+    MinLength: 8
+    Description: Shared passphrase for the state-sync API (deploy.sh manages it in SSM).
 
 Resources:
   SiteBucket:
@@ -42,6 +49,19 @@ Resources:
             OriginAccessControlId: !GetAtt OriginAccessControl.Id
             S3OriginConfig:
               OriginAccessIdentity: ''
+          - Id: api
+            # The Lambda function URL is "https://<domain>/"; element 2 of the split is the domain.
+            DomainName: !Select [2, !Split ['/', !GetAtt StateFnUrl.FunctionUrl]]
+            CustomOriginConfig:
+              OriginProtocolPolicy: https-only
+        CacheBehaviors:
+          - PathPattern: /api/*
+            TargetOriginId: api
+            ViewerProtocolPolicy: https-only
+            AllowedMethods: [GET, HEAD, OPTIONS, PUT, POST, PATCH, DELETE]
+            Compress: true
+            CachePolicyId: 4135ea2d-6df8-44a3-9df3-4b5a84be39ad # Managed-CachingDisabled
+            OriginRequestPolicyId: b689b0a8-53d0-40ab-baf2-68738e2966ac # Managed-AllViewerExceptHostHeader
         DefaultCacheBehavior:
           TargetOriginId: s3
           ViewerProtocolPolicy: redirect-to-https
@@ -66,6 +86,116 @@ Resources:
             Condition:
               StringEquals:
                 AWS:SourceArn: !Sub 'arn:aws:cloudfront::${AWS::AccountId}:distribution/${Distribution}'
+
+  StateTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+
+  StateFnRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: { Service: lambda.amazonaws.com }
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: state-table
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: [dynamodb:GetItem, dynamodb:PutItem]
+                Resource: !GetAtt StateTable.Arn
+
+  # GET /api/state -> {rev, data}; PUT /api/state {baseRev, data} -> {rev}, or 409 with the
+  # current doc when baseRev is stale (optimistic concurrency; the client then takes the server's).
+  StateFn:
+    Type: AWS::Lambda::Function
+    Properties:
+      Runtime: nodejs22.x
+      Handler: index.handler
+      MemorySize: 128
+      Timeout: 10
+      Role: !GetAtt StateFnRole.Arn
+      Environment:
+        Variables:
+          TABLE: !Ref StateTable
+          TOKEN: !Ref SyncToken
+      Code:
+        ZipFile: |
+          const { DynamoDBClient, GetItemCommand, PutItemCommand } = require("@aws-sdk/client-dynamodb");
+          const crypto = require("crypto");
+          const db = new DynamoDBClient();
+          const eq = (a, b) => {
+            const x = Buffer.from(String(a)), y = Buffer.from(String(b));
+            return x.length === y.length && crypto.timingSafeEqual(x, y);
+          };
+          const res = (statusCode, body) => ({ statusCode, headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
+          const read = async () => {
+            const g = await db.send(new GetItemCommand({ TableName: process.env.TABLE, Key: { id: { S: "v1" } } }));
+            return g.Item ? { rev: +g.Item.rev.N, data: JSON.parse(g.Item.data.S) } : { rev: 0, data: null };
+          };
+          exports.handler = async (e) => {
+            if (!eq(e.headers?.["x-sync-token"] || "", process.env.TOKEN)) return res(401, { error: "bad token" });
+            if (e.rawPath !== "/api/state") return res(404, { error: "not found" });
+            const m = e.requestContext.http.method;
+            if (m === "GET") return res(200, await read());
+            if (m !== "PUT") return res(405, { error: "method" });
+            let b;
+            try { b = JSON.parse(e.body || ""); } catch { return res(400, { error: "bad json" }); }
+            if (typeof b.data === "undefined") return res(400, { error: "no data" });
+            const s = JSON.stringify(b.data);
+            if (s.length > 200000) return res(413, { error: "too large" });
+            const rev = Date.now();
+            try {
+              await db.send(new PutItemCommand({
+                TableName: process.env.TABLE,
+                Item: { id: { S: "v1" }, rev: { N: String(rev) }, data: { S: s } },
+                ConditionExpression: "attribute_not_exists(id) OR rev = :base",
+                ExpressionAttributeValues: { ":base": { N: String(+b.baseRev || 0) } },
+              }));
+              return res(200, { rev });
+            } catch (err) {
+              if (err.name === "ConditionalCheckFailedException") return res(409, await read());
+              throw err;
+            }
+          };
+
+  StateFnUrl:
+    Type: AWS::Lambda::Url
+    Properties:
+      AuthType: NONE # the function checks x-sync-token itself
+      TargetFunctionArn: !GetAtt StateFn.Arn
+
+  StateFnUrlPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunctionUrl
+      FunctionName: !Ref StateFn
+      FunctionUrlAuthType: NONE
+      Principal: '*'
+
+  # In this account, anonymous function-URL invokes are only authorized when the policy also
+  # grants InvokeFunction (verified empirically; the URL-auth-type condition and SourceAccount
+  # scoping are both rejected/broken for this action). The function checks x-sync-token itself,
+  # so a direct invoke without the passphrase still only yields a 401.
+  StateFnInvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref StateFn
+      Principal: '*'
 
 Outputs:
   BucketName:

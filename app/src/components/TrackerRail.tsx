@@ -1,6 +1,7 @@
 import { ART, CANNONS, INK, ORD, PAY, PAY_ORDER, SHOT_CAP, STOCK, T, type CannonType } from '../data/tokens';
 import { resetTurn, slotAvail, slotMax, spendSlot, type Econ, type FreeSpell, type OrbStatus } from '../tracker/logic';
 import type { TrackerApi } from '../tracker/useTracker';
+import type { Sync, SyncStatus } from '../useSync';
 import { Thumb } from './bits';
 
 /** Lit/unlit toggle colors for action economy and free spells. `hue` is the oklch hue of the lit state. */
@@ -22,7 +23,11 @@ const ORB_ST: Record<OrbStatus, [string, string, string, string, number]> = {
   ally: ['ally threw', 'transparent', 'dashed', 'oklch(0.36 0.01 260)', 0.4],
 };
 
-export function TrackerRail({ api, L }: { api: TrackerApi; L: 4 | 5 }) {
+const SYNC_LABEL: Record<SyncStatus, string> = {
+  off: 'Sync off', syncing: 'Syncing…', synced: '● Synced', offline: 'Sync offline', denied: 'Sync: bad key',
+};
+
+export function TrackerRail({ api, L, sync }: { api: TrackerApi; L: 4 | 5; sync: Sync }) {
   const { tr, commit, tweak } = api;
   const inCombat = tr.round > 0;
   const m = slotMax(L);
@@ -88,7 +93,9 @@ export function TrackerRail({ api, L }: { api: TrackerApi; L: 4 | 5 }) {
   return (
     <aside className="rail" data-print-hide aria-label="Tracker">
       <div className="rail-box leaded">
-        <div className="rail-head"><span className="head">Tracker</span><span className="rail-round">{inCombat ? 'Round ' + tr.round : 'Out of combat'}</span></div>
+        <div className="rail-head"><span className="head">Tracker</span>
+          <button className={'sync-chip ' + sync.status} onClick={sync.connect} title="Set or change the sync passphrase">{SYNC_LABEL[sync.status]}</button>
+          <span className="rail-round">{inCombat ? 'Round ' + tr.round : 'Out of combat'}</span></div>
 
         <div className="rail-sec row">
           <button className="btn-primary" onClick={() => commit(t => {

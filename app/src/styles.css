@@ -328,3 +328,9 @@ button:focus-visible, .card:focus-visible { outline: 2px solid var(--amber); out
   [data-print-hide] { display: none !important; }
   html, body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
+
+/* Sync status chip in the tracker header */
+.sync-chip { cursor: pointer; margin-left: auto; min-height: 26px; padding: 2px 9px; border-radius: 13px; font-size: 11px; font-weight: 700; letter-spacing: 0.03em; background: transparent; color: var(--dim); border: 1px solid oklch(0.40 0.01 260); white-space: nowrap; }
+.sync-chip.synced { color: var(--green); border-color: oklch(0.80 0.15 150 / 0.5); }
+.sync-chip.syncing { color: var(--muted); }
+.sync-chip.offline, .sync-chip.denied { color: var(--amber); border-style: dashed; border-color: var(--amber); }

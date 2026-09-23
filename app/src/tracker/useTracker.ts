@@ -52,7 +52,10 @@ export function useTracker() {
 
   const reset = useCallback(() => setStore({ tr: freshTr(), hist: [] }), []);
 
-  return { tr: store.tr, canUndo: store.hist.length > 0, commit, tweak, undo, reset };
+  /** Replace the tracker with a synced copy from the server. Undo history stays local. */
+  const restore = useCallback((tr: Tracker) => setStore(s => ({ ...s, tr: reviveTr(tr) })), []);
+
+  return { tr: store.tr, canUndo: store.hist.length > 0, commit, tweak, undo, reset, restore };
 }
 
 export type TrackerApi = ReturnType<typeof useTracker>;

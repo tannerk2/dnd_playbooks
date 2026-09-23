@@ -15,8 +15,18 @@ npm ci
 npm test
 npm run build
 
+# Sync passphrase: generated once, kept in SSM so every deploy (from any machine) reuses it.
+TOKEN_PARAM="/$STACK_NAME/sync-token"
+TOKEN="$(aws ssm get-parameter --name "$TOKEN_PARAM" --with-decryption --query Parameter.Value --output text 2>/dev/null || true)"
+if [ -z "$TOKEN" ] || [ "$TOKEN" = "None" ]; then
+  TOKEN="$(openssl rand -hex 16)"
+  aws ssm put-parameter --name "$TOKEN_PARAM" --type SecureString --value "$TOKEN" >/dev/null
+  echo "→ Generated a new sync passphrase (stored in SSM at $TOKEN_PARAM)"
+fi
+
 echo "→ Creating/updating stack $STACK_NAME in $AWS_REGION (first run takes a few minutes)"
-aws cloudformation deploy --stack-name "$STACK_NAME" --template-file deploy/cloudformation.yml --no-fail-on-empty-changeset
+aws cloudformation deploy --stack-name "$STACK_NAME" --template-file deploy/cloudformation.yml \
+  --parameter-overrides "SyncToken=$TOKEN" --capabilities CAPABILITY_IAM --no-fail-on-empty-changeset
 
 BUCKET="$(out BucketName)"
 DIST="$(out DistributionId)"
@@ -32,3 +42,4 @@ echo "→ Invalidating index.html"
 aws cloudfront create-invalidation --distribution-id "$DIST" --paths /index.html /  >/dev/null
 
 echo "✓ Live at $(out Url)"
+echo "  Sync passphrase (enter once per device via the Sync button): $TOKEN"

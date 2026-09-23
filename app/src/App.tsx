@@ -8,11 +8,13 @@ import { Playbook } from './components/Playbook';
 import { TrackerRail } from './components/TrackerRail';
 import { apply, check, defaultSel, plan } from './tracker/logic';
 import { useTracker } from './tracker/useTracker';
+import { useSync } from './useSync';
 import { usePrefs } from './usePrefs';
 
 export default function App() {
   const [prefs, save] = usePrefs();
   const api = useTracker();
+  const sync = useSync(prefs, save, api.tr, api.restore);
   const [filters, setFilters] = useState<Tag[]>([]);
   const [step, setStep] = useState<number | null>(null);
   const [dlg, setDlg] = useState<{ id: string; sel: Record<number, boolean> } | null>(null);
@@ -84,7 +86,7 @@ export default function App() {
         <Footer appr={prefs.appr} toggle={n => save({ appr: { ...prefs.appr, [n]: !prefs.appr[n] } })} />
       </div>
 
-      <TrackerRail api={api} L={L} />
+      <TrackerRail api={api} L={L} sync={sync} />
 
       {dlgCard && (
         <PlayDialog card={dlgCard} sel={dlg!.sel} tr={api.tr} L={L} appr={prefs.appr}

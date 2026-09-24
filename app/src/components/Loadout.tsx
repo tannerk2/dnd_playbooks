@@ -6,7 +6,6 @@ import { Art, BadgeChip, TierHeader, badgeStyle, type BadgeStyle } from './bits'
 export interface Stats { l5: boolean; L: 4 | 5; dc: number; atk: string; dex: number; prof: number }
 
 export function Loadout({ s, appr, show, onToggle }: { s: Stats; appr: Record<number, boolean>; show: boolean; onToggle: () => void }) {
-  const fbAvg = s.l5 ? 15.5 : 5.5;
   return (
     <section className="tier" aria-label="Tier I Loadout">
       <TierHeader n="I" title="Loadout" sub="What Siris carries into the fight" gem="oklch(0.74 0.14 255 / 0.35)">
@@ -16,9 +15,6 @@ export function Loadout({ s, appr, show, onToggle }: { s: Stats; appr: Record<nu
         <div className="stat"><div className="stat-k">Spell atk</div><div className="stat-v">{s.atk}</div></div>
         <div className="stat"><div className="stat-k">Save DC</div><div className="stat-v">{s.dc}</div></div>
         <div className="stat"><div className="stat-k">Chistera atk</div><div className="stat-row"><span className="stat-v">+{s.dex + s.prof}</span><span className="stat-note">(Dex {s.dex} + {s.prof})</span></div></div>
-        <div className="stat"><div className="stat-k">Slots</div><div className="stat-v sm">{s.l5 ? '4× 1st · 2× 2nd' : '3× 1st'}</div></div>
-        <div className="stat"><div className="stat-k">▲ Fire Bolt</div><div className="stat-v xs">{(s.l5 ? '2d10 + 1d8' : '1d10') + ' ≈ ' + fbAvg}</div><div className="stat-note">{s.l5 ? '(cantrip + firearm)' : '(cantrip)'}</div></div>
-        <div className="stat"><div className="stat-k">Baseline</div><div className="stat-v">≈{fmt(fbAvg + 9)}</div><div className="stat-note">Fire Bolt + cannon</div></div>
         <div className="stat"><div className="stat-k">Cannon</div><div className="stat-v xxs">AC 18 · HP {5 * s.L}</div><div className="stat-note">5 × level</div></div>
       </div>
       {show && (

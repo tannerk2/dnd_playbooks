@@ -71,12 +71,10 @@ button { font: inherit; }
 .pill-btn { cursor: pointer; min-height: 34px; padding: 4px 12px; border-radius: 17px; font-size: 12.5px; background: transparent; color: var(--body); border: 1px solid oklch(0.40 0.01 260); }
 
 /* Stats strip */
-.stats { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); background: var(--lead); gap: 3px; overflow: hidden; }
+.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); background: var(--lead); gap: 3px; overflow: hidden; }
 .stat { background: var(--panel); padding: 7px 10px; min-width: 0; }
 .stat-k { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
 .stat-v { font-family: var(--f-mono); font-size: 24px; font-weight: 700; }
-.stat-v.sm { font-size: 16px; margin-top: 5px; }
-.stat-v.xs { font-size: 15px; margin-top: 5px; white-space: nowrap; }
 .stat-v.xxs { font-size: 14px; margin-top: 5px; white-space: nowrap; }
 .stat-note { font-size: 11px; color: var(--dimmer); }
 .stat-row { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }

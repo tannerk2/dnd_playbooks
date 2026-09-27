@@ -24,9 +24,18 @@ if [ -z "$TOKEN" ] || [ "$TOKEN" = "None" ]; then
   echo "→ Generated a new sync passphrase (stored in SSM at $TOKEN_PARAM)"
 fi
 
+# Optional custom domain: set once with three SSM parameters (/$STACK_NAME/domain, /cert-arn,
+# /zone-id); the cert must be an issued us-east-1 ACM cert for the domain.
+ssm() { aws ssm get-parameter --name "/$STACK_NAME/$1" --query Parameter.Value --output text 2>/dev/null || true; }
+DOMAIN="$(ssm domain)"; CERT="$(ssm cert-arn)"; ZONE="$(ssm zone-id)"
+PARAMS=("SyncToken=$TOKEN")
+if [ -n "$DOMAIN" ] && [ "$DOMAIN" != "None" ]; then
+  PARAMS+=("DomainName=$DOMAIN" "CertificateArn=$CERT" "HostedZoneId=$ZONE")
+fi
+
 echo "→ Creating/updating stack $STACK_NAME in $AWS_REGION (first run takes a few minutes)"
 aws cloudformation deploy --stack-name "$STACK_NAME" --template-file deploy/cloudformation.yml \
-  --parameter-overrides "SyncToken=$TOKEN" --capabilities CAPABILITY_IAM --no-fail-on-empty-changeset
+  --parameter-overrides "${PARAMS[@]}" --capabilities CAPABILITY_IAM --no-fail-on-empty-changeset
 
 BUCKET="$(out BucketName)"
 DIST="$(out DistributionId)"

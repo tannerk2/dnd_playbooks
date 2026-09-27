@@ -342,3 +342,11 @@ button:focus-visible, .card:focus-visible { outline: 2px solid var(--amber); out
 .mech-k.hit, .mech-k.pass { color: var(--green); border-color: oklch(0.80 0.15 150 / 0.5); }
 .mech-v { color: oklch(0.82 0.01 260); }
 .mech-m { font-family: var(--f-mono); font-size: 13.5px; color: var(--ink); white-space: nowrap; }
+
+/* "How Siris plays it": collapsed read-aloud narration under Will spend */
+.story { border-top: 1px solid var(--rule); padding-top: 8px; display: flex; flex-direction: column; gap: 7px; }
+.story-toggle { cursor: pointer; align-self: flex-start; display: flex; align-items: baseline; gap: 8px; padding: 0; background: transparent; border: 0; color: var(--ink); text-align: left; }
+.story-toggle > span:nth-child(2) { font-family: var(--f-head); font-size: 15px; color: var(--amber-head); }
+.story-hint { font-size: 11px; color: var(--dim); }
+.story-row { display: grid; grid-template-columns: 74px minmax(0, 1fr); gap: 10px; align-items: start; }
+.story-txt { margin: 0; font-style: italic; font-size: 13px; line-height: 1.45; color: var(--body); text-wrap: pretty; }

@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { buildCards } from './cards';
+import { FLAVOR } from './flavor';
 import { laneRows } from './mechanics';
 
 const ctx4 = { dc: 14, atk: '+6', dex: 2, prof: 2, l5: false };
@@ -37,5 +38,17 @@ describe('laneRows', () => {
     const ally = handoff.lanes.find(l => l.k === 'ALLY')!;
     expect(laneRows('handoff', ally, ctx4)[0].k).toBe('ally');
     expect(laneRows('handoff', ally, ctx4)[0].m).toBe('d20 +6');
+  });
+});
+
+describe('FLAVOR', () => {
+  it('has a read-aloud line for every lane of every card at both levels', () => {
+    for (const L of [4, 5] as const) {
+      for (const c of buildCards(L, 2, L === 5 ? 15 : 14)) {
+        for (const ln of c.lanes) {
+          expect(FLAVOR[c.id]?.[ln.name], `${c.id} / ${ln.name} (L${L})`).toBeTruthy();
+        }
+      }
+    }
   });
 });

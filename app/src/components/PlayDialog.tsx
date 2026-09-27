@@ -1,7 +1,8 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { Card } from '../data/cards';
 import { INK, MUTED, T, tint } from '../data/tokens';
 import { costChips, plan, type StepKind, type Tracker } from '../tracker/logic';
+import { FLAVOR } from '../data/flavor';
 import { laneRows, ROW_LABEL } from '../data/mechanics';
 import { BadgeChip, DiceRow, LaneTag, badgeStyle } from './bits';
 import { cannonGate } from './Playbook';
@@ -30,6 +31,7 @@ interface Props {
 /** A play opened over the page: every step checked against the tracker in order, then Execute spends it all at once. */
 export function PlayDialog({ card, sel, setSel, tr, L, dex, appr, onRun, onClose }: Props) {
   const closeRef = useRef<HTMLButtonElement>(null);
+  const [storyOpen, setStoryOpen] = useState(false);
   useEffect(() => {
     const prev = document.activeElement as HTMLElement | null;
     closeRef.current?.focus();
@@ -47,6 +49,7 @@ export function PlayDialog({ card, sel, setSel, tr, L, dex, appr, onRun, onClose
   const spend = runs.flatMap(x => costChips(x.cost!));
   const acc = T[card.k];
   const mechCtx = { dc: L === 5 ? 15 : 14, atk: L === 5 ? '+7' : '+6', dex, prof: L === 5 ? 3 : 2, l5: L === 5 };
+  const stories = card.lanes.flatMap(ln => { const t = FLAVOR[card.id]?.[ln.name]; return t ? [{ ln, t }] : []; });
 
   return (
     <div className="scrim" data-print-hide onClick={onClose}>
@@ -98,6 +101,21 @@ export function PlayDialog({ card, sel, setSel, tr, L, dex, appr, onRun, onClose
             <span className="caps">Will spend</span>
             <span className="v" style={{ color: runs.length ? INK : MUTED }}>{runs.length ? spend.join(' · ') : 'Nothing selected'}</span>
           </div>
+          {stories.length > 0 && (
+            <div className="story">
+              <button className="story-toggle" aria-expanded={storyOpen} onClick={() => setStoryOpen(o => !o)}>
+                <span className="flow-chev">{storyOpen ? '▾' : '▸'}</span>
+                <span>How Siris plays it</span>
+                <span className="story-hint">{storyOpen ? '' : 'read-aloud lines for each step'}</span>
+              </button>
+              {storyOpen && stories.map(({ ln, t }, i) => (
+                <div key={i} className="story-row">
+                  <LaneTag k={ln.k} />
+                  <p className="story-txt">{t}</p>
+                </div>
+              ))}
+            </div>
+          )}
           <div className="dlg-actions">
             <button className="dlg-cancel" onClick={onClose}>Cancel</button>
             <button className="dlg-run" onClick={onRun} disabled={!runs.length}

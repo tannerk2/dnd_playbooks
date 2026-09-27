@@ -89,7 +89,7 @@ export default function App() {
       <TrackerRail api={api} L={L} sync={sync} />
 
       {dlgCard && (
-        <PlayDialog card={dlgCard} sel={dlg!.sel} tr={api.tr} L={L} appr={prefs.appr}
+        <PlayDialog card={dlgCard} sel={dlg!.sel} tr={api.tr} L={L} dex={prefs.dex} appr={prefs.appr}
           setSel={(li, v) => setDlg(d => d && { ...d, sel: { ...d.sel, [li]: v } })}
           onRun={() => runDlg(dlgCard)} onClose={closeDlg} />
       )}

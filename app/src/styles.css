@@ -332,3 +332,13 @@ button:focus-visible, .card:focus-visible { outline: 2px solid var(--amber); out
 .sync-chip.synced { color: var(--green); border-color: oklch(0.80 0.15 150 / 0.5); }
 .sync-chip.syncing { color: var(--muted); }
 .sync-chip.offline, .sync-chip.denied { color: var(--amber); border-style: dashed; border-color: var(--amber); }
+
+/* Mechanics rows in the play dialog: who rolls what, step by step */
+.mech { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 8px; align-items: start; font-size: 13px; line-height: 1.35; }
+.mech-k { font-size: 9.5px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; text-align: center; padding: 2.5px 4px; border-radius: 3px; border: 1px solid oklch(0.38 0.01 260); color: var(--muted); margin-top: 1px; white-space: nowrap; }
+.mech-k.roll, .mech-k.ally { color: var(--dark-txt); background: var(--amber); border-color: var(--amber); }
+.mech-k.save { color: var(--dark-txt); background: var(--cobalt); border-color: var(--cobalt); }
+.mech-k.fail { color: oklch(0.78 0.10 30); border-color: oklch(0.55 0.08 30); }
+.mech-k.hit, .mech-k.pass { color: var(--green); border-color: oklch(0.80 0.15 150 / 0.5); }
+.mech-v { color: oklch(0.82 0.01 260); }
+.mech-m { font-family: var(--f-mono); font-size: 13.5px; color: var(--ink); white-space: nowrap; }

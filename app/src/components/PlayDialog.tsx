@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import type { Card } from '../data/cards';
 import { INK, MUTED, T, tint } from '../data/tokens';
 import { costChips, plan, type StepKind, type Tracker } from '../tracker/logic';
+import { laneRows, ROW_LABEL } from '../data/mechanics';
 import { BadgeChip, DiceRow, LaneTag, badgeStyle } from './bits';
 import { cannonGate } from './Playbook';
 
@@ -20,13 +21,14 @@ interface Props {
   setSel: (li: number, v: boolean) => void;
   tr: Tracker;
   L: 4 | 5;
+  dex: number;
   appr: Record<number, boolean>;
   onRun: () => void;
   onClose: () => void;
 }
 
 /** A play opened over the page: every step checked against the tracker in order, then Execute spends it all at once. */
-export function PlayDialog({ card, sel, setSel, tr, L, appr, onRun, onClose }: Props) {
+export function PlayDialog({ card, sel, setSel, tr, L, dex, appr, onRun, onClose }: Props) {
   const closeRef = useRef<HTMLButtonElement>(null);
   useEffect(() => {
     const prev = document.activeElement as HTMLElement | null;
@@ -44,6 +46,7 @@ export function PlayDialog({ card, sel, setSel, tr, L, appr, onRun, onClose }: P
   const runs = steps.filter(x => x.kind === 'run');
   const spend = runs.flatMap(x => costChips(x.cost!));
   const acc = T[card.k];
+  const mechCtx = { dc: L === 5 ? 15 : 14, atk: L === 5 ? '+7' : '+6', dex, prof: L === 5 ? 3 : 2, l5: L === 5 };
 
   return (
     <div className="scrim" data-print-hide onClick={onClose}>
@@ -60,6 +63,7 @@ export function PlayDialog({ card, sel, setSel, tr, L, appr, onRun, onClose }: P
         <div className="dlg-lanes">
           {steps.map(x => {
             const ln = card.lanes[x.li], s = ST[x.kind], can = x.kind === 'run' || x.kind === 'skip';
+            const rows = laneRows(card.id, ln, mechCtx);
             const toggle = () => { if (can) setSel(x.li, x.kind !== 'run'); };
             return (
               <div key={x.li} className="dlg-lane"
@@ -69,7 +73,15 @@ export function PlayDialog({ card, sel, setSel, tr, L, appr, onRun, onClose }: P
                 <span className="dlg-box" style={{ borderColor: s[5], background: s[6] }}>{s[0]}</span>
                 <LaneTag k={ln.k} q={ln.q} />
                 <div className="dlg-lane-body">
-                  <div className="dlg-lane-txt"><b>{ln.name}</b> <span>{ln.txt}</span></div>
+                  {rows.length
+                    ? <div className="dlg-lane-txt"><b>{ln.name}</b></div>
+                    : <div className="dlg-lane-txt"><b>{ln.name}</b> <span>{ln.txt}</span></div>}
+                  {rows.map((r, i) => (
+                    <div key={i} className="mech">
+                      <span className={'mech-k ' + r.k}>{ROW_LABEL[r.k]}</span>
+                      <span className="mech-v">{r.m && <b className="mech-m">{r.m}</b>}{r.m ? ' · ' : ''}{r.txt}</span>
+                    </div>
+                  ))}
                   {ln.dice.map((d, i) => <DiceRow key={i} d={d} />)}
                   <div className="dlg-cost">
                     <span className="c">{x.cost ? 'Costs ' + costChips(x.cost).join(' · ') : ''}</span>
